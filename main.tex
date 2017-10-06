@@ -50,16 +50,11 @@ In one of the early works on privacy preservation Privacy Preserving Data Mining
 \paragraph{}
 This technique is valid for offline data analysis where the data provider gives out all data at once (transformed into new distribution) to the analyzer, so applying it to real time data analysis where the analyzer might ask questions about data (like max of value Y, or sum of all Xs) is not possible.
 \subsection{Differential Privacy}
-\paragraph{}
-Differential Privacy (Dwork) [4] is one of the relatively new foundational works in preventing private information leaks. This work first proves the impossibility of absolute disclosure prevention, which is the negation of Dalenius’s principal that no information should be learn-able from a data that is not learnable without absolute access to data. This auxiliary information is also dangerous for Privacy Preserving Data Mining Algorithms (Agrawal et al.) [2] as underlying distribution and some added information is usually sufficient to leak information.
-To side step this impossibility authors propose a mechanism called differential privacy, which relaxes the absolute disclosure safety, that any information leak is within small multiplicative factor, i.e. adversary will at best have a rough approximation about the actual information. They achieve this by adding random noise to the output of queries. This magnitude of this noise is also controlled by the degree that one individual record can change the result of the query, for example getting mean of a distribution of small variance needs less noise but highly varying distributions require large amount of noise to conceal individual instances. (Dwork et al.) [8] Provides a comprehensive analysis of differential privacy fundamentals and sets it in strong mathematical background. 
-\paragraph{}
-All these techniques have been proven to be effective only when the adversary tries sub linear number of queries, a large number of queries increase the chance of information leakage (Haeberlen et al.) [7].
-(Dwork et al.) [3] Argue that this limitation of sub-linear queries can be solved by using vertically partitioned databases, i.e. single attribute databases or database divided into multiple databases via subsets of attributes.
-\paragraph{}
-Differential Privacy seems to be the most trustworthy technique of all the approaches as its mathematically sound and provable. Other approaches need some form of trust between data provider and analyzer.
-\paragraph{}
-One problem with differential privacy is this that currently there are no standard ways to do this, like RSA or AES are now standard implementations of Public Key Encryption and have made encryption adoptable and more secure. So I believe that, such a standard will really help Differential Privacy to be adopted on a large scale.
+Differential Privacy [4], is a mathematically proven way to insure and quantify privacy. The main goal of this technique is to ensure that, no single record level information can be derived from the result of a computation done over the complete database of records. For example, such leaks can result from aggregation queries like Sum, Count and Min/Max, or where the database can be augmented with some auxiliary information. In this work, authors propose a mechanism to ensure the privacy condition, by adding controlled amount of random noise (usually from Laplacian Distribution) into the data or the results being produced.
+
+There is usually a trade off between: the amount of noise and the utility of the results required. We will explore this technique in detail in the next chapter.
+
+
 \subsection{Manual Data/Job Partitioning}
 \paragraph{}
 Some of the existing frameworks discussed in next section are based on manual division of data. This means that if an organization has both sensitive (private) and non-sensitive data, private data can be kept on local infrastructure and non-sensitive data can be given to public compute providers.
@@ -140,8 +135,23 @@ Most of current frameworks for hybrid cloud, work by the manual tagging of sensi
 
 
 \chapter{Differential Privacy}
+\section{Introduction}
+\paragraph{}
+In Chapter 2, we introduced the notion of Differential Privacy with respect to a distributed environment, In this chapter we will explore it in detail and formalize some of it's features. 
+
+\paragraph{}
+Differential Privacy (Dwork) [4] is one of the relatively new foundational works in preventing private information leaks. This work first proves the impossibility of absolute disclosure prevention, which is the negation of Dalenius’s principal that no information should be learn-able from a data that is not learnable without absolute access to data. This auxiliary information is also dangerous for Privacy Preserving Data Mining Algorithms (Agrawal et al.) [2] as underlying distribution and some added information is usually sufficient to leak information.
+To side step this impossibility authors propose a mechanism called differential privacy, which relaxes the absolute disclosure safety, that any information leak is within small multiplicative factor, i.e. adversary will at best have a rough approximation about the actual information. They achieve this by adding random noise to the output of queries. This magnitude of this noise is also controlled by the degree that one individual record can change the result of the query, for example getting mean of a distribution of small variance needs less noise but highly varying distributions require large amount of noise to conceal individual instances. (Dwork et al.) [8] Provides a comprehensive analysis of differential privacy fundamentals and sets it in strong mathematical background. 
+\paragraph{}
+All these techniques have been proven to be effective only when the adversary tries sub linear number of queries, a large number of queries increase the chance of information leakage (Haeberlen et al.) [7].
+(Dwork et al.) [3] Argue that this limitation of sub-linear queries can be solved by using vertically partitioned databases, i.e. single attribute databases or database divided into multiple databases via subsets of attributes.
+\paragraph{}
+Differential Privacy seems to be the most trustworthy technique of all the approaches as its mathematically sound and provable. Other approaches need some form of trust between data provider and analyzer.
+\paragraph{}
+One problem with differential privacy is this that currently there are no standard ways to do this, like RSA or AES are now standard implementations of Public Key Encryption and have made encryption adoptable and more secure. So I believe that, such a standard will really help Differential Privacy to be adopted on a large scale.
 
 
+\[Pr[\mathit{K}(D_{1})\in S] \leq \exp (\epsilon ) \times Pr[\mathit{K}(D_{2})\in S]\]
 
 
 \chapter{Experimental Setup - Apache Hadoop and Spark}
@@ -157,19 +167,6 @@ Most of current frameworks for hybrid cloud, work by the manual tagging of sensi
 
 \chapter{Conclusion and Recommendations}
 
-\section{Introduction}
-There is a theory which states that if ever anyone discovers exactly what the Universe is for and why it is here, it will instantly disappear and be replaced by something even more bizarre and inexplicable.
-There is another theory which states that this has already happened.
-
-\begin{figure}[h!]
-\centering
-\includegraphics[scale=1.7]{universe.jpg}
-\caption{The Universe}
-\label{fig:univerise}
-\end{figure}
-
-\section{Conclusion}
-``I always thought something was fundamentally wrong with the universe'' \citep{adams1995hitchhiker}
 
 \bibliographystyle{plain}
 \bibliography{references}
