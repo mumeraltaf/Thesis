@@ -2,6 +2,22 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lineno}
 \linenumbers
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+
+
+
+\bibliographystyle{acm}
+
+
 \title{Privacy Oriented Data Analysis}
 \author{Muhammad Umer Altaf }
 \date{October 2017}
@@ -19,7 +35,7 @@
 \begin{document}
 
 \maketitle
-
+\tableofcontents
 
 \chapter{Privacy in Digital Age}
 
@@ -33,7 +49,7 @@
 \paragraph{}
 Systems that guarantee secure communication have been in use for a long time, but Public Clouds suffer from very basic trust issues. Sensitive data like medical or financial records have tough safety guidelines and cannot be processed on offshore third party servers. The advent of public cloud holds tremendous advantages in terms of scalability and elasticity, especially if augmented by in-house infrastructure (Hybrid Cloud). In this chapter we will list some of existing frameworks that try to support privacy oriented analysis while being applicable in hybrid clouds or distributed environments.
 \paragraph{}
-The ideal of Privacy in Data Analysis can be traced back to Dalenius 1977’s [1] rule, that no such information about a single person can be derived from a database that cannot be learned without access to the database. This simply means that in a secure privacy controlled analysis, the results can never lead to private data.
+The ideal of Privacy in Data Analysis can be traced back to Dalenius 1977’s \cite{dalenius1977} rule, that no such information about a single person can be derived from a database that cannot be learned without access to the database. This simply means that in a secure privacy controlled analysis, the results can never lead to private data.
 \paragraph{}
 Organizations are hungry for insights from Big Data. Online advertisement agencies and social media networks are already using these insights to drive profits by serving targeted advertisements. Retailers use these insights to identify patterns in markets and sales. Most of currently prevalent applications care very less about individual privacy because in most cases the individual has voluntarily forfeited the right to privacy (see Terms and Conditions on Facebook Sign-up).
 \paragraph{}
@@ -46,11 +62,11 @@ The traditional methodology for privacy protection has been mandated access cont
 \paragraph{}
 The fundamental approaches to privacy can be divided into following basic techniques:
 \subsection{Privacy Preserving Data Mining Algorithms}
-In one of the early works on privacy preservation Privacy Preserving Data Mining Algorithms (Agrawal et al.) [2]. Authors argue that data mining tasks usually don’t need individual records but the distribution of data itself. If they perturbate the original distribution with some known random distribution, then they can infer the properties of original distribution by reconstructing it with confidence. This approach hides the individuals in distribution, thus allowing data analysis without privacy fears.
+In one of the early works on privacy preservation Privacy Preserving Data Mining Algorithms \cite{agrawal2001design}. Authors argue that data mining tasks usually don’t need individual records but the distribution of data itself. If they perturbate the original distribution with some known random distribution, then they can infer the properties of original distribution by reconstructing it with confidence. This approach hides the individuals in distribution, thus allowing data analysis without privacy fears.
 \paragraph{}
 This technique is valid for offline data analysis where the data provider gives out all data at once (transformed into new distribution) to the analyzer, so applying it to real time data analysis where the analyzer might ask questions about data (like max of value Y, or sum of all Xs) is not possible.
 \subsection{Differential Privacy}
-Differential Privacy [4], is a mathematically proven way to insure and quantify privacy. The main goal of this technique is to ensure that, no single record level information can be derived from the result of a computation done over the complete database of records. For example, such leaks can result from aggregation queries like Sum, Count and Min/Max, or where the database can be augmented with some auxiliary information. In this work, authors propose a mechanism to ensure the privacy condition, by adding controlled amount of random noise (usually from Laplacian Distribution) into the data or the results being produced.
+Differential Privacy \cite{Dwork:2006:DP:2097282.2097284}, is a mathematically proven way to insure and quantify privacy. The main goal of this technique is to ensure that, no single record level information can be derived from the result of a computation done over the complete database of records. For example, such leaks can result from aggregation queries like Sum, Count and Min/Max, or where the database can be augmented with some auxiliary information. In this work, authors propose a mechanism to ensure the privacy condition, by adding controlled amount of random noise (usually from Laplacian Distribution) into the data or the results being produced.
 
 There is usually a trade off between: the amount of noise and the utility of the results required. We will explore this technique in detail in the next chapter.
 
@@ -59,7 +75,7 @@ There is usually a trade off between: the amount of noise and the utility of the
 \paragraph{}
 Some of the existing frameworks discussed in next section are based on manual division of data. This means that if an organization has both sensitive (private) and non-sensitive data, private data can be kept on local infrastructure and non-sensitive data can be given to public compute providers.
 \paragraph{}
-Approaches [6, 9] (c) and [12] (e) use this concept to apply analysis task on hybrid environment.
+Approaches \cite{zhang2011sedic}\cite{xu2015framework} (c) and \cite{ko2011hybrex} (e) use this concept to apply analysis task on hybrid environment.
 The drawback of this approach is that some human will have to decide and manually label the data, which will need human effort and extra cost.
 
 
@@ -67,31 +83,31 @@ The drawback of this approach is that some human will have to decide and manuall
 \section{Existing Frameworks for Privacy Preserved Analysis}
 \subsection{Privacy Integrated Queries}
 \paragraph{}
-Privacy Integrated Queries (PINQ) [5] build upon the idea of differential privacy by supplying an interface to standard LINQ queries in .NET. They try to offer non disclosing information by use of exponential noise and stable transforms. They demonstrate that their solution is also resistant to aggregation attacks, where the adversary may issue large number of queries, slightly varying in nature in an effort to combine results and getting to the underlying distribution.
+Privacy Integrated Queries (PINQ) \cite{mcsherry2009privacy} build upon the idea of differential privacy by supplying an interface to standard LINQ queries in .NET. They try to offer non disclosing information by use of exponential noise and stable transforms. They demonstrate that their solution is also resistant to aggregation attacks, where the adversary may issue large number of queries, slightly varying in nature in an effort to combine results and getting to the underlying distribution.
 \paragraph{}
 One particular problem of this work regarding public cloud is this that PINQ requires a secure and trusted data store, as it’s an interface that transforms original data distribution to a new non disclosing distribution, that represents the original distribution. So this means, a complete public cloud implementation of this approach is not possible. This scenario, fits perfectly well with a hybrid model where storage is kept private and compute is delegated to public compute engines, however the data source must also provide the PINQ interface.
 \subsection{Airavat}
 \paragraph{}
-Map Reduce is one of the most prevalent Big Data analysis tool, and Airavat (Roy et al.) [10] modifies it to the task of privacy preservation. Here authors present a case where mappers are third party and hence their code is untrusted. It's methodology has two main components i.e. Mandated Access Control via the help of underlying operating system and application of differential privacy by adding random noise to the reduced outputs. For example, for the task of parallel K-Means clustering, mappers can be public which output cluster associations (within a bounded range) and the reducers can be private and trusted which output new cluster centroids with certain level of error, such that this error does not massively affect the collective distribution of points but also masks individual data points.
+Map Reduce is one of the most prevalent Big Data analysis tool, and Airavat \cite{roy2010airavat} modifies it to the task of privacy preservation. Here authors present a case where mappers are third party and hence their code is untrusted. It's methodology has two main components i.e. Mandated Access Control via the help of underlying operating system and application of differential privacy by adding random noise to the reduced outputs. For example, for the task of parallel K-Means clustering, mappers can be public which output cluster associations (within a bounded range) and the reducers can be private and trusted which output new cluster centroids with certain level of error, such that this error does not massively affect the collective distribution of points but also masks individual data points.
 \paragraph{}
 They applied their framework to multiple big data tasks like K-NN recommender engine, K Means clustering and Naïve Bayes Classifier and claim that their system has a performance overhead of 32% (in terms of time complexity) compared to vanilla Map Reduce.
 \paragraph{}
-One problem with this performance score is this that the authors implemented this system entirely on public cloud i.e. 100 machine cluster on Amazon EC2, where most probably all machines were on same network, but in a hybrid environment such implementation will surely suffer performance loss because of added Virtual Network implementation (same problem as with (Ko et al.) [12] HyberEx).
+One problem with this performance score is this that the authors implemented this system entirely on public cloud i.e. 100 machine cluster on Amazon EC2, where most probably all machines were on same network, but in a hybrid environment such implementation will surely suffer performance loss because of added Virtual Network implementation (same problem as with HyberEx \cite{ko2011hybrex}).
 \subsection{User labeled data protection}
 \paragraph{}
-Sedic (Zhang et al.) [6] proposes an implementation of Map Reduce over Hybrid Cloud infrastructure. Their approach works by splitting up both the mappers and reducers over large number of nodes. They claim to preserve privacy by allowing the user to label critical data. They keep the sensitive data on private infrastructure and send out rest to public cloud.
+Sedic \cite{zhang2011sedic} proposes an implementation of Map Reduce over Hybrid Cloud infrastructure. Their approach works by splitting up both the mappers and reducers over large number of nodes. They claim to preserve privacy by allowing the user to label critical data. They keep the sensitive data on private infrastructure and send out rest to public cloud.
 \paragraph{}
-(Xu et al.) [9] Also is similar to Sedic (Zhang) [6], but they have proposed a mechanism to finely control the scale of tagging i.e. what is sensitive and what is not. They propose multi-level tagging in terms of: file level, line level, temporal and spatial level tags. This can give almost total control of information to an administrator but also adds the overhead of manual tagging effort.
+[9] Also is similar to Sedic \cite{zhang2011sedic}, but they have proposed a mechanism to finely control the scale of tagging i.e. what is sensitive and what is not. They propose multi-level tagging in terms of: file level, line level, temporal and spatial level tags. This can give almost total control of information to an administrator but also adds the overhead of manual tagging effort.
 \paragraph{}
-Although both these approaches present a very good framework of task breakdown and scheduling but in terms of privacy, this approach is very simplistic and requires a lot of manual sanitization of data. Also as demonstrated by (Dwork) [2] this approach suffers from information leakage in presence of auxiliary information generator.
+Although both these approaches present a very good framework of task breakdown and scheduling but in terms of privacy, this approach is very simplistic and requires a lot of manual sanitization of data. Also as demonstrated by \cite{dwork2004privacy} this approach suffers from information leakage in presence of auxiliary information generator.
 \subsection{GUPT: Privacy Preserving Data Analysis}
 \paragraph{}
-This framework (Mohan et al.) [11] builds upon Airavat (Roy et al.) [10] and presents two new concepts. First is Automatic Privacy Budget Allocations, authors argue that current data analysis experts have no idea about differential privacy hence they find it difficult to set privacy budgets i.e. the amount of noise in the output to obfuscate the sensitive information, even if they understand these concepts current tools and programs have to be redeveloped to comply with privacy guidelines. Hence they propose a mechanism to automatically allocate these privacy budgets and all other such parameters.
+This framework \cite{mohan2012gupt} builds upon Airavat \cite{roy2010airavat} and presents two new concepts. First is Automatic Privacy Budget Allocations, authors argue that current data analysis experts have no idea about differential privacy hence they find it difficult to set privacy budgets i.e. the amount of noise in the output to obfuscate the sensitive information, even if they understand these concepts current tools and programs have to be redeveloped to comply with privacy guidelines. Hence they propose a mechanism to automatically allocate these privacy budgets and all other such parameters.
 \paragraph{}
 Secondly they propose the idea of decreased sensitivity of aged records, they give an example that very old records relating to deceased people, may not be as much privacy demanding as newer records. So they invest less resources hiding old information which gives them some performance improvements.
 \subsection{HybrEx}
 \paragraph{}
-In this work (Ko et al.) [12] authors describe an execution strategy where they segregate both data and computation systems into trusted (private) and untrusted (public) partitions.
+In this work \cite{ko2011hybrex} authors describe an execution strategy where they segregate both data and computation systems into trusted (private) and untrusted (public) partitions.
 \paragraph{}
 They manually label data as per the privacy requirements (safe to run publicly or not) and then use these labels to distribute the map and reduce jobs on hybrid environment. Private labeled data stays on private machines and public labeled data can be transferred to public cloud. The inherent nature of MapReduce requires all resources to be present in one network, so they used a Wide Area Network (WAN) encompassing cloud and private instances.
 \paragraph{}
@@ -111,10 +127,10 @@ All the mentioned frameworks use some form of manual data labeling, differential
 \hline
 \textbf{Framework}                 & \textbf{Based on}    & \textbf{Hybrid Ready?} & \textbf{Accuracy} \\ \hline
 Privacy Integrated Queries {[}5{]} & Differential Privacy & No                     &                   \\ \hline
-Airavat {[}10{]}                   & Differential Privacy & No                     &                   \\ \hline
-Sedic {[}6{]} and Xu, X {[}9{]}    & Manual Labeling      & Yes                    &                   \\ \hline
-GUPT {[}11{]}                      & Differential Privacy & No                     &                   \\ \hline
-HybrEx {[}12{]}                    & Manual Labeling      & Yes                    &                   \\ \hline
+Airavat \cite{roy2010airavat}                   & Differential Privacy & No                     &                   \\ \hline
+Sedic \cite{zhang2011sedic} and Xu, X \cite{xu2015framework}    & Manual Labeling      & Yes                    &                   \\ \hline
+GUPT \cite{mohan2012gupt}                      & Differential Privacy & No                     &                   \\ \hline
+HybrEx \cite{ko2011hybrex}                    & Manual Labeling      & Yes                    &     Not Applicable              \\ \hline
 \end{tabular}
 }
 \end{table}
@@ -134,27 +150,78 @@ Most of current frameworks for hybrid cloud, work by the manual tagging of sensi
 
 
 
+
+
+\chapter{Location Based Services and Methodologies for Location Privacy}
+\section{Location Based Services}
+\paragraph{}
+Today most of the mobile devices (phones, tablets, laptops etc.) have a GPS (Global Positioning System) receiver built in, it was not the case twenty years, ago when this technology was limited to special professions such as military and construction. The age of smart phones and mobile applications has unlocked a variety of useful applications of GPS. These services use location of the device or user to supply user with useful information. Such services are called Location Based Services (LBS).
+\paragraph{}
+LBS did exist before smartphones with GPS access, early LBS \cite{lbsShu} used mobile network positioning techniques like cellular triangulation. Although such services were useful but had a limited scope. Example of LBS from that era can be “Find my Friends” service which worked by a user sending a text message with his friends ID and the Network operator sending back the cell address (usually name of suburb) of the friend’s mobile (given that friend had previously agreed to his location sharing). Another example can be a SMS based restaurant locator, which would reply with a list of restaurants in the user’s vicinity. In this work however, we will focus mainly on the modern location services which have the ability to pinpoint a device's location to within a few meters \cite{ TGIS:TGIS1152}.
+\paragraph{Examples of Location Based Services}
+\begin{itemize}
+\item Navigation (e.g Driving Directions)
+\item Targeted Marketing (e.g. Sale/Offer near you!)
+\item Nearby Point of Interest Discovery (e.g. Where is the nearest Chinese Restaurant?)
+\item Information Services (e.g. Weather, News etc.)
+\item Geo Targeted Content (e.g Online Radio may change content based on listener's location)
+\end{itemize}
+
+\subsection{Privacy Issues in Location Based Services}
+All these applications work by the user's device sending its location to the server of the LBS provider. This sharing of location data raises some serious privacy issues. Exactly where a person is located is part of its human freedom, and most of the time people will no want other to find where they are ``all the time". These others can be trusted entities (family or friends) or some adversarial entity (spies, robbers etc.). Yet most of us today transmit our location (via mobile phones) nearly 24/7, to servers we do not know about.
+
+\paragraph{}
+In a relatively early work \cite{dobson2003geoslavery} in the dangers of geo-privacy, they have argued that location technologies that exist today have the power to technically enslave human beings, for example they present scenarios where some ``master" entity may restrict the movement of ``slave" humans. Such an entity will have the technical means to accurately determine the location of slaves and take corrective action (just like we might zap animals with electric shock if they leave a set parameter). Although such a scenario is very unlikely or even absurd, but authors argue that all the technological pre-requisites are available now, which itself is a cause of concern.
+
+\paragraph{}
+Mining of publicly available location data (such as from social media) can have adverse affect on the privacy and even physical well being of the user. We have demonstrated such an experiment in Section ([Add Section]). 
+
+
+
+\paragraph{}
+Even if we do not go to such horrible extent there will always be dangers in sharing and collecting location information. So the problem arises, that ``Can we extract any utility from LBSs, without compromising these privacy issues?". The answer is yes, there are multiple methodologies to analyze and process location data without exposing users to the risks of limiting freedom.  In the following sections we will explore some of these methods in detail.
+
+\section{Methods for privacy aware Location Data Analysis}
+There are many mechanisms for location privacy. Most of these approaches aim to disclose 
+
+
+
+
+
+
+
+
+
+
 \chapter{Differential Privacy}
 \section{Introduction}
 \paragraph{}
 In Chapter 2, we introduced the notion of Differential Privacy with respect to a distributed environment, In this chapter we will explore it in detail and formalize some of it's features. 
 
 \paragraph{}
-Differential Privacy (Dwork) [4] is one of the relatively new foundational works in preventing private information leaks. This work first proves the impossibility of absolute disclosure prevention, which is the negation of Dalenius’s principal that no information should be learn-able from a data that is not learnable without absolute access to data. This auxiliary information is also dangerous for Privacy Preserving Data Mining Algorithms (Agrawal et al.) [2] as underlying distribution and some added information is usually sufficient to leak information.
-To side step this impossibility authors propose a mechanism called differential privacy, which relaxes the absolute disclosure safety, that any information leak is within small multiplicative factor, i.e. adversary will at best have a rough approximation about the actual information. They achieve this by adding random noise to the output of queries. This magnitude of this noise is also controlled by the degree that one individual record can change the result of the query, for example getting mean of a distribution of small variance needs less noise but highly varying distributions require large amount of noise to conceal individual instances. (Dwork et al.) [8] Provides a comprehensive analysis of differential privacy fundamentals and sets it in strong mathematical background. 
+Differential Privacy \cite{Dwork:2006:DP:2097282.2097284} is one of the relatively new foundational works in preventing private information leaks. This work, first proves the impossibility of absolute disclosure prevention, which is the negation of Dalenius’s principal that no information should be learn-able from a data that is not learnable without absolute access to data. This auxiliary information is also dangerous for Privacy Preserving Data Mining Algorithms [2] as underlying distribution and some added information is usually sufficient to leak information.
+To side step this impossibility authors propose a mechanism called differential privacy, which relaxes the absolute disclosure safety, that any information leak is within small multiplicative factor, i.e. adversary will at best have a rough approximation about the actual information. They achieve this by adding random noise to the output of queries. This magnitude of this noise is also controlled by the degree that one individual record can change the result of the query, for example getting mean of a distribution of small variance needs less noise but highly varying distributions require large amount of noise to conceal individual instances. \cite{dwork2014algorithmic} Provides a comprehensive analysis of differential privacy fundamentals and sets it in strong mathematical background. 
 \paragraph{}
-All these techniques have been proven to be effective only when the adversary tries sub linear number of queries, a large number of queries increase the chance of information leakage (Haeberlen et al.) [7].
-(Dwork et al.) [3] Argue that this limitation of sub-linear queries can be solved by using vertically partitioned databases, i.e. single attribute databases or database divided into multiple databases via subsets of attributes.
+All these techniques have been proven to be effective only when the adversary tries sub linear number of queries, a large number of queries increase the chance of information leakage\cite{haeberlen2011differential}. \cite{dwork2004privacy} Argue that this limitation of sub-linear queries can be solved by using vertically partitioned databases, i.e. single attribute databases or database divided into multiple databases via subsets of attributes.
 \paragraph{}
 Differential Privacy seems to be the most trustworthy technique of all the approaches as its mathematically sound and provable. Other approaches need some form of trust between data provider and analyzer.
 \paragraph{}
 One problem with differential privacy is this that currently there are no standard ways to do this, like RSA or AES are now standard implementations of Public Key Encryption and have made encryption adoptable and more secure. So I believe that, such a standard will really help Differential Privacy to be adopted on a large scale.
 
 
-\[Pr[\mathit{K}(D_{1})\in S] \leq \exp (\epsilon ) \times Pr[\mathit{K}(D_{2})\in S]\]
+
+\newcommand{\dd}[1]{\mathrm{d}#1}
+
+\begin{equation}
+[Pr[\mathit{K}(D_{1})\in S] \leq \exp (\epsilon ) \times Pr[\mathit{K}(D_{2})\in S]] \end{equation}
+
+\begin{equation}
+[Pr[\mathit{K}(D_{1})\in S]  = Pr[\mathit{K}(D_{2})\in S]]
+\end{equation}
 
 
 \chapter{Experimental Setup - Apache Hadoop and Spark}
+
 
 
 
