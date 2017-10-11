@@ -182,14 +182,22 @@ Mining of publicly available location data (such as from social media) can have 
 Even if we do not go to such horrible extent there will always be dangers in sharing and collecting location information. So the problem arises, that ``Can we extract any utility from LBSs, without compromising these privacy issues?". The answer is yes, there are multiple methodologies to analyze and process location data without exposing users to the risks of limiting freedom.  In the following sections we will explore some of these methods in detail.
 
 \section{Methods for privacy aware Location Data Analysis}
-There are many mechanisms for location privacy. Most of these approaches aim to disclose 
+There are many mechanisms for location privacy. Most of these approaches aim to limit the effect of any information that may be transmitted from a user's device. Nearly all literature uses some kind of a motivation example as a use case for analysis.
+\paragraph{A simple use scenario for LBS:}
+
+Figure \ref{fig:LBSMechanism} illustrates a simple use case of an LBS, which returns a list of restaurants (serving a specific cuisine), near a user's location. The general motivation of the Location Privacy Preserving approaches is to offer some utility (i.e. valid and geographically near restaurants Y,Z,A), while trying to hide as much of the original position X.
 
 
 
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=100mm,scale=0.5]{Images/LBS-Scenario.png}
+    \caption{LBS Mechanism}
+    \label{fig:LBSMechanism}
+\end{figure}
 
-
-
-
+\subsection{Error Based Approaches}
+Certain approaches work by minimizing the Expected Error between some obfuscated (the output) location and the actual full utility location, while constraining this error within some bound to maintain certain Quality of Service. 
 
 
 
