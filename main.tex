@@ -56,13 +56,44 @@ Organizations are hungry for insights from Big Data. Online advertisement agenci
 There are however some applications where this privacy of individual holds the prime objective yet the analytic potential of data as whole is also very great. For example processing large data of psoriasis patients may bring useful insights about the disease, but if some health insurance company is able to identify patients and refuse coverage then it can be both, legally and ethically wrong. 
 Below we discuss some of the identified formalization of privacy problems in Big Data context and some proposed solutions.
 
-\section{Literature Review}
+\section{Methodologies for Private Data Analysis}
 \paragraph{}
 The traditional methodology for privacy protection has been mandated access control. This is the protection of data resources via set policy controls on all storage and transfer mediums. End to end encryption/protection is usually the standard implementation but this approach is not applicable when the intermediate entities (public cloud) require access to data for analysis.
 \paragraph{}
 The fundamental approaches to privacy can be divided into following basic techniques:
+
+
+\subsection{k-Anonymous Information Release}
+\paragraph{}
+k-Anonymity \cite{sweeney2002k} is a method of data anonymization, where the goal is to render any published database in such a form that any one particular record is indistinguishable from at least k-1 other records, with respect to some stated Quasi-Identifiers and fixed secret values \cite{dalenius1986finding}.
+
+\paragraph{Quasi-Identifiers}
+For any group of records Quasi Identifiers are the Attributes (Fields) which can identify a single record in the dataset uniquely.
+\paragraph{Secret Values}
+These are the fields that we want to hide, or do not want to be exposed for single records. The unique values for Secret Value fields, in a particular set of records can also be referred as equivalence classes.
+
+\paragraph{}
+For example consider the data in Figure \ref{fig:kAon=2}, here we can see that if we fix k=2, we can make \{Race, Birth, Gender and ZIP\} Quasi-Identifiers for the Secret Values of \{Problem\}, as for each unique set of \{Race, Birth, Gender and ZIP\} we get at least 2 different equivalence classes (In this case for \{Black, 1965, m, 0214\} we get \{short breath, chest pain\}).
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=100mm,scale=0.5]{Images/k2Diversified.png}
+    \caption{A k=2, k-Anonymized Dataset. Source:\cite{sweeney2002k}}
+    \label{fig:kAon=2}
+\end{figure}
+
+\paragraph{}
+As apparent from the definition above, we need a very specialized database (where the values follow the rules for required k). If the complete database does not pass this test we can not publish it in full, instead we need to find a valid subset or add dummy (invalid) records to fulfill this requirement. Another way to achieve k-anonymity is to suppress (delete) some values (i.e. replace them by *, for example in the example above we suppressed the last digit of the zip code for the table to comply with 2-Anonymity definition) Finding valid subsets can be computationally very expensive so most often we suppress or just add dummy records. Adding invalid records or suppressing can also affect the quality of the data analysis that can be performed on the published set (as we may alter the original distribution of the data).
+\paragraph{}
+Another problem with this k-anonymity is that it fails if additional information is available to an adversary (who is looking to identify particular records). There are mainly two types of these attacks. First one is Homogeneity Attack, where using some previously known information adversary is able to filter out a set of records which have the same Secret Values (resulting in disclosure). For example if adversary knows that a person is Male, White and is 50 years old, he gets 2 matching records, both of them reveal secret value as `chest pain'. The other attack is known as Background Information Attack, where if an attacker is able to filter some data, the identification can be done by some general known information, let say white people are more prone to obesity. Countering such attacks have been proposed by using l-diversity \cite{machanavajjhala2006diversity} which makes sure that each similar block of quasi-identifiers has at minimum l different sensitive values
+
+\paragraph{}
+By its very nature, k-anonymity is limited to only pre-planned publishing of data, where the publisher has to keep the required k level of anonymity, valid for any values in the data. Any kind of interactive querying via this technique is not possible. But still there are some applications where k-anonymity has proven useful, as Intel demonstrated in it analysis of cloud usage data to enhance security \cite{sedayao2012enhancing}. 
+
+
+
+
 \subsection{Privacy Preserving Data Mining Algorithms}
-In one of the early works on privacy preservation Privacy Preserving Data Mining Algorithms \cite{agrawal2001design}. Authors argue that data mining tasks usually don’t need individual records but the distribution of data itself. If they perturbate the original distribution with some known random distribution, then they can infer the properties of original distribution by reconstructing it with confidence. This approach hides the individuals in distribution, thus allowing data analysis without privacy fears.
+In one of the early works on privacy preservation, Privacy Preserving Data Mining Algorithms \cite{agrawal2001design} authors argue that data mining tasks usually don’t need individual records, but the distribution of data itself. If they perturbate the original distribution with some known random distribution, then they can infer the properties of original distribution by reconstructing it with confidence. This approach hides the individuals in distribution, thus allowing data analysis without privacy fears.
 \paragraph{}
 This technique is valid for offline data analysis where the data provider gives out all data at once (transformed into new distribution) to the analyzer, so applying it to real time data analysis where the analyzer might ask questions about data (like max of value Y, or sum of all Xs) is not possible.
 \subsection{Differential Privacy}
@@ -90,7 +121,7 @@ One particular problem of this work regarding public cloud is this that PINQ req
 \paragraph{}
 Map Reduce is one of the most prevalent Big Data analysis tool, and Airavat \cite{roy2010airavat} modifies it to the task of privacy preservation. Here authors present a case where mappers are third party and hence their code is untrusted. It's methodology has two main components i.e. Mandated Access Control via the help of underlying operating system and application of differential privacy by adding random noise to the reduced outputs. For example, for the task of parallel K-Means clustering, mappers can be public which output cluster associations (within a bounded range) and the reducers can be private and trusted which output new cluster centroids with certain level of error, such that this error does not massively affect the collective distribution of points but also masks individual data points.
 \paragraph{}
-They applied their framework to multiple big data tasks like K-NN recommender engine, K Means clustering and Naïve Bayes Classifier and claim that their system has a performance overhead of 32% (in terms of time complexity) compared to vanilla Map Reduce.
+They applied their framework to multiple big data tasks like K-NN recommender engine, K Means clustering and Naïve Bayes Classifier and claim that their system has a performance overhead of 32\% (in terms of time complexity) compared to vanilla Map Reduce.
 \paragraph{}
 One problem with this performance score is this that the authors implemented this system entirely on public cloud i.e. 100 machine cluster on Amazon EC2, where most probably all machines were on same network, but in a hybrid environment such implementation will surely suffer performance loss because of added Virtual Network implementation (same problem as with HyberEx \cite{ko2011hybrex}).
 \subsection{User labeled data protection}
@@ -174,21 +205,23 @@ All these applications work by the user's device sending its location to the ser
 In a relatively early work \cite{dobson2003geoslavery} in the dangers of geo-privacy, they have argued that location technologies that exist today have the power to technically enslave human beings, for example they present scenarios where some ``master" entity may restrict the movement of ``slave" humans. Such an entity will have the technical means to accurately determine the location of slaves and take corrective action (just like we might zap animals with electric shock if they leave a set parameter). Although such a scenario is very unlikely or even absurd, but authors argue that all the technological pre-requisites are available now, which itself is a cause of concern.
 
 \paragraph{}
-Mining of publicly available location data (such as from social media) can have adverse affect on the privacy and even physical well being of the user. We have demonstrated such an experiment in Section ([Add Section]). 
+Mining of publicly available location data (such as: from social media) can have adverse affect on the privacy and even physical well being of the user. We have demonstrated such an experiment in Section ([Add Section]). 
 
 
 
 \paragraph{}
 Even if we do not go to such horrible extent there will always be dangers in sharing and collecting location information. So the problem arises, that ``Can we extract any utility from LBSs, without compromising these privacy issues?". The answer is yes, there are multiple methodologies to analyze and process location data without exposing users to the risks of limiting freedom.  In the following sections we will explore some of these methods in detail.
 
+
+\section{Recent prominent location privacy breaches}
+
+
 \section{Methods for privacy aware Location Data Analysis}
+\paragraph{}
 There are many mechanisms for location privacy. Most of these approaches aim to limit the effect of any information that may be transmitted from a user's device. Nearly all literature uses some kind of a motivation example as a use case for analysis.
-\paragraph{A simple use scenario for LBS:}
+\paragraph{A simple use scenario for LBS and desire for privacy:}
 
-Figure \ref{fig:LBSMechanism} illustrates a simple use case of an LBS, which returns a list of restaurants (serving a specific cuisine), near a user's location. The general motivation of the Location Privacy Preserving approaches is to offer some utility (i.e. valid and geographically near restaurants Y,Z,A), while trying to hide as much of the original position X.
-
-
-
+Figure \ref{fig:LBSMechanism} illustrates a simple use case of an LBS, which returns a list of restaurants (serving a specific cuisine), near a user's location. The general motivation of the Location Privacy Preserving approaches is to offer some utility (i.e. valid and geographically near restaurants Y,Z,A), while trying to hide as much of the original position X as possible.
 \begin{figure}[ht]
 \centering
         \includegraphics[width=100mm,scale=0.5]{Images/LBS-Scenario.png}
@@ -196,18 +229,66 @@ Figure \ref{fig:LBSMechanism} illustrates a simple use case of an LBS, which ret
     \label{fig:LBSMechanism}
 \end{figure}
 
+\paragraph{Definition of an adversary:}
+Adversary in this setting, is any entity whose goal is to correctly intercept, calculate, determine or guess the location X of the user. Usually user would not give consent for this release of location to the adversary, hence its a breach of privacy.
+
+\paragraph{Concept of Side Information}
+Apart from ensuring privacy w.r.t location X some approaches also try to counter any prior knowledge any adversary might have, this prior information is also referred as side information in the literature. Notice that this side information can also be thought as (auxiliary information) when we talk about methods based on Differential Privacy. Side Information has the ability to render the obfuscation of location X useless. 
+
+
+\paragraph{}
+For example side information can be an actual map of the area where certain area is a water body i.e. pond, river etc. and if some Privacy Preserving technique outputs a location within this water body, an adversary can rule out this whole water area as possible location for the user. Another example can be that if adversary knows that a house has single bedroom and only one person lives there, he can infer when that house is empty based on social media usage pattern of that particular user (This is the exact experiment which we will demonstrate in section [Add Section]).
+
+
+
 \subsection{Error Based Approaches}
-Certain approaches work by minimizing the Expected Error between some obfuscated (the output) location and the actual full utility location, while constraining this error within some bound to maintain certain Quality of Service. 
+\paragraph{}
+Certain approaches work by minimizing the Expected Error between some obfuscated (the output) location and the actual full utility location, while constraining this error within some bound to maintain certain Quality of Service. \cite{shokri2012protecting} works by solving an optimization problem (via a linear program). The constraints they use for this linear program are: the expected quality of service and information taken from user's profile, so as to cancel out the effect of side information. To achieve this they present a game-theory based probabilistic model, where they counter any strategy that the adversary might use to win (guess actual location X). This work has a limitation, that you need to specify the type of side information, which may not be possible in a real world scenario. Other wise, if we limit the types of side information attacks in our model, this method yields the best quality of service (i.e. utility) among all such methods, but is computationally demanding because of solving linear program.
+
+
+
+\paragraph{}
+Another approach in this category \cite{hoh2005protecting}, works by adding noise to the paths user's take while moving, they aim to cross paths of different users, so as to confuse the adversary that which path belongs to which user, see Figure \ref{fig:pathConfusion}. The noise, or the perturbing factor can increase the chance of any two paths intersecting, which can effectively confuse the adversary. To calculate the best possible noisy intersecting paths (best: which confuse the most and still have QOS) they also formulate an optimization problem like the previous approach. 
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=75mm,scale=0.5]{Images/PathConfusion.PNG}
+    \caption{Crossing two user's paths to confuse the adversary. Source:\cite{hoh2005protecting}}
+    \label{fig:pathConfusion}
+\end{figure}
+
+\subsection{k-Anonymity and l-Diversity Based Approaches}
+Some approaches have used to mask user's identity using making him indistinguishable with in k users, this is very similar to the approach we discussed in chapter 2.2.1 [Add Chapter]. Some interesting approaches like \cite{kido2005protection} work by reporting not the actual single location X to the LBS, but a set of multiple locations which contains X and all other values are dummy. Another approach \cite{duckham2005formal}, makes representative cloaking region around X and queries LBS on behalf of complete cloaking region. Figure \ref{fig:obfuscationRegion} shows basic idealization of this technique.
+
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=120mm,scale=1]{Images/obfuscationRegion.PNG}
+    \caption{Example of obfuscated cloaking region for pedestrian's location. Source:\cite{duckham2005formal}}
+    \label{fig:obfuscationRegion}
+\end{figure}
+
+\paragraph{}
+These approaches also suffers from side-information attack, as ensuring that all dummy locations are equally likely to be the real location X (from the point of view of the LBS) is hard to do. So the next set of approaches try to develop, a fit all model for location privacy that abstract away the notion of side-information.
+
+
+
+\subsection{Differential Privacy Based Approaches}
+\paragraph{}
+Differential Privacy is a recurring theme in this report, the reason is this 
+
+
+
 
 
 
 \chapter{Differential Privacy}
 \section{Introduction}
 \paragraph{}
-In Chapter 2, we introduced the notion of Differential Privacy with respect to a distributed environment, In this chapter we will explore it in detail and formalize some of it's features. 
+In Chapter 2 and 3, we introduced the notion of Differential Privacy with respect to a distributed environments and location privacy, In this chapter we will explore it in detail and formalize some of it's features. 
 
 \paragraph{}
 Differential Privacy \cite{Dwork:2006:DP:2097282.2097284} is one of the relatively new foundational works in preventing private information leaks. This work, first proves the impossibility of absolute disclosure prevention, which is the negation of Dalenius’s principal that no information should be learn-able from a data that is not learnable without absolute access to data. This auxiliary information is also dangerous for Privacy Preserving Data Mining Algorithms [2] as underlying distribution and some added information is usually sufficient to leak information.
+\paragraph{}
 To side step this impossibility authors propose a mechanism called differential privacy, which relaxes the absolute disclosure safety, that any information leak is within small multiplicative factor, i.e. adversary will at best have a rough approximation about the actual information. They achieve this by adding random noise to the output of queries. This magnitude of this noise is also controlled by the degree that one individual record can change the result of the query, for example getting mean of a distribution of small variance needs less noise but highly varying distributions require large amount of noise to conceal individual instances. \cite{dwork2014algorithmic} Provides a comprehensive analysis of differential privacy fundamentals and sets it in strong mathematical background. 
 \paragraph{}
 All these techniques have been proven to be effective only when the adversary tries sub linear number of queries, a large number of queries increase the chance of information leakage\cite{haeberlen2011differential}. \cite{dwork2004privacy} Argue that this limitation of sub-linear queries can be solved by using vertically partitioned databases, i.e. single attribute databases or database divided into multiple databases via subsets of attributes.
