@@ -35,6 +35,7 @@
 \begin{document}
 
 \maketitle
+\setcounter{tocdepth}{1}
 \tableofcontents
 
 \chapter{Privacy in Digital Age}
@@ -157,7 +158,7 @@ All the mentioned frameworks use some form of manual data labeling, differential
 \begin{tabular}{|l|l|l|l|}
 \hline
 \textbf{Framework}                 & \textbf{Based on}    & \textbf{Hybrid Ready?} & \textbf{Accuracy} \\ \hline
-Privacy Integrated Queries {[}5{]} & Differential Privacy & No                     &                   \\ \hline
+Privacy Integrated Queries \cite{mcsherry2009privacy} & Differential Privacy & No                     &                   \\ \hline
 Airavat \cite{roy2010airavat}                   & Differential Privacy & No                     &                   \\ \hline
 Sedic \cite{zhang2011sedic} and Xu, X \cite{xu2015framework}    & Manual Labeling      & Yes                    &                   \\ \hline
 GUPT \cite{mohan2012gupt}                      & Differential Privacy & No                     &                   \\ \hline
@@ -202,7 +203,7 @@ LBS did exist before smartphones with GPS access, early LBS \cite{lbsShu} used m
 All these applications work by the user's device sending its location to the server of the LBS provider. This sharing of location data raises some serious privacy issues. Exactly where a person is located is part of its human freedom, and most of the time people will no want other to find where they are ``all the time". These others can be trusted entities (family or friends) or some adversarial entity (spies, robbers etc.). Yet most of us today transmit our location (via mobile phones) nearly 24/7, to servers we do not know about.
 
 \paragraph{}
-In a relatively early work \cite{dobson2003geoslavery} in the dangers of geo-privacy, they have argued that location technologies that exist today have the power to technically enslave human beings, for example they present scenarios where some ``master" entity may restrict the movement of ``slave" humans. Such an entity will have the technical means to accurately determine the location of slaves and take corrective action (just like we might zap animals with electric shock if they leave a set parameter). Although such a scenario is very unlikely or even absurd, but authors argue that all the technological pre-requisites are available now, which itself is a cause of concern.
+In a relatively early work \cite{dobson2003geoslavery} in the dangers of geo-privacy, they have argued that location technologies that exist today have the power to technically enslave human beings, for example they present scenarios where some ``master" entity may restrict the movement of ``slave" humans. Such an entity will have the technical means to accurately determine the location of slaves and take corrective action (just like we might zap animals with electric shock if they leave a set parameter). Although, such a scenario is very unlikely or even absurd, but authors argue that all the technological pre-requisites are available now, which itself is a cause of concern.
 
 \paragraph{}
 Mining of publicly available location data (such as: from social media) can have adverse affect on the privacy and even physical well being of the user. We have demonstrated such an experiment in Section ([Add Section]). 
@@ -210,10 +211,7 @@ Mining of publicly available location data (such as: from social media) can have
 
 
 \paragraph{}
-Even if we do not go to such horrible extent there will always be dangers in sharing and collecting location information. So the problem arises, that ``Can we extract any utility from LBSs, without compromising these privacy issues?". The answer is yes, there are multiple methodologies to analyze and process location data without exposing users to the risks of limiting freedom.  In the following sections we will explore some of these methods in detail.
-
-
-\section{Recent prominent location privacy breaches}
+Even if we do not go to such horrible extent, there will always be dangers in sharing and collecting location information. So the problem arises, that ``Can we extract any utility from LBSs, without compromising these privacy issues?". The answer is yes, there are multiple methodologies to analyze and process location data without exposing users to the risks of limiting freedom.  In the following sections we will explore some of these methods in detail.
 
 
 \section{Methods for privacy aware Location Data Analysis}
@@ -221,7 +219,7 @@ Even if we do not go to such horrible extent there will always be dangers in sha
 There are many mechanisms for location privacy. Most of these approaches aim to limit the effect of any information that may be transmitted from a user's device. Nearly all literature uses some kind of a motivation example as a use case for analysis.
 \paragraph{A simple use scenario for LBS and desire for privacy:}
 
-Figure \ref{fig:LBSMechanism} illustrates a simple use case of an LBS, which returns a list of restaurants (serving a specific cuisine), near a user's location. The general motivation of the Location Privacy Preserving approaches is to offer some utility (i.e. valid and geographically near restaurants Y,Z,A), while trying to hide as much of the original position X as possible.
+Figure \ref{fig:LBSMechanism} illustrates a simple use case of an LBS, which returns a list of restaurants (serving a specific cuisine), near a user's location. The general motivation of the Location Privacy Preserving approaches is to offer some utility, like list of Points of Interest (POI) (i.e. valid and geographically near restaurants Y,Z,A), while trying to hide as much of the original position X as possible.
 \begin{figure}[ht]
 \centering
         \includegraphics[width=100mm,scale=0.5]{Images/LBS-Scenario.png}
@@ -239,6 +237,12 @@ Apart from ensuring privacy w.r.t location X some approaches also try to counter
 \paragraph{}
 For example side information can be an actual map of the area where certain area is a water body i.e. pond, river etc. and if some Privacy Preserving technique outputs a location within this water body, an adversary can rule out this whole water area as possible location for the user. Another example can be that if adversary knows that a house has single bedroom and only one person lives there, he can infer when that house is empty based on social media usage pattern of that particular user (This is the exact experiment which we will demonstrate in section [Add Section]).
 
+\subsection{Transformative Approaches}
+There are some methods which transform the location information in such a way that the LBS can not infer location X but can provide some useful utility. One such method is \cite{khoshgozaran2007blind} which keeps encrypted POIs on server, they make sure that this encryption transformation supports Nearest Neighbour calculations. So user's device just transforms the actual location X by encrypting it using same mechanism and then LBS server calculate k-Nearest POIs and returns the list.
+
+\paragraph{}
+These type of approaches, are not very applicable today, as most of the information on all major LBS is in plain and not encrypted. This encryption at both server and client side can add a very substantial computing cost.
+
 
 
 \subsection{Error Based Approaches}
@@ -248,7 +252,7 @@ Certain approaches work by minimizing the Expected Error between some obfuscated
 
 
 \paragraph{}
-Another approach in this category \cite{hoh2005protecting}, works by adding noise to the paths user's take while moving, they aim to cross paths of different users, so as to confuse the adversary that which path belongs to which user, see Figure \ref{fig:pathConfusion}. The noise, or the perturbing factor can increase the chance of any two paths intersecting, which can effectively confuse the adversary. To calculate the best possible noisy intersecting paths (best: which confuse the most and still have QOS) they also formulate an optimization problem like the previous approach. 
+Another approach in this category \cite{hoh2005protecting}, works by adding noise to the paths user's take while moving, they aim to cross paths of different users, so as to confuse the adversary that which path belongs to which user, see Figure \ref{fig:pathConfusion}. The noise, or the perturbing factor can increase the chance of any two paths intersecting, which can effectively confuse the adversary. To calculate the best possible noisy intersecting paths (best: which confuse the most and still have acceptable Quality of Service) they also formulate an optimization problem like the previous approach. 
 \begin{figure}[ht]
 \centering
         \includegraphics[width=75mm,scale=0.5]{Images/PathConfusion.PNG}
@@ -268,18 +272,40 @@ Some approaches have used to mask user's identity using making him indistinguish
 \end{figure}
 
 \paragraph{}
-These approaches also suffers from side-information attack, as ensuring that all dummy locations are equally likely to be the real location X (from the point of view of the LBS) is hard to do. So the next set of approaches try to develop, a fit all model for location privacy that abstract away the notion of side-information.
+These approaches also suffers from side-information attack, as ensuring that all dummy locations are equally likely to be the real location X (from the point of view of the LBS) is hard to do. So the next set of approaches try to develop, a fit all model for location privacy, that abstract away the notion of side-information.
 
 
 
 \subsection{Differential Privacy Based Approaches}
 \paragraph{}
-Differential Privacy is a recurring theme in this report, the reason is this 
+In Chapter 2 we introduced differential privacy as a method to do private data analysis, in this section we will discuss it specifically for location privacy. It is basically a balance between utility and a mathematical expression of privacy (we will offer detailed discussion on differential privacy in the next chapter).
+\cite{dewri2013local} Proposes a framework where he makes up an anonymity set (similar to cloaking regions discussed earlier) having k locations and specifying the probability of reporting same location Z from this set to be similar (within a small range) for each of locations in the set. To achieve this similar probability distribution he adds Laplace noise to each location point in the set. One drawback of this technique is this that when he divides up the locations into sets, he kind of adds a deterministic element that can make the privacy guarantee weak. 
+
+The seminal work on Location Privacy which can be termed as current state of the art is: Geo-Indistinguishability \cite{andres2013geo} introduced in 2012. This technique works by adding Laplacian Noise (drawn randomly form a specially constructed Planar Laplace distribution) to the actual location X to get a position Z (this is done offline i.e. on user's device). Now it sends Z to the LBS server and requests all the interesting service points with a set radius, called Area of Request (AOR). Ideally this radius being requested should be large enough that, it would contain X, as well as all the service points near X with in an Area of Interest (AOI) see Figure \ref{fig:AOIvsAOR}, that will offer best utility to the user. Now the device can easily filter AOI from AOR.
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=100mm,scale=1]{Images/AOIvsAOR.PNG}
+    \caption{AOI of 300m and AOR of 1 KM, X(blue) lies with in AOR. Source:\cite{andres2013geo}}
+    \label{fig:AOIvsAOR}
+\end{figure}
+
+\paragraph{}
+Note that it is not guaranteed that  AOI and X will fall with in AOR, if this happens the scheme just considers such a request as not accepted. Authors state that if any attempt is made to dynamically set the radius of AOR, the LBS server would know that X lies with in that specific region. The uncertainty, that it is not guaranteed that X will be in AOR is the property that saves this approach from side information attacks, albeit at the cost of failed unfulfilled requests where AOR does not include AOI.
+\paragraph{}
+One good advantage of this approach is that, it does not need a trusted middle layer to compute the obfuscated location Z, all can be done on user's device offline before sending Z to LBS.
+\paragraph{Cloaking vs Planer-Laplace}
+In \cite{andres2013geo} authors have presented a good comparison between the k-anonymity cloaking mechanism and their Planar Laplace method (explained above) see Figure \ref{fig:CloakingVsPlanar}. For this comparison they fixed the accuracy (i.e. utility) metric and compared the privacy metric on 3 different location maps a,b and c (having different point distributions). It is apparent that Planar Laplace gives better privacy guarantee, while abstracting the danger of side information attacks.
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=120mm,scale=1]{Images/CloakingVsLaplace.PNG}
+    \caption{Cloaking vs Planar Laplace at fixed utility. Source:\cite{andres2013geo}}
+    \label{fig:CloakingVsPlanar}
+\end{figure}
 
 
-
-
-
+\section{Chapter Conclusion and A Possible Gap}
+In this chapter we explained the mechanism of Location Based Services and presented a survey of current methods of ensuring privacy while working with LBSs.A lot of work has been done on the protection of user's location, but there are some very specific privacy related issues, that are concerned with the private properties of the locations themselves. For example the use pattern of a house, people staying in a property, demographics of a apartment block. Although the goal of such analysis is not directly related to the techniques discussed in this chapter, but still its good to think about privacy issues for these applications. In chapter [Add Chapter] we will demonstrate, such an attack on privacy where we can infer when particular homes are empty.
 
 \chapter{Differential Privacy}
 \section{Introduction}
