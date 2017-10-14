@@ -6,16 +6,13 @@
 \usepackage{hyperref}
 \hypersetup{
     colorlinks,
-    citecolor=black,
+    citecolor=blue,
     filecolor=black,
     linkcolor=black,
     urlcolor=black
 }
 
 
-
-
-\bibliographystyle{acm}
 
 
 \title{Privacy Oriented Data Analysis}
@@ -38,9 +35,12 @@
 \setcounter{tocdepth}{1}
 \tableofcontents
 
-\chapter{Privacy in Digital Age}
+\chapter{Introduction}
 
 
+\textit{``The choice for mankind lies between freedom and happiness and for the great bulk of mankind, happiness is better."}
+
+{\raggedleft -- George Orwell in `1984'\quad\par}
 
 
 
@@ -85,7 +85,7 @@ For example consider the data in Figure \ref{fig:kAon=2}, here we can see that i
 \paragraph{}
 As apparent from the definition above, we need a very specialized database (where the values follow the rules for required k). If the complete database does not pass this test we can not publish it in full, instead we need to find a valid subset or add dummy (invalid) records to fulfill this requirement. Another way to achieve k-anonymity is to suppress (delete) some values (i.e. replace them by *, for example in the example above we suppressed the last digit of the zip code for the table to comply with 2-Anonymity definition) Finding valid subsets can be computationally very expensive so most often we suppress or just add dummy records. Adding invalid records or suppressing can also affect the quality of the data analysis that can be performed on the published set (as we may alter the original distribution of the data).
 \paragraph{}
-Another problem with this k-anonymity is that it fails if additional information is available to an adversary (who is looking to identify particular records). There are mainly two types of these attacks. First one is Homogeneity Attack, where using some previously known information adversary is able to filter out a set of records which have the same Secret Values (resulting in disclosure). For example if adversary knows that a person is Male, White and is 50 years old, he gets 2 matching records, both of them reveal secret value as `chest pain'. The other attack is known as Background Information Attack, where if an attacker is able to filter some data, the identification can be done by some general known information, let say white people are more prone to obesity. Countering such attacks have been proposed by using l-diversity \cite{machanavajjhala2006diversity} which makes sure that each similar block of quasi-identifiers has at minimum l different sensitive values
+Another problem with this k-anonymity is that it fails if additional information is available to an adversary (who is looking to identify particular records). There are mainly two types of these attacks. First one is Homogeneity Attack, where using some previously known information adversary is able to filter out a set of records which have the same Secret Values (resulting in disclosure). For example if adversary knows that a person is Male, White and is 50 years old, he gets 2 matching records, both of them reveal secret value as `chest pain'. The other attack is known as Background Information Attack, where if an attacker is able to filter some data, the identification can be done by some general known information, for example, lets say white people are more prone to obesity. Countering such attacks have been proposed, by using l-diversity \cite{machanavajjhala2006diversity} which makes sure that each similar block of quasi-identifiers has at minimum l different sensitive values.
 
 \paragraph{}
 By its very nature, k-anonymity is limited to only pre-planned publishing of data, where the publisher has to keep the required k level of anonymity, valid for any values in the data. Any kind of interactive querying via this technique is not possible. But still there are some applications where k-anonymity has proven useful, as Intel demonstrated in it analysis of cloud usage data to enhance security \cite{sedayao2012enhancing}. 
@@ -122,7 +122,7 @@ One particular problem of this work regarding public cloud is this that PINQ req
 \paragraph{}
 Map Reduce is one of the most prevalent Big Data analysis tool, and Airavat \cite{roy2010airavat} modifies it to the task of privacy preservation. Here authors present a case where mappers are third party and hence their code is untrusted. It's methodology has two main components i.e. Mandated Access Control via the help of underlying operating system and application of differential privacy by adding random noise to the reduced outputs. For example, for the task of parallel K-Means clustering, mappers can be public which output cluster associations (within a bounded range) and the reducers can be private and trusted which output new cluster centroids with certain level of error, such that this error does not massively affect the collective distribution of points but also masks individual data points.
 \paragraph{}
-They applied their framework to multiple big data tasks like K-NN recommender engine, K Means clustering and Naïve Bayes Classifier and claim that their system has a performance overhead of 32\% (in terms of time complexity) compared to vanilla Map Reduce.
+They applied their framework to multiple big data tasks like k-NN recommender engine, k Means clustering and Naïve Bayes Classifier and claim that their system has a performance overhead of 32\% (in terms of time complexity) compared to vanilla Map Reduce.
 \paragraph{}
 One problem with this performance score is this that the authors implemented this system entirely on public cloud i.e. 100 machine cluster on Amazon EC2, where most probably all machines were on same network, but in a hybrid environment such implementation will surely suffer performance loss because of added Virtual Network implementation (same problem as with HyberEx \cite{ko2011hybrex}).
 \subsection{User labeled data protection}
@@ -187,7 +187,7 @@ Most of current frameworks for hybrid cloud, work by the manual tagging of sensi
 \chapter{Location Based Services and Methodologies for Location Privacy}
 \section{Location Based Services}
 \paragraph{}
-Today most of the mobile devices (phones, tablets, laptops etc.) have a GPS (Global Positioning System) receiver built in, it was not the case twenty years, ago when this technology was limited to special professions such as military and construction. The age of smart phones and mobile applications has unlocked a variety of useful applications of GPS. These services use location of the device or user to supply user with useful information. Such services are called Location Based Services (LBS).
+Today most of the mobile devices (phones, tablets, laptops etc.) have a GPS (Global Positioning System) receiver built in, it was not the case twenty years ago when this technology was limited to special professions, such as military and construction. The age of smart phones and mobile applications has unlocked a variety of useful applications of GPS. These services use location of the device or user to supply user with useful information. Such services are called Location Based Services (LBS).
 \paragraph{}
 LBS did exist before smartphones with GPS access, early LBS \cite{lbsShu} used mobile network positioning techniques like cellular triangulation. Although such services were useful but had a limited scope. Example of LBS from that era can be “Find my Friends” service which worked by a user sending a text message with his friends ID and the Network operator sending back the cell address (usually name of suburb) of the friend’s mobile (given that friend had previously agreed to his location sharing). Another example can be a SMS based restaurant locator, which would reply with a list of restaurants in the user’s vicinity. In this work however, we will focus mainly on the modern location services which have the ability to pinpoint a device's location to within a few meters \cite{ TGIS:TGIS1152}.
 \paragraph{Examples of Location Based Services}
@@ -200,10 +200,10 @@ LBS did exist before smartphones with GPS access, early LBS \cite{lbsShu} used m
 \end{itemize}
 
 \subsection{Privacy Issues in Location Based Services}
-All these applications work by the user's device sending its location to the server of the LBS provider. This sharing of location data raises some serious privacy issues. Exactly where a person is located is part of its human freedom, and most of the time people will no want other to find where they are ``all the time". These others can be trusted entities (family or friends) or some adversarial entity (spies, robbers etc.). Yet most of us today transmit our location (via mobile phones) nearly 24/7, to servers we do not know about.
+All of these applications work by getting the location from the user's device and sending it to the server of the LBS provider. This sharing of location data raises some serious privacy issues. Exactly where a person is located is part of its human freedom, and most of the time, people will no want others to find where they are ``all the time". These others can be trusted entities (family or friends) or some adversarial entity (spies, robbers etc.). Yet most of us today transmit our location (via mobile phones) nearly 24/7, to servers we do not know about.
 
 \paragraph{}
-In a relatively early work \cite{dobson2003geoslavery} in the dangers of geo-privacy, they have argued that location technologies that exist today have the power to technically enslave human beings, for example they present scenarios where some ``master" entity may restrict the movement of ``slave" humans. Such an entity will have the technical means to accurately determine the location of slaves and take corrective action (just like we might zap animals with electric shock if they leave a set parameter). Although, such a scenario is very unlikely or even absurd, but authors argue that all the technological pre-requisites are available now, which itself is a cause of concern.
+In a relatively early work \cite{dobson2003geoslavery} about the dangers of geo-privacy, authors have argued that location technologies that exist today, have the power to technically enslave human beings, for example they present scenarios where some ``master" entity may restrict the movement of ``slave" humans. Such an entity will have the technical means to accurately determine the location of slaves and take corrective action (just like we might zap animals with electric shock if they leave a set parameter). Although, such a scenario is very unlikely or even absurd, but authors argue that all the technological pre-requisites are available now, which itself is a cause of concern.
 
 \paragraph{}
 Mining of publicly available location data (such as: from social media) can have adverse affect on the privacy and even physical well being of the user. We have demonstrated such an experiment in Section ([Add Section]). 
@@ -216,10 +216,10 @@ Even if we do not go to such horrible extent, there will always be dangers in sh
 
 \section{Methods for privacy aware Location Data Analysis}
 \paragraph{}
-There are many mechanisms for location privacy. Most of these approaches aim to limit the effect of any information that may be transmitted from a user's device. Nearly all literature uses some kind of a motivation example as a use case for analysis.
+There are many mechanisms for location privacy. Most of these approaches aim to limit the effect of any information that may be transmitted from a user's device. Nearly all the literature uses some kind of a motivation example as a use case for analysis.
 \paragraph{A simple use scenario for LBS and desire for privacy:}
 
-Figure \ref{fig:LBSMechanism} illustrates a simple use case of an LBS, which returns a list of restaurants (serving a specific cuisine), near a user's location. The general motivation of the Location Privacy Preserving approaches is to offer some utility, like list of Points of Interest (POI) (i.e. valid and geographically near restaurants Y,Z,A), while trying to hide as much of the original position X as possible.
+Figure \ref{fig:LBSMechanism} illustrates a simple use case of an LBS, which returns a list of restaurants (serving a specific cuisine), near a user's location. The general motivation of the Location Privacy Preserving approaches is to offer some utility, like list of Points of Interest (POI) (i.e. valid and geographically near restaurants Y,Z,A), while trying to hide as much of the original position X as possible. The alternate location that hides X is referred as location Z.
 \begin{figure}[ht]
 \centering
         \includegraphics[width=100mm,scale=0.5]{Images/LBS-Scenario.png}
@@ -280,7 +280,7 @@ These approaches also suffers from side-information attack, as ensuring that all
 \paragraph{}
 In Chapter 2 we introduced differential privacy as a method to do private data analysis, in this section we will discuss it specifically for location privacy. It is basically a balance between utility and a mathematical expression of privacy (we will offer detailed discussion on differential privacy in the next chapter).
 \cite{dewri2013local} Proposes a framework where he makes up an anonymity set (similar to cloaking regions discussed earlier) having k locations and specifying the probability of reporting same location Z from this set to be similar (within a small range) for each of locations in the set. To achieve this similar probability distribution he adds Laplace noise to each location point in the set. One drawback of this technique is this that when he divides up the locations into sets, he kind of adds a deterministic element that can make the privacy guarantee weak. 
-
+\paragraph{}
 The seminal work on Location Privacy which can be termed as current state of the art is: Geo-Indistinguishability \cite{andres2013geo} introduced in 2012. This technique works by adding Laplacian Noise (drawn randomly form a specially constructed Planar Laplace distribution) to the actual location X to get a position Z (this is done offline i.e. on user's device). Now it sends Z to the LBS server and requests all the interesting service points with a set radius, called Area of Request (AOR). Ideally this radius being requested should be large enough that, it would contain X, as well as all the service points near X with in an Area of Interest (AOI) see Figure \ref{fig:AOIvsAOR}, that will offer best utility to the user. Now the device can easily filter AOI from AOR.
 \begin{figure}[ht]
 \centering
@@ -290,7 +290,7 @@ The seminal work on Location Privacy which can be termed as current state of the
 \end{figure}
 
 \paragraph{}
-Note that it is not guaranteed that  AOI and X will fall with in AOR, if this happens the scheme just considers such a request as not accepted. Authors state that if any attempt is made to dynamically set the radius of AOR, the LBS server would know that X lies with in that specific region. The uncertainty, that it is not guaranteed that X will be in AOR is the property that saves this approach from side information attacks, albeit at the cost of failed unfulfilled requests where AOR does not include AOI.
+Note that, it is not guaranteed that  AOI and X will fall with in AOR, if this happens the scheme just considers such a request as not accepted. Authors state that if any attempt is made to dynamically set the radius of AOR, the LBS server would know that X lies with in that specific region. The uncertainty, that it is not guaranteed that X will be in AOR is the property that saves this approach from side information attacks, albeit at the cost of failed or unfulfilled requests where AOR does not include AOI.
 \paragraph{}
 One good advantage of this approach is that, it does not need a trusted middle layer to compute the obfuscated location Z, all can be done on user's device offline before sending Z to LBS.
 \paragraph{Cloaking vs Planer-Laplace}
@@ -305,7 +305,7 @@ In \cite{andres2013geo} authors have presented a good comparison between the k-a
 
 
 \section{Chapter Conclusion and A Possible Gap}
-In this chapter we explained the mechanism of Location Based Services and presented a survey of current methods of ensuring privacy while working with LBSs.A lot of work has been done on the protection of user's location, but there are some very specific privacy related issues, that are concerned with the private properties of the locations themselves. For example the use pattern of a house, people staying in a property, demographics of a apartment block. Although the goal of such analysis is not directly related to the techniques discussed in this chapter, but still its good to think about privacy issues for these applications. In chapter [Add Chapter] we will demonstrate, such an attack on privacy where we can infer when particular homes are empty.
+In this chapter we explained the mechanism of Location Based Services, and presented a survey of the current methods of ensuring privacy while working with LBSs. A lot of work has been done on the protection of user's location, but there are some very specific privacy related issues, that are concerned with the private properties/attributes of the locations themselves.For example: the use pattern of a house, people staying in a property, demographics of a apartment block. Although the goal of such analysis is not directly related to the techniques discussed in this chapter, but still its good to think about privacy issues for these applications. In chapter [Add Chapter] we will demonstrate, such an attack on privacy where we can infer when particular homes are empty, then we will propose a differential privacy based approach to extract some utility from this scenario.
 
 \chapter{Differential Privacy}
 \section{Introduction}
@@ -335,7 +335,7 @@ One problem with differential privacy is this that currently there are no standa
 \end{equation}
 
 
-\chapter{Experimental Setup - Apache Hadoop and Spark}
+\chapter{Experimental Setup - Apache Hadoop and Spark on NECTAR}
 
 
 
