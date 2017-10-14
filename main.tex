@@ -1,8 +1,15 @@
-\documentclass{report}
-\usepackage[utf8]{inputenc}
-\usepackage{lineno}
-\linenumbers
+\documentclass[12pt]{report}
 
+\usepackage{geometry}
+\geometry{a4paper, portrait, margin=3cm}
+\linespread{1.25}
+\usepackage[utf8]{inputenc}
+% \usepackage{lineno}
+% \linenumbers
+
+
+\usepackage{algorithm2e}
+\usepackage{minted}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks,
@@ -11,12 +18,25 @@
     linkcolor=black,
     urlcolor=black
 }
+\usepackage{authblk}
+\usepackage{listings}
 
+% \usepackage{fancyhdr}
+ 
+% \pagestyle{fancy}
+% \fancyhf{}
+% \renewcommand\chaptermark[1]{\markboth{\\ #1}{}}
 
+% \fancyhead[L]{\bfseries\leftmark}\rfoot{Page \thepage}
+\renewcommand\Authands{ and }
 
+\title{Privacy Oriented Data Analysis\\\large{Master Thesis - 75 Points}}
 
-\title{Privacy Oriented Data Analysis}
-\author{Muhammad Umer Altaf }
+\author[1]{Muhammad Umer Altaf}
+\author[1]{Prof. Richard O. Sinnott}
+
+\affil[1]{The University of Melbourne\\School of Computing and Information Systems}
+
 \date{October 2017}
 
 \usepackage{natbib}
@@ -45,7 +65,7 @@
 
 
 
-\chapter{Privacy-oriented Data Analysis in Distributed and Hybrid Environments}{Background Study}
+\chapter{Privacy-oriented Analysis in Distributed and Hybrid Environments}{Background Study}
 \section{Introduction}
 \paragraph{}
 Systems that guarantee secure communication have been in use for a long time, but Public Clouds suffer from very basic trust issues. Sensitive data like medical or financial records have tough safety guidelines and cannot be processed on offshore third party servers. The advent of public cloud holds tremendous advantages in terms of scalability and elasticity, especially if augmented by in-house infrastructure (Hybrid Cloud). In this chapter we will list some of existing frameworks that try to support privacy oriented analysis while being applicable in hybrid clouds or distributed environments.
@@ -56,6 +76,8 @@ Organizations are hungry for insights from Big Data. Online advertisement agenci
 \paragraph{}
 There are however some applications where this privacy of individual holds the prime objective yet the analytic potential of data as whole is also very great. For example processing large data of psoriasis patients may bring useful insights about the disease, but if some health insurance company is able to identify patients and refuse coverage then it can be both, legally and ethically wrong. 
 Below we discuss some of the identified formalization of privacy problems in Big Data context and some proposed solutions.
+
+
 
 \section{Methodologies for Private Data Analysis}
 \paragraph{}
@@ -213,6 +235,23 @@ Mining of publicly available location data (such as: from social media) can have
 \paragraph{}
 Even if we do not go to such horrible extent, there will always be dangers in sharing and collecting location information. So the problem arises, that ``Can we extract any utility from LBSs, without compromising these privacy issues?". The answer is yes, there are multiple methodologies to analyze and process location data without exposing users to the risks of limiting freedom.  In the following sections we will explore some of these methods in detail.
 
+\section{Recent location privacy breaches}
+\paragraph{}
+Location played a key role in some of the recent privacy breaches. Some of these breaches were even picked up by international news and TV. Below are some examples of how location data was used as a negative force.
+
+\paragraph{Gawker Stalker Maps\cite{GawkerURL}} Gawker was a blog focused on the activities of famous celebrities and media entities. In 2014 they launched a portal where anyone could share the location of a celebrity they spot in public. The person sighting any celebrity, would normally email to Gawker, the location and time of sighting. Gawker would then put these sightings on Google Maps. Usually, these sightings also would include a text story about the sighting, see Figure \ref{fig:Gawker}. 
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=75mm,scale=0.5]{Images/gawker-stalker.jpg}
+    \caption{A screen shot of a celebrity sighting on Gawker}
+    \label{fig:Gawker}
+\end{figure}
+\paragraph{}
+Celebrities in Hollywood were outraged with this service, because in some cases they were being tracked in real-time. George Clooney and Jimmy Kimmel publicly thrashed Gawker for breaching their privacy and putting them in possible harms way. This scandal, apart from being one of the reason for the closure of Gawker as a whole, Stalker Maps brought into limelight the issues about privacy.
+\paragraph{``We know your house"\cite{WeKnowYourHouse} and ``Please Rob Me"\cite{PleaseRobMe}} These two websites were a social experiment to show the power of data analysis. ``We know your house"\cite{WeKnowYourHouse} gathered publicly available tweets via the Twitter Search API\cite{twiterSearchAPI} and extracted the tweets with location information. It then used this location to translate to actual street level level address, then published them online. 
+\paragraph{}
+``Please Rob Me"\cite{PleaseRobMe} also used Twitter data to mark the times when people check into Foursquare\cite{Foursquare} spots and tweeted about them. They published these times on internet saying that, they are not home so their homes were open for robbers. In section [Add Section], we also present an experiment like this.
 
 \section{Methods for privacy aware Location Data Analysis}
 \paragraph{}
@@ -305,6 +344,7 @@ In \cite{andres2013geo} authors have presented a good comparison between the k-a
 
 
 \section{Chapter Conclusion and A Possible Gap}
+\paragraph{}
 In this chapter we explained the mechanism of Location Based Services, and presented a survey of the current methods of ensuring privacy while working with LBSs. A lot of work has been done on the protection of user's location, but there are some very specific privacy related issues, that are concerned with the private properties/attributes of the locations themselves.For example: the use pattern of a house, people staying in a property, demographics of a apartment block. Although the goal of such analysis is not directly related to the techniques discussed in this chapter, but still its good to think about privacy issues for these applications. In chapter [Add Chapter] we will demonstrate, such an attack on privacy where we can infer when particular homes are empty, then we will propose a differential privacy based approach to extract some utility from this scenario.
 
 \chapter{Differential Privacy}
@@ -335,7 +375,89 @@ One problem with differential privacy is this that currently there are no standa
 \end{equation}
 
 
-\chapter{Experimental Setup - Apache Hadoop and Spark on NECTAR}
+\chapter{Experimental Setup}
+\section{Infrastructure}
+\paragraph{}
+From this chapter onwards we will discuss the experiments, and proof of concept implementations we did for this research work. For these experiments, we work with a large amount of data (for more details see Section [Add Section]). Collecting and processing this data needs substantial amount of computing resources, this chapter offers details of the infrastructure employed and the experimental setup deployed.
+\paragraph{}
+The primary computing resource used in this project is the NECTAR\cite{NECTAR} cloud platform. Other resources that are used include: the AURIN\cite{AURIN} data platform and some local resources at the University of Melbourne. Using these resources a Apache Spark and Hadoop cluster was deployed.
+
+\subsection{Platform}
+\paragraph{NECTAR} or the ``National eResearch Collaboration Tools and Resources project" aims to provide, researchers and academics all over Australia, with access to large set of digital resources, which can help and enhance their research. 
+\paragraph{}
+NECTAR cloud is a public Infrastructure as a Service (IaaS) platform, which readily supplies on demand cloud resources to its users. An IaaS is a modal for cloud service provision, where computing resources such as Virtual Machines, Storage Containers etc. are provided to the user as a service, which may be charged as per usage. Notable commercial IaaS providers are Amazon Web Services\cite{AWS}, Microsoft Azure Cloud\cite{Azure} and Oracle Cloud\cite{OracleCloud}. NECTAR however, is an implementation of the open source OpenStack\cite{OpenStack} project.
+\paragraph{}
+As researchers at The University of Melbourne we had to submit an application to NECTAR for the allocation of required resources. A request was made for 4 dual core instances with 8 GB ram each, plus we also requested about 600 GB of volume storage. This application was accepted and resources were allocated for our use.
+
+\paragraph{AURIN} or ``Australia’s Urban Intelligence Network" collects and aggregates urban data from vast number of data providers. Aim of AURIN is to provide both tools and data to encourage urban development. From the location and height of the trees in Australia, to the census statistics, there are hundreds of data-sets available on AURIN. Just by loading any data set AURIN automatically provides tools to visualize and manipulate data. AURIN's main focus is on geo-spatial data analysis and it is one of the best tools for these tasks.
+
+
+
+\section{Requirements and Deployment}
+Below is a quick list of the requirements that were identified for this project:
+\begin{itemize}
+  \item Provide a store for data (mainly social media data, like Twitter tweets) 
+  \item Provide a fast and quick data analysis platform
+  \item Allow hassle free and efficient programming
+\end{itemize}
+
+\paragraph{}
+The requirements of this project dictated a fast environment to store and process data, after much deliberation Apache Spark was selected to be the main processing platform. Other options, that were considered were No-SQL databases like MongoDB and CouchDB, but they are mostly good for storage only, for any kind of data analysis we need to take the data out of their stores. CouchDB does provide some analysis functionality, through views but it is very limited for interactive data manipulation.
+\subsection{Data Collection}
+Although not used for primary data processing, CouchDB was used as a temporary store during the data collection process. Because it offers higher availability and lower data addition cost than the Hadoop File System. The tweet harvester as described in the next section, collected the tweets continuously, so the data store had to be online, CouchDB perfectly fits the description, plus as it is a document oriented database, we just retrieve the tweets in JSON format and store them as it is, without the need of parsing and splitting each record, which would have been a necessity if any structured RDBMS (Relational Database Management System) like MySQL or SQL Server would have been used.
+
+Here we would like to cite and mention one of the earlier works that the author (Muhammad Umer Altaf) did for the ``Cluster and Cloud Computing" course project in Semester 1 2016 at The University of Melbourne. This work was done as a part of team [Add team] and required same kind of twitter data collection. So for this part of the project we used the same code - the Tweet Harvester.
+
+Basically the code, spawned 4 NECTAR instances to harvest (collect) tweets and save them to a single CouchDB instance which had a large volume storage attached, see Figure \ref{fig:tweetHarvester}. These instances ran Ubuntu 16.04 as the operating system and had all the required dependencies configured through Ansible playbooks (automation scripts).
+
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=120mm,scale=1]{Images/TweetHarvesting.png}
+    \caption{Architecture of our Tweet Harvester.}
+    \label{fig:tweetHarvester}
+\end{figure}
+
+
+
+Due to the limited amount of time and the speed of speed of Twitter Search API, we were only able to gather about 1 million tweets, in 3 weeks, using this setup. Although one million is a high number, but due to the limitations of search API, these tweets were not all geo-coded, this means not all tweets had tweet location in them (This happens when tweeter turns off his device's location capabilities). As location was our primary data attribute, we requested twitter data from our good friends at the Melbourne eResearch Group, they continually do social media experiments and collect tweets. They were kind enough to provide us an interface to their data. We added these tweets to our collection.
+
+\paragraph{}
+In total we gathered about 38 Million tweets. The resulting JSON file from CouchDB was about 13 GB in size. In this work we also used some other data as described in the experiment chapters [Add Chapter], but that data was relatively small in size and did not need special infrastructure.
+
+\subsection{Data Processing}
+Once we had acquired tweet data, we dismantled the Tweet Harvester to free up our NECTAR resources (we kept the volume storage containing our tweets intact). On these free resources we spawned a Apache Spark cluster which runs on top of a Hadoop cluster.
+
+\paragraph{Apache Hadoop:\\}
+Hadoop is a framework for distributed big data storage and processing. A Hadoop cluster can be built using commodity hardware. The power of Hadoop are mainly its two components: First is the Hadoop Distributed File System (HDFS), which distributes data among all nodes, replicating automatically, this to ensure reliability in case of node failures. Second is the MapReduce processing engine, which is a very powerful processing model.
+\paragraph{About MapReduce:\\}
+MapReduce is basically a distributed programming model that pushes code to relevant data. MapReduce has proven to be very effective method for distributed processing. This model requires two basic functions/operations. First is the `Map' operation, which is defined to process a single data item (such as a row in table or single record/document). This map part can be executed in parallel on all data items, the limit to this parallelism is only constrained by the amount of resources (i.e. number of nodes, number of cores per node). Then comes the `Reduce' operation, that collects all the results from the map part to a single master node for output. 
+\paragraph{}The classic example to understand MapReduce is a program that counts occurrences of each word in a large set of documents. Imagine that these documents are scattered over multiple nodes in the HDFS, now the map part will output for each document a list of unique terms and their counts, recall that this can run independently on all available nodes. When the map stage is completed the reducer kicks in and aggregates all these counts, effectively by summing up counts for all matching terms, then it will output the results on a single node (usually the one that initiated the reduce operation).
+
+\paragraph{Apache Spark:\\}
+Spark is the next evolution of MapReduce, while MapReduce worked by reading data from disk storage and then processing it, Spark works on a data structure called RDDs (Resilient Distributed Datasets). These RDD are loaded up in to memory of the nodes where particular data items are stored, and computations are executed on them. So in a sense RDDs offer a mechanism for limited shared memory. These RDDs are also replicated as per needed to ensure reliability of the tasks. As the data now resides on memory, much more interactive programs can be written for this infrastructure. Spark programs can be divided in to three main categories i.e. DataFrames, Machine Learning (ML) and Graph Processing. DataFrames offer a SQL like interface to many types of data in the HDFS, Spark also comes with libraries for common ML and graph processing tasks.
+
+\paragraph{}
+Spark is written in Scala programming language, but now Python and Java APIs are also available. We love Python for its simplicity, so we used the Python API PySpark in this project.
+
+DataFrames is the feature we primarily used in this work, due to the power of spark, loading up a large JSON of tweets and querying it very easy, you just need 2 lines of code. For example following code will filter out and print the count all tweets by a user `abc':
+
+
+\inputminted{python}{sparkCount.py}
+
+Imagine doing this in C++, Java or normal Python. You need to read the file, parse it into json or into custom column structures, then you need to search for this user and in the end count the relevant tweets. And mind you the file is 13 GB in size so good luck managing memory.
+
+What's even better is that Spark is fast, we ran the above code on a 13 GB tweet file. The filter and count part took less than a minute on a 4 node cluster. Run time, can be further improved considerably if Tweets dataframe is cached into memory. The first access in this case will result in same run time as above as the data will be copied to memory, subsequent accesses like counting tweets by some other user will be very fast: less than 8 secs.
+
+This accessibility and performance compelled us to use Spark for our experiments, because Spark gives ability to run instant interactive data analysis, without the need of using a small subset of data to test code, or waiting for a lengthy distributed job to finish.
+
+
+\paragraph{Jupyter Notebook Server:\\}
+After setting up the Hadoop and Spark cluster we installed a Jupyter notebook server on the Spark master node. This allowed us to remotely access the cluster and run interactive Python code in any browser. These notebooks also allow us to visualize data instantly within the browser, this feature is very important for us as we work with geo-spatial data, seeing things on maps or graphs allow much better and faster analysis.
+
+\section{Final Setup and Recommendations}
+Figure [Add Figure], shows the high level diagram of the setup. It was a very challenging and hard process to setup and configure this cluster, so for the advantage of our peers and future researchers, we have made snapshots of the instances for the master and slave nodes. These snapshots are publicly available via the NECTAR dashboard by the name of `spark-master' and `spark-slave'. These images when launched into instances will still need some configuration (like Host Names, IP addresses and passwords), and we plan to release a guide to do this soon.
+
 
 
 
