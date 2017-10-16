@@ -77,6 +77,46 @@ Organizations are hungry for insights from Big Data. Online advertisement agenci
 There are however some applications where this privacy of individual holds the prime objective yet the analytic potential of data as whole is also very great. For example processing large data of psoriasis patients may bring useful insights about the disease, but if some health insurance company is able to identify patients and refuse coverage then it can be both, legally and ethically wrong. 
 Below we discuss some of the identified formalization of privacy problems in Big Data context and some proposed solutions.
 
+\section{Popular Examples of Data Privacy Breaches}
+\paragraph{}
+Security and privacy are two distinct concepts \cite{spencer2001security}, but can be confused as being the same because they are very close in impact. Classically digital security usually means to restrict access to data and systems. Privacy is somewhat a different way of looking at things, digital privacy is the guarantee that the data or system, (doesn't matter secured or public), will not violate personal rights of the concerned person. In this section we will list some of the examples of data privacy breaches, which were not directly the result of a security breach or failure. These examples highlight the power of large scale data analysis, where the analyst can have access to diverse other secondary data sources, and combining them with primary data can result in surprising disclosures.
+\paragraph{Governor of Massachusetts health records \cite{sweeney2000uniqueness}:\\}
+In 1990 a government department of the State of Massachusetts, released some hospital visit medical records for research purposes. This data was sanitized by state, means that all identifying information like: Social Security Number, Name and Address was removed from the records. The state gave an assurance that, no record can be linked to any personal identity, the then Governor of the state ``William Weld" himself assured his citizens of this. But instead, researcher ``Latanya Sweeney" at the Carnegie Mellon University, was able to re-identify most of the records from this release, including Governor's own records. 
+\paragraph{}
+In \cite{sweeney2000uniqueness} Sweeney describes the process she used to re-identify the records. She used publicly available voter list data (which she purchased from the state for just \$20), and linked it to the anonymous health records via matching attributes. ZIP code, sex and  date of birth - are some examples of the such attributes which were present in both data sources see Figure \ref{fig:voterMedical}.
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=100mm,scale=0.5]{Images/GovMassReId.PNG}
+    \caption{Linking Voter Data with Anonymized Medical Data. Source:\cite{sweeney2000uniqueness}}
+    \label{fig:voterMedical}
+\end{figure}
+\paragraph{}
+Sweeney observes that almost 87\% of entire U.S.A. population can be identified by using just: ZIP code, sex and date of birth. Even if name of county is used instead of the ZIP code (county is bigger than a Postal ZIP area, and contain many ZIP codes), 18\% of the people can be identified. This finding disproves the view that a unique nationally allocated number like Social Security Number is the only unique identifier of people, and if kept secret, alone can preserve privacy.
+
+
+\paragraph{Netflix subscriber de-anonymization \cite{narayanan2008robust}:\\}
+Since 2006 Netflix, an online DVD-Rental and movie streaming service, had been conducting a challenge to improve it's movie recommendation engine. The task was to correctly predict user's movie ratings. For this they released their anonymized movie rating database, which did not had any user identifying data. Researchers at University of Texas, used data from another movie rating website IMDb (Internet Movie Database), which had user's ids to re-identify the users in Netflix dataset.
+\paragraph{}
+The authors \cite{narayanan2008robust}, showed that you just need to know a person's identity and his/her views on only a few movies, you can get their entire Netflix viewing history (given that the user was part of the released data set), even if you don't use the IMDb records. This shows that in very sparse data-sets (like the movie ratings one, which had a lot of movies but each user rated on only few of them), re-identification is very accurate.
+
+\paragraph{}
+Implications of this were severe, as movie ratings enjoy some of the strictest privacy laws. Probably because, the movies a person watch can reveal a lot about his personal self (e.g. Political ideology, religious views and sexual orientation etc). There were many law suits against Netflix, with the plaintiffs reporting damaging personal impacts. For example a closet Lesbian mother claimed that, this data release had outed her to the world, by revealing her movie choices, hence revealing her sexual orientation. Netflix had to settle these lawsuits for a large amount of money \cite{netFlixSetlement}.
+
+
+
+\paragraph{AOL Search Queries Release \cite{barbaro2006face}:\\}
+AOL (America Online), released more than 20 million search terms from 6.5 million individual users. Although the release was intended for research purposes and had no user ids or names associated with the released search terms, but the terms themselves had a lot of personal information. This led to many researchers, de-identifying the searchers identities. The New York Times successfully identified ``user No. 4417749" as one ``Thelma Arnold" from Lilburn, Georgia. They were able to identify her based on her search questions like ``numb fingers, ``60 single men" and ``dog that urinates on everything" among many. The interesting thing in this fiasco is this that, Ms Arnold, herself verified that this was her own history. Various other users have been either identified or marked as being `interesting' based on their queer search habits. One of other such user is ``user No. 927", who had very deranged search habits, he even inspired a theatrical play.
+
+
+\subsection{Impact of these privacy breaches}
+An extensive study \cite{ohm2009broken} from  UCLA Law School investigates the impact and realization the privacy breaches, such as the ones mentioned in this section have on human freedom, governance and policy making. They note that although simple anonymization has been proved to be worthless by these disclosures, but still most of the data publishing agencies (i.e. government, health care, legal etc.) do not pay attention to these issues and rely on half-cooked faulty anonymization. They argue that mostly it is because the legal framework is lagging behind and does not address these new issues. So if a law or policy asks for privacy it normally deems anonymization enough. They have proposed some good recommendations for policy makers to follow at the end.
+
+\paragraph{}
+We here note that above mentioned disclosures are the ones that were very public. They made it to media outlets so that is why their impact has been so extensively investigated. But now consider some adversary having access to some private data repositories, (which is not a very absurd scenario as employees of every organization can have tendency to go rouge), he can do bad (as in evil) data analysis without the outside world even knowing about it. Right now not much legal thought has been given to these scenarios, mainly because techniques to do private data analysis are at very nascent stage. We need robust privacy oriented data analysis frameworks and the legal framework to follow it properly, that can only come if there is wide spread public awareness of these issues.
+
+
+
 
 
 \section{Methodologies for Private Data Analysis}
@@ -172,7 +212,7 @@ Authors realize that using a WAN impacts the performance of MapReduce jobs, but 
 All the mentioned frameworks use some form of manual data labeling, differential privacy or some combination of both. The table below summarizes these frameworks by describing their base fundamentals and their applicability to hybrid cloud environment:
 
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{Frameworks for privacy Oriented Analysis}
 \label{Frameworks for privacy Oriented Analysis}
@@ -207,6 +247,7 @@ Most of current frameworks for hybrid cloud, work by the manual tagging of sensi
 
 
 \chapter{Location Based Services and Methodologies for Location Privacy}
+\label{chap:LocationBasedServices}
 \section{Location Based Services}
 \paragraph{}
 Today most of the mobile devices (phones, tablets, laptops etc.) have a GPS (Global Positioning System) receiver built in, it was not the case twenty years ago when this technology was limited to special professions, such as military and construction. The age of smart phones and mobile applications has unlocked a variety of useful applications of GPS. These services use location of the device or user to supply user with useful information. Such services are called Location Based Services (LBS).
@@ -254,6 +295,7 @@ Celebrities in Hollywood were outraged with this service, because in some cases 
 ``Please Rob Me"\cite{PleaseRobMe} also used Twitter data to mark the times when people check into Foursquare\cite{Foursquare} spots and tweeted about them. They published these times on internet saying that, they are not home so their homes were open for robbers. In section [Add Section], we also present an experiment like this.
 
 \section{Methods for privacy aware Location Data Analysis}
+\label{sec:MethodsForLocationPrivacy}
 \paragraph{}
 There are many mechanisms for location privacy. Most of these approaches aim to limit the effect of any information that may be transmitted from a user's device. Nearly all the literature uses some kind of a motivation example as a use case for analysis.
 \paragraph{A simple use scenario for LBS and desire for privacy:}
@@ -460,11 +502,31 @@ Figure [Add Figure], shows the high level diagram of the setup. It was a very ch
 
 
 
-
-
-\chapter{Location Privacy and Attack Demo }
-
 \chapter{Location Specific Privacy Attack and Resolution}
+\section{Locations and Privacy Attributes}
+\paragraph{}
+In Chapter \ref{chap:LocationBasedServices}, we introduced the concept of Location Privacy and the approaches to defend it. Until now we have presented privacy from a human's (i.e. user's) point of view. In this chapter we will show that, location (as in places) also have some privacy attributes attached to them. These issues, when exploited have the power to ultimately violate the privacy of humans that are related to these places. Examples of some of these privacy attributes can be:
+\begin{itemize}
+  \item The address of a house
+  \item Neighbourhood description of a house (for example: How far is it from a police station?)
+  \item The use pattern of a property/house (for example: When is the property empty? When do people go to sleep in a house?) 
+  \item The demographics of the property (for example: How many people live in a house? What are their ethnicities etc?)
+\end{itemize}
+\paragraph{}
+Nearly all the methods for location privacy preservation as presented in Section \ref{sec:MethodsForLocationPrivacy}, aim to obfuscate or hide the location of user, but we argue that sometimes this is not enough. Especially when doing large scale big data analysis, where the adversary (an unwanted entity) may have access to a lot of side information.
+\paragraph{}
+We live in an increasingly digitizing society, now nearly every human task has an electronic footprint. Buy a parking ticket, go through a security check point, log-on to a website you are sure to leave digital traces there. So existence of such knowledge in itself is a threat, let alone it being used adversely. All this information has the potential to become side information, hence, although they may not breach privacy by themselves, but when aggregated with other data they can cause privacy breaches. But, then again this data exists in first place because it offers some utility to certain people. 
+
+
+
+
+
+
+
+
+\chapter{Location Privacy Attack Demo }
+
+
 
 
 
