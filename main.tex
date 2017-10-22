@@ -20,7 +20,7 @@
 }
 \usepackage{authblk}
 \usepackage{listings}
-
+\usepackage{booktabs}
 % \usepackage{fancyhdr}
  
 % \pagestyle{fancy}
@@ -54,16 +54,30 @@
 \maketitle
 \setcounter{tocdepth}{1}
 \tableofcontents
+\pagebreak
+I certify that:
+\begin{itemize}
+\item This thesis does not incorporate without acknowledgement any material previously submitted for a degree or diploma in any university; and that to the best of my knowledge and belief it does not contain any material
+previously published or written by another person where due reference is not made in the text.
+
+\item The thesis is xxx words in length (excluding text in images, table, bibliographies and appendices).
+\end{itemize}
+- Muhammad Umer Altaf
+\pagebreak
+
 
 \chapter{Introduction}
 
 
 \textit{``The choice for mankind lies between freedom and happiness and for the great bulk of mankind, happiness is better."}
 
-{\raggedleft -- George Orwell in `1984'\quad\par}
+{\raggedleft -- George Orwell in `Nineteen Eighty-Four'\quad\par}
 
+\paragraph{}
+Orwell wrote ``Nineteen Eighty-Four" in 1949, when computers were just calculators, but even then he beautifully captured the dilemma of modern data driven society. We produce a large amount of data everyday, be it sharing stuff on social networks, buying a movie ticket or almost any task on the internet, we are sure to leave behind a digital footprint. All this data is being collected for some purpose, this is defined the data's ``Utility". To understand utility, think: better weather forecasts, better connectivity with friends or better business practices. This utility is understood pretty well, and can be quantified using standard measures (e.g. Accuracy/Precision of the Algorithms, Revenue changes in financial models etc.). But what has often been either ignored, or has alluded us, is the price we pay for this utility on a personal level. This price to utility comes in form of violation of personal freedom. 
 
-
+% \paragraph{}
+% We live in an increasingly digitizing society, now nearly every human task has an electronic footprint. Buy a parking ticket, go through a security check point, log-on to a website you are sure to leave digital traces there. So existence of such knowledge in itself is a threat, let alone it being used adversely. All this information has the potential to become side information, hence, although they may not breach privacy by themselves, but when aggregated with other data they can cause privacy breaches. But, then again this data exists in first place because it offers some utility to certain people. 
 
 \chapter{Privacy-oriented Analysis in Distributed and Hybrid Environments}{Background Study}
 \section{Introduction}
@@ -74,13 +88,13 @@ The ideal of Privacy in Data Analysis can be traced back to Dalenius 1977’s \c
 \paragraph{}
 Organizations are hungry for insights from Big Data. Online advertisement agencies and social media networks are already using these insights to drive profits by serving targeted advertisements. Retailers use these insights to identify patterns in markets and sales. Most of currently prevalent applications care very less about individual privacy because in most cases the individual has voluntarily forfeited the right to privacy (see Terms and Conditions on Facebook Sign-up).
 \paragraph{}
-There are however some applications where this privacy of individual holds the prime objective yet the analytic potential of data as whole is also very great. For example processing large data of psoriasis patients may bring useful insights about the disease, but if some health insurance company is able to identify patients and refuse coverage then it can be both, legally and ethically wrong. 
+There are however some applications, where this privacy of individual holds the prime objective yet the analytic potential of data as whole is also very great. For example processing large data of psoriasis patients may bring useful insights about the disease, but if some health insurance company is able to identify patients and refuse coverage then it can be both, legally and ethically wrong. 
 Below we discuss some of the identified formalization of privacy problems in Big Data context and some proposed solutions.
 
 \section{Popular Examples of Data Privacy Breaches}
 \paragraph{}
 Security and privacy are two distinct concepts \cite{spencer2001security}, but can be confused as being the same because they are very close in impact. Classically digital security usually means to restrict access to data and systems. Privacy is somewhat a different way of looking at things, digital privacy is the guarantee that the data or system, (doesn't matter secured or public), will not violate personal rights of the concerned person. In this section we will list some of the examples of data privacy breaches, which were not directly the result of a security breach or failure. These examples highlight the power of large scale data analysis, where the analyst can have access to diverse other secondary data sources, and combining them with primary data can result in surprising disclosures.
-\paragraph{Governor of Massachusetts health records \cite{sweeney2000uniqueness}:\\}
+\paragraph{Governor of Massachusetts Health Records \cite{sweeney2000uniqueness}:\\}
 In 1990 a government department of the State of Massachusetts, released some hospital visit medical records for research purposes. This data was sanitized by state, means that all identifying information like: Social Security Number, Name and Address was removed from the records. The state gave an assurance that, no record can be linked to any personal identity, the then Governor of the state ``William Weld" himself assured his citizens of this. But instead, researcher ``Latanya Sweeney" at the Carnegie Mellon University, was able to re-identify most of the records from this release, including Governor's own records. 
 \paragraph{}
 In \cite{sweeney2000uniqueness} Sweeney describes the process she used to re-identify the records. She used publicly available voter list data (which she purchased from the state for just \$20), and linked it to the anonymous health records via matching attributes. ZIP code, sex and  date of birth - are some examples of the such attributes which were present in both data sources see Figure \ref{fig:voterMedical}.
@@ -95,7 +109,7 @@ In \cite{sweeney2000uniqueness} Sweeney describes the process she used to re-ide
 Sweeney observes that almost 87\% of entire U.S.A. population can be identified by using just: ZIP code, sex and date of birth. Even if name of county is used instead of the ZIP code (county is bigger than a Postal ZIP area, and contain many ZIP codes), 18\% of the people can be identified. This finding disproves the view that a unique nationally allocated number like Social Security Number is the only unique identifier of people, and if kept secret, alone can preserve privacy.
 
 
-\paragraph{Netflix subscriber de-anonymization \cite{narayanan2008robust}:\\}
+\paragraph{Netflix Subscriber De-Anonymization \cite{narayanan2008robust}:\\}
 Since 2006 Netflix, an online DVD-Rental and movie streaming service, had been conducting a challenge to improve it's movie recommendation engine. The task was to correctly predict user's movie ratings. For this they released their anonymized movie rating database, which did not had any user identifying data. Researchers at University of Texas, used data from another movie rating website IMDb (Internet Movie Database), which had user's ids to re-identify the users in Netflix dataset.
 \paragraph{}
 The authors \cite{narayanan2008robust}, showed that you just need to know a person's identity and his/her views on only a few movies, you can get their entire Netflix viewing history (given that the user was part of the released data set), even if you don't use the IMDb records. This shows that in very sparse data-sets (like the movie ratings one, which had a lot of movies but each user rated on only few of them), re-identification is very accurate.
@@ -207,7 +221,8 @@ They manually label data as per the privacy requirements (safe to run publicly o
 \paragraph{}
 Authors realize that using a WAN impacts the performance of MapReduce jobs, but they claim that this performance hit is bearable. In this regard they compare the run-time of a job running on 5 local machines (937 sec) with 10 machine hybrid environment (702 sec).
 
-\section{Comparison of the Available Frameworks}
+\section{Comparison of the Available Frameworks and Conclusion}
+\subsection{Frameworks for Privacy Oriented Analysis}
 \paragraph{}
 All the mentioned frameworks use some form of manual data labeling, differential privacy or some combination of both. The table below summarizes these frameworks by describing their base fundamentals and their applicability to hybrid cloud environment:
 
@@ -228,6 +243,9 @@ HybrEx \cite{ko2011hybrex}                    & Manual Labeling      & Yes      
 \end{tabular}
 }
 \end{table}
+
+
+
 \paragraph{}
 It is apparent from the results above that, none of the existing techniques provides a comprehensive platform that uses differential privacy in a hybrid environment. This is important because in big data applications it becomes impractical to label data manually.
 \paragraph{}
@@ -237,7 +255,7 @@ Also there is a need of specific use cases for privacy control, which can be use
 
 
 
-\section{Chapter Conclusion}
+\subsection{Conclusion}
 \paragraph{}
 Most of current frameworks for hybrid cloud, work by the manual tagging of sensitive information. Plus the standard mechanisms for differential privacy are hard for a data analyst, so there is scope of work in the direction of a unified framework that makes differential privacy techniques applicable in hybrid environment. 
 
@@ -387,7 +405,7 @@ In \cite{andres2013geo} authors have presented a good comparison between the k-a
 
 \section{Chapter Conclusion and A Possible Gap}
 \paragraph{}
-In this chapter we explained the mechanism of Location Based Services, and presented a survey of the current methods of ensuring privacy while working with LBSs. A lot of work has been done on the protection of user's location, but there are some very specific privacy related issues, that are concerned with the private properties/attributes of the locations themselves.For example: the use pattern of a house, people staying in a property, demographics of a apartment block. Although the goal of such analysis is not directly related to the techniques discussed in this chapter, but still its good to think about privacy issues for these applications. In chapter [Add Chapter] we will demonstrate, such an attack on privacy where we can infer when particular homes are empty, then we will propose a differential privacy based approach to extract some utility from this scenario.
+In this chapter we explained the mechanism of Location Based Services, and presented a survey of the current methods of ensuring privacy while working with LBSs. A lot of work has been done on the protection of user's location, but there are some very specific privacy related issues, that are concerned with the private properties/attributes of the locations themselves. For example: the use pattern of a house, people staying in a property, demographics of a apartment block. Although the goal of such analysis is not directly related to the techniques discussed in this chapter, but still its good to think about privacy issues for these applications. In chapter [Add Chapter] we will demonstrate, such an attack on privacy where we can infer when particular homes are empty, then we will propose a differential privacy based approach to extract some utility from this scenario.
 
 \chapter{Differential Privacy}
 \section{Introduction}
@@ -436,7 +454,7 @@ As researchers at The University of Melbourne we had to submit an application to
 
 
 \section{Requirements and Deployment}
-Below is a quick list of the requirements that were identified for this project:
+Below is a list of the requirements that were identified for this project:
 \begin{itemize}
   \item Provide a store for data (mainly social media data, like Twitter tweets) 
   \item Provide a fast and quick data analysis platform
@@ -444,37 +462,25 @@ Below is a quick list of the requirements that were identified for this project:
 \end{itemize}
 
 \paragraph{}
-The requirements of this project dictated a fast environment to store and process data, after much deliberation Apache Spark was selected to be the main processing platform. Other options, that were considered were No-SQL databases like MongoDB and CouchDB, but they are mostly good for storage only, for any kind of data analysis we need to take the data out of their stores. CouchDB does provide some analysis functionality, through views but it is very limited for interactive data manipulation.
-\subsection{Data Collection}
-Although not used for primary data processing, CouchDB was used as a temporary store during the data collection process. Because it offers higher availability and lower data addition cost than the Hadoop File System. The tweet harvester as described in the next section, collected the tweets continuously, so the data store had to be online, CouchDB perfectly fits the description, plus as it is a document oriented database, we just retrieve the tweets in JSON format and store them as it is, without the need of parsing and splitting each record, which would have been a necessity if any structured RDBMS (Relational Database Management System) like MySQL or SQL Server would have been used.
-
-Here we would like to cite and mention one of the earlier works that the author (Muhammad Umer Altaf) did for the ``Cluster and Cloud Computing" course project in Semester 1 2016 at The University of Melbourne. This work was done as a part of team [Add team] and required same kind of twitter data collection. So for this part of the project we used the same code - the Tweet Harvester.
-
-Basically the code, spawned 4 NECTAR instances to harvest (collect) tweets and save them to a single CouchDB instance which had a large volume storage attached, see Figure \ref{fig:tweetHarvester}. These instances ran Ubuntu 16.04 as the operating system and had all the required dependencies configured through Ansible playbooks (automation scripts).
-
-
-\begin{figure}[ht]
-\centering
-        \includegraphics[width=120mm,scale=1]{Images/TweetHarvesting.png}
-    \caption{Architecture of our Tweet Harvester.}
-    \label{fig:tweetHarvester}
-\end{figure}
+The requirements of this project dictate a fast environment to store and process data. As this is a research project we needed an interactive platform, which could help us query large amount of data (\textgreater15 GB), without waiting for a long time. Also, as illustrated in the next chapter \ref{sec:DataCollection}, this data would also be semi-structured (JSON and CSV). We use the following strategy to store and manipulate data:
+\begin{enumerate}
+  \item CouchDB is used as a temporary storage platform during the data collection phase
+  \item After all the required data is collected it will be loaded in a Hadoop cluster
+  \item A Spark cluster would be used for processing and interactively querying the data in present in Hadoop
+\end{enumerate}
 
 
 
-Due to the limited amount of time and the speed of speed of Twitter Search API, we were only able to gather about 1 million tweets, in 3 weeks, using this setup. Although one million is a high number, but due to the limitations of search API, these tweets were not all geo-coded, this means not all tweets had tweet location in them (This happens when tweeter turns off his device's location capabilities). As location was our primary data attribute, we requested twitter data from our good friends at the Melbourne eResearch Group, they continually do social media experiments and collect tweets. They were kind enough to provide us an interface to their data. We added these tweets to our collection.
+\subsection{Description of the Tools Used}
 
-\paragraph{}
-In total we gathered about 38 Million tweets. The resulting JSON file from CouchDB was about 13 GB in size. In this work we also used some other data as described in the experiment chapters [Add Chapter], but that data was relatively small in size and did not need special infrastructure.
-
-\subsection{Data Processing}
-Once we had acquired tweet data, we dismantled the Tweet Harvester to free up our NECTAR resources (we kept the volume storage containing our tweets intact). On these free resources we spawned a Apache Spark cluster which runs on top of a Hadoop cluster.
+\paragraph{CouchDB:\\}
+CouchDB is a NoSQL document oriented database. NoSQL data stores differ from traditional RDBMS (Relational Database Management System) in a sense that they do not require the data to be modeled in to relations (fixed tables and columns). Instead most of the NoSQL databases including CouchDB work by storing data in \textless Key, Value\textgreater pairs. Key is used to randomly access the data so it works like an index, value on the other hand can be any data structure. CouchDB's values are documents, which are usually JSON formated. As there is no set relational schema (i.e. table and relationship structure) each document defines its own schema (i.e. JSON fields). This means that CouchDB is perfect for unstructured big data applications. For example if we are gathering/using data from a source (such as JSON API), and that API does not adhere to a fixed schema, it will not be a problem to store such records in a single CouchDB instance.
 
 \paragraph{Apache Hadoop:\\}
-Hadoop is a framework for distributed big data storage and processing. A Hadoop cluster can be built using commodity hardware. The power of Hadoop are mainly its two components: First is the Hadoop Distributed File System (HDFS), which distributes data among all nodes, replicating automatically, this to ensure reliability in case of node failures. Second is the MapReduce processing engine, which is a very powerful processing model.
-\paragraph{About MapReduce:\\}
+Hadoop is a framework for distributed big data storage and processing. A Hadoop cluster can be built using commodity hardware. The power of Hadoop is mainly its two components: First is the Hadoop Distributed File System (HDFS), which distributes data among all nodes, replicating automatically, this to ensure reliability in case of node failures. Second is the MapReduce processing engine, which is a very powerful processing model.
+\paragraph{}
 MapReduce is basically a distributed programming model that pushes code to relevant data. MapReduce has proven to be very effective method for distributed processing. This model requires two basic functions/operations. First is the `Map' operation, which is defined to process a single data item (such as a row in table or single record/document). This map part can be executed in parallel on all data items, the limit to this parallelism is only constrained by the amount of resources (i.e. number of nodes, number of cores per node). Then comes the `Reduce' operation, that collects all the results from the map part to a single master node for output. 
-\paragraph{}The classic example to understand MapReduce is a program that counts occurrences of each word in a large set of documents. Imagine that these documents are scattered over multiple nodes in the HDFS, now the map part will output for each document a list of unique terms and their counts, recall that this can run independently on all available nodes. When the map stage is completed the reducer kicks in and aggregates all these counts, effectively by summing up counts for all matching terms, then it will output the results on a single node (usually the one that initiated the reduce operation).
+\paragraph{}The classic example to understand MapReduce is a program that counts occurrences of each word in a large set of documents. Imagine that these documents are scattered over multiple nodes in the HDFS, now the map part will output for each document a list of unique terms and their counts, recall that this can run independently on all available nodes. The replication property of the HDFS can help increase the degree of parallelism as it can automatically distribute a single file to the entire cluster. When the map stage is completed the reducer kicks in and aggregates all these counts, effectively by summing up counts for all matching terms, then it will output the results on a single node (usually the one that initiated the reduce operation).
 
 \paragraph{Apache Spark:\\}
 Spark is the next evolution of MapReduce, while MapReduce worked by reading data from disk storage and then processing it, Spark works on a data structure called RDDs (Resilient Distributed Datasets). These RDD are loaded up in to memory of the nodes where particular data items are stored, and computations are executed on them. So in a sense RDDs offer a mechanism for limited shared memory. These RDDs are also replicated as per needed to ensure reliability of the tasks. As the data now resides on memory, much more interactive programs can be written for this infrastructure. Spark programs can be divided in to three main categories i.e. DataFrames, Machine Learning (ML) and Graph Processing. DataFrames offer a SQL like interface to many types of data in the HDFS, Spark also comes with libraries for common ML and graph processing tasks.
@@ -496,9 +502,14 @@ This accessibility and performance compelled us to use Spark for our experiments
 
 \paragraph{Jupyter Notebook Server:\\}
 After setting up the Hadoop and Spark cluster we installed a Jupyter notebook server on the Spark master node. This allowed us to remotely access the cluster and run interactive Python code in any browser. These notebooks also allow us to visualize data instantly within the browser, this feature is very important for us as we work with geo-spatial data, seeing things on maps or graphs allow much better and faster analysis.
-
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=120mm,scale=1]{Images/Spark.png}
+    \caption{Architecture of the Spark Cluster.}
+    \label{fig:sparkCluster}
+\end{figure}
 \section{Final Setup and Recommendations}
-Figure [Add Figure], shows the high level diagram of the setup. It was a very challenging and hard process to setup and configure this cluster, so for the advantage of our peers and future researchers, we have made snapshots of the instances for the master and slave nodes. These snapshots are publicly available via the NECTAR dashboard by the name of `spark-master' and `spark-slave'. These images when launched into instances will still need some configuration (like Host Names, IP addresses and passwords), and we plan to release a guide to do this soon.
+Figure \ref{fig:sparkCluster}, shows the high level diagram of the setup. It was a very challenging and hard process to setup and configure this cluster, so for the advantage of our peers and future researchers, we have made snapshots of the instances for the master and slave nodes. These snapshots are publicly available via the NECTAR dashboard by the name of `spark-master' and `spark-slave'. These images when launched into instances will still need some configuration (like Host Names, IP addresses and passwords), and we plan to release a guide to do this soon.
 
 
 
@@ -513,22 +524,131 @@ In Chapter \ref{chap:LocationBasedServices}, we introduced the concept of Locati
   \item The demographics of the property (for example: How many people live in a house? What are their ethnicities etc?)
 \end{itemize}
 \paragraph{}
-Nearly all the methods for location privacy preservation as presented in Section \ref{sec:MethodsForLocationPrivacy}, aim to obfuscate or hide the location of user, but we argue that sometimes this is not enough. Especially when doing large scale big data analysis, where the adversary (an unwanted entity) may have access to a lot of side information.
+Nearly all the methods for location privacy preservation as presented in Section \ref{sec:MethodsForLocationPrivacy}, aim to obfuscate or hide the location of user, but we argue that sometimes this is not enough. Especially when doing large scale big data analysis, where the adversary (an unwanted entity) may have access to a lot of side information. 
+
+\section{Experiment: Predicting Home Vacancy using Social Media Data}
+\paragraph{The idea for the experiment\\}
+The motivation for this experiment comes from a discussion we had with some friends from the Australian Bureau of Statistics (ABS). One of their jobs is to visit each house and collect statistics (e.g. census etc.), but they had a problem that, they needed to figure out when is the best time of the day to do these surveys, such that most people will be at home. We had this intuition that, we can predict whether a house is empty or not based on its social media usage profile. When the people in a house are known to be avid social media users, we can collect their publicly shared data to determine when they use it from their home. And if there are times when they don't post we can infer that they are not home. And if these times can be aggregated on an administrative area level (i.e. Suburb), the ABS can get the best times to visit that suburb. Such analysis would not only help ABS but would also help various other organizations like advertising firms, city administration etc. to get a better understanding of its citizens movement and behaviour.
+\paragraph{This experiment can be dangerous\\}
+Predicting when a particular house is empty is a clear threat to its occupants, as it provides any potential thief or robber a golden opportunity to carry out their act, without interruption. In fact in most of the heists (robberies), the very first step is to stake-out the target property, which is the act to physically spy on  the property to determine how the occupants use it, i.e. when do they leave for work? when do they come back? So revealing such sensitive information via this experiment is a very big privacy issue. In this chapter we will first present a walk-through of the above experiment, then will present a solution to this problem (via Differential Privacy). Our solution aims to keep the aggregate utility of the experiment within reasonable expectation, while insuring that any adversary would not be able to determine the use pattern of any single property, thus mitigating the danger of this experiment.
+
+
+\subsection{Overview of the Experiment}
+\paragraph{Assumption of the Experiment} For one bedroom homes, if we identify a single prominent tweeter, we can infer when he is at home based on his tweeting pattern. 
 \paragraph{}
-We live in an increasingly digitizing society, now nearly every human task has an electronic footprint. Buy a parking ticket, go through a security check point, log-on to a website you are sure to leave digital traces there. So existence of such knowledge in itself is a threat, let alone it being used adversely. All this information has the potential to become side information, hence, although they may not breach privacy by themselves, but when aggregated with other data they can cause privacy breaches. But, then again this data exists in first place because it offers some utility to certain people. 
+Using the assumption stated above, Figure \ref{fig:TimeLineProcess} shows the high level overview of the process which was used to generate individual home/property use pattern time-line. First we start by collecting all the relevant data. We mainly use two data sources, one is the Twitter social media data, other is the property information data from CoreLogic. After getting the data we try to identify certain tweeters and corresponding properties that are closest to our assumption (as above). Once we find some interesting properties we aggregate them on suburb level to get the home use profile for the entire suburb. We will show that this profile somewhat verifies our assumption.
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=25mm,scale=1]{Images/TimeLineProcess.png}
+    \caption{Generating home usage profile for a suburb.}
+    \label{fig:TimeLineProcess}
+\end{figure}
 
 
 
+\subsection{Data Collection}
+\label{sec:DataCollection}
+\subsubsection{Twitter Data}
+Twitter is an online social media network. Registered users can post short messages (called tweets), and their followers can read them and comment on them. It was launched in 2006 and now it is one of the most popular social media platform with more than 100 million people using it daily. The tweets that people share have lot of extra information in them apart from the text, such as time posted, position posted from and the user's profile information. The location attribute in the tweets is used for various purposes by Twitter, one of the main reason is to compile local `Trends", which are groupings of tweets in to topics relevant to a particular area (city, country etc.) For this experiment we decided to gather a large amount of tweets, so that we can use the location information embedded in them to associate them with individual homes.
+
+CouchDB was used as a temporary store during the data collection process. Because it offers higher availability and lower data addition cost than the Hadoop File System. The tweet harvester as described below, collected the tweets continuously, so the data store had to be online, CouchDB perfectly fits the description, plus as it is a document oriented database, we just retrieve the tweets in JSON format and store them as it is, without the need of parsing and splitting each record, which would have been a necessity if any structured RDBMS (Relational Database Management System) like MySQL or SQL Server would have been used.
+
+Here we would like to cite and mention one of the earlier works that the author (Muhammad Umer Altaf) did for the ``Cluster and Cloud Computing" course project in Semester 1 2016 at The University of Melbourne \cite{clusterCloudReport}. This work was done as a part of team and required same kind of twitter data collection. So for this part of the project we used the same code - the Tweet Harvester.
+
+Basically, the code spawned 4 NECTAR instances to harvest (collect) tweets and save them to a single CouchDB instance which had a large volume storage attached, see Figure \ref{fig:tweetHarvester}. These instances ran Ubuntu 16.04 as the operating system and had all the required dependencies configured through Ansible playbooks (automation scripts).
+
+The code uses the `Tweepy'\cite{Tweepy} Python library, to interface with the official Twitter API. We had to use this wrapper library because the official API has certain rate limits. For example it limits the number of requests you can make in a day, Tweepy provides an elegant interface, which allows paged retrieval and state management so when the rate limit expires we can continue the retrieval where we left it. To increase the speed of collection and minimizing the time between rate limit errors, we registered multiple API credentials with Twitter and cycled through them in our code.
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=120mm,scale=1]{Images/TweetHarvesting.png}
+    \caption{Architecture of our Tweet Harvester. Source: \cite{clusterCloudReport}}
+    \label{fig:tweetHarvester}
+\end{figure}
+
+Due to the limited amount of time and the retrieval speed of Twitter Search API, we were only able to gather about 1 million tweets, in 3 weeks, using this setup. Although one million is a high number, but due to the limitations of search API, these tweets were not all geo-coded, this means not all tweets had tweet location in them (This happens when tweeter turns off his device's location capabilities). As the location was our primary data attribute, we requested twitter data from our good friends at the Melbourne eResearch Group, they continually do social media experiments and collect tweets. They were kind enough to provide us an interface (REST API for their CouchDB instance) to their data. We added these tweets to our collection. In total we gathered about 3.2 Million tweets. 
+\paragraph{Loading Tweets to HDFS:\\}
+The resulting JSON file from CouchDB was about 13 GB in size, which was then loaded to HDFS with the replication factor of 3. This means that the file is broken in to Hadoop blocks of 64 MB and each block will be replicated (copied) to at-least 3 different nodes. We did this because we wanted an even distribution of blocks, and if the default replication factor of 1 was used, all the blocks of the file are usually placed on a single node (the node that is used to load up: i.e. `hadoop fs -put", the file on hdfs).
+
+Even/Uniform distribution is necessary for getting good parallelism in Spark, because Spark by default runs the code on the data where it resides, so if data is on a single node all computation would be done on that node only, even if cluster has multiple other nodes. This means that Spark will not handle dynamic data migration for the developer. We discovered this problem only after realizing that all computations were being done on a single node. Then after diagnosing this problem, we changed the replication factor from 1 to 3 in ``hdfs-site.xml" configuration file. We noticed a significant change in Spark's computation performance. Table \ref{tab:SparkRuntime} compares the running time for a simple filter query issued to the cluster (4 Nodes) over a 13 GB JSON file. Note that it is an improvement of more than 4x. This is possible mainly because in case of replication factor = 1, only one node was doing all the computation, this node also happened to be the Jupyter Python server, Spark Master server and HDFS NameNode, so it's resources were being used for multiple tasks, but when the computation was divided among slave nodes, they had better free resources.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+\multicolumn{1}{c}{\textbf{Replication Factor}} & \multicolumn{1}{c}{\textbf{Task Run-time}} \\ \midrule
+1 & 174 sec \\
+3 & 42 sec \\ \bottomrule
+\end{tabular}
+\caption{Filter Query Run-time on Spark w.r.t. Replication Factor}
+\label{tab:SparkRuntime}
+\end{table}
+\subsubsection{Properties Data}
+The house level data comes from CoreLogic\cite{CoreLogic}, Inc. which is a data analysis firm. CoreLogic specializes in property, finance and consumer data. It provides it's clients with customized data products. In Australia and New Zealand, CoreLogic manages a database of more than 4 billion individual properties. For research purposes they have allowed limited access to some of their data via the AURIN platform. The dataset we use in this experiment is titled ``CoreLogic EDL point level dataset". This dataset is labeled as restricted and only the Supervisor of this project was allowed access to data (after filing a request application with CoreLogic). This dataset includes year wise records for properties that have transferred ownership during the year. 
+
+Although this dataset has many fields, we only selected and used limited fields, mainly the ID, Location of the Property and the number of Bedrooms. Figure \ref{fig:CoreLogicSchema} shows the JSON schema (as generated by Spark), of the dataset used.
 
 
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=100mm,scale=1]{Images/CoreLogicSchema.PNG}
+    \caption{Schema of the CoreLogic property Data.}
+    \label{fig:CoreLogicSchema}
+\end{figure}
 
 
+As this dataset is restricted and comes with legal bindings, we in this work will only report visualizations and aggregate statistics from this data. Any individual record values even if mentioned here will only be representational (all original values will be anonymized, suppressed or replaced with random values). Secondly the agreement also restricts us to use maximum of 1000 properties, it states that if need to use more than 1000 we need special permission. Due to lack of time we did not apply for this permission, instead we limited our experiment to as few properties as possible. In the end we used less than 50 properties, for our complete analysis.
+
+The complete dataset has the data for entire Australia ranging from year 2013 to 2017, we however only retrieved records from selected Melbourne suburbs for 2017. We also restricted the retrieval by filtering only those records that have interesting tweeters as defined in next section. Plus we restricted properties only from a selected number of suburbs of Melbourne. These particular suburbs were chosen mainly because, first of all our Tweet data collection was mainly focused on Melbourne region and secondly, as we were more interested in residential homes rather than commercial properties, we focused on residential suburbs.
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lr}
+\hline
+\textbf{Suburb Name}         & \multicolumn{1}{l}{\textbf{No. of Properties}} \\ \hline
+Carlton North - Princes Hill & 1                                             \\
+Richmond (Vic.)              & 1                                           \\
+Hawthorn                     & 1                                            \\
+Port Melbourne Industrial    & 1                                             \\
+Northcote                    & 1                                            \\
+Abbotsford                   & 1                                           \\
+Total                        & 1                                           \\ \hline
+\end{tabular}
+\caption{Number of Properties in each Suburb}
+\label{tab:Number of Properties in each Suburb}
+\end{table}
+
+\section{Identifying Interesting Tweeters}
+Twitter is a diverse platform, today it is being used by both humans and bots. Bots are automated programs that tweet messages like news, information updates (traffic, weather, sports scores etc.) or even advertisements. These bots can generate a lot of tweets very quickly, and if we collect tweets, we are bound to get a large number of tweets from bots too. This is a problem for our experiment, because this does not help us with our assumption that, we can infer home usage pattern based on tweet timing pattern. The concept of time (even sleep time) does not apply to bots as they can tweet continuously 24//7. Tweets from such bots are noise for our experiment and we have to get rid of bots before we go any further.
+
+There has been a lot of work done on detecting whether a tweeter is bot or human, in-fact literature also refers to third type of tweeters, the cyborg. Cyborg is defined to be human assisted bot, or bot assisted human. For example a person might program a bot to tweet when ever he/she eats. It has been observed that cyborgs and bots generate much higher number of tweets than humans, so the simplest approach to filter out bots and cyborgs is to analyze the number of tweets from each tweet handle or screen name (i.e. Twitter Id of the tweeter). 
+There are however many more sophisticated methods for bot detection, for example \cite{chu2010tweeting} uses multiple approaches, such as entropy based, machine learning based on the text of the tweet and the account properties of the tweeter. Due to the lack of time and desire to keep things simple we preferred the tweet frequency/count based filtering technique. Later when we got the tweet time-lines for each user, we could see that this approach worked fine as times reproduced mimicked human behaviour (e.g. sleeping at night etc.). 
+
+But to filter on tweet frequency, we need the cut off thresholds for the number of tweets by each individual tweeter. To get an idea what these cutoffs should be, we first grouped tweets by individual users to get how many tweets do we have in our data from that user. Table \ref{tab:TopTweeters} lists down the screen\_name of the top 10 tweeters in our data-set.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}rlr@{}}
+\toprule
+\multicolumn{1}{l}{\textbf{Rank}} & \multicolumn{1}{c}{\textbf{screen\_name}} & \multicolumn{1}{c}{\textbf{Num Of Tweets}} \\ \midrule
+1                                 & VirtualJukebox                            & 85363                                      \\
+2                                 & bikewatchbne                              & 27339                                      \\
+3                                 & will\_i\_ammg                             & 22620                                      \\
+4                                 & TrendsSydney                              & 14458                                      \\
+5                                 & emgw\_melbourne                           & 13654                                      \\
+6                                 & PairsonnalitesA                           & 11015                                      \\
+7                                 & UN\_secretary                             & 9938                                       \\
+8                                 & TrendsAustralia                           & 7640                                       \\
+9                                 & dsn\_status                               & 7438                                       \\
+10                                & 3031Weather                               & 6851                                       \\ \bottomrule
+\end{tabular}
+\caption{Top 10 Tweeters in our Data w.r.t Tweet Count}
+\label{tab:TopTweeters}
+\end{table}
+Just by analyzing the screen names we can see that nearly all of the top tweeters are bots, they seem to range from music bots to weather bots. So to get a clearer picture of the distribution of tweet counts as per user, we plotted them on a historgram
 
 \chapter{Location Privacy Attack Demo }
-
-
-
-
 
 
 \chapter{Conclusion and Recommendations}
