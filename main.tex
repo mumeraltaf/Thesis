@@ -313,7 +313,7 @@ LBS did exist before smartphones with GPS access, early LBS \cite{lbsShu} used m
 All of these applications work by getting the location from the user's device and sending it to the server of the LBS provider. This sharing of location data raises some serious privacy issues. Exactly where a person is located is part of its human freedom, and most of the time, people will no want others to find where they are ``all the time". These others can be trusted entities (family or friends) or some adversarial entity (spies, robbers etc.). Yet most of us today transmit our location (via mobile phones) nearly 24/7, to servers we do not know about.
 
 \paragraph{}
-In a relatively early work \cite{dobson2003geoslavery} about the dangers of geo-privacy, authors have argued that location technologies that exist today, have the power to technically enslave human beings, for example they present scenarios where some ``master" entity may restrict the movement of ``slave" humans. Such an entity will have the technical means to accurately determine the location of slaves and take corrective action (just like we might zap animals with electric shock if they leave a set parameter). Although, such a scenario is very unlikely or even absurd, but authors argue that all the technological pre-requisites are available now, which itself is a cause of concern.
+In a relatively early work \cite{dobson2003geoslavery} about the dangers of geo-privacy, authors have argued that location technologies that exist today, have the power to technically enslave human beings, for example they present scenarios where some ``master" entity may restrict the movement of ``slave" humans. Such an entity will have the technical means to accurately determine the location of slaves and take corrective action (just like we might zap animals with electric shock if they leave a set perimeter). Although, such a scenario is very unlikely or even absurd, but authors argue that all the technological pre-requisites are available now, which itself is a cause of concern.
 
 \paragraph{}
 Mining of publicly available location data (such as: from social media) can have adverse affect on the privacy and even physical well being of the user. We have demonstrated such an experiment in Section ([Add Section]). 
@@ -723,9 +723,9 @@ One may argue, that we could have instead randomly picked limited number of prop
 
 Figure \ref{fig:BedRoomDistribution}, shows the frequency distribution of the number of bedrooms per house, in the suburb of ``Port Melbourne". We can clearly see that number of bedrooms range from 1 to 39 for each property, and most of the properties have 12 or fewer bedrooms. The properties with higher bedroom count can be apartment buildings, with multiple homes. Also notice that There is an abundance of 1 bedroom properties.
 
-Now let's try to correlate these bedroom counts with the unique number of tweeters from each property. Here we ran into a problem, the properties data provided by CoreLogic, only has positional coordinates for each property, but to filter out tweets from each property we needed a region for area of the house. We tried to get this information using Google Maps GeoCoding API \cite{GoogleGeoCodingAPI}, but found out that it only gives property parameters for few selected places (we think public places which Google thinks are less sensitive). 
+Now let's try to correlate these bedroom counts with the unique number of tweeters from each property. Here we ran into a problem, the properties data provided by CoreLogic, only has positional coordinates for each property, but to filter out tweets from each property we needed a region for area of the house. We tried to get this information using Google Maps GeoCoding API \cite{GoogleGeoCodingAPI}, but found out that it only gives property perimeters for few selected places (we think public places which Google thinks are less sensitive). 
 
-So we had to come up with our own approach to get property parameter (Polygon), what we basically did was to construct a 10 meter by 10 meter box around the (latitude, longitude) coordinate point for each property. The resultant code is shown below, this code was used with 5 meters as input. Note that in all our data we follow the ``WGS84" geo-referencing coordinate system, so each degree in latitude value equals 1/111111 meters, corresponding longitude value can be calculated using trigonometry. This conversion is technically called `Projection'.
+So we had to come up with our own approach to get property perimeter (Polygon), what we basically did was to construct a 10 meter by 10 meter box around the (latitude, longitude) coordinate point for each property. The resultant code is shown below, this code was used with 5 meters as input. Note that in all our data we follow the ``WGS84" geo-referencing coordinate system, so each degree in latitude value equals 1/111111 meters, corresponding longitude value can be calculated using trigonometry. This conversion is technically called `Projection'.
 
 \inputminted{python}{pointToPolygon.py}
 
@@ -760,17 +760,93 @@ This filter is quite a hard one, specially considering we applied to only \texta
 
 \subsection{Generating Property Time Lines}
 After collecting all the interesting properties, we proceeded to infer the tweeting patterns from these homes, we start by defining the term Time Line, we will use this definition throughout this work.
-\begin{namedtheorem}[Definition of a Time Line] A visual or data representation of the time of day, a tweeter tweets, plotted on a 24 hour (midnight to midnight) axis.
+\begin{namedtheorem}[Definition of a Time Line] A visual or data representation of the time of day, when a prominent tweeter tweets, plotted on a 24 hour (midnight to midnight) axis.
+
 \end{namedtheorem}
 \paragraph{}
-Figure 
+One thing we would like to mention at this stage is this that, the times sent by the Twitter API are always represented at UTC times, so we had to convert all the times to Melbourne Local times (otherwise we got worried, for a bit here as people were shown to be sleeping around 6 in the evening! before we corrected this time zone issue).
+
+Figure \ref{fig:ExampleTimeLine}, shows an example time-lines from one particular house. The left plot contains tweets from the whole week, while the right one plots the tweets which are posted only from Monday to Friday (working, weekdays).
 
 \begin{figure}[ht]
 \centering
-        \includegraphics[width=80mm,scale=1]{Images/FilteredInterestingProperties.png}
-    \caption{Location of Interesting Properties}
+        \includegraphics[width=150mm,scale=1]{Images/ExampleTimelines.PNG}
+    \caption{Time-Lines for one particular Property}
     \label{fig:ExampleTimeLine}
 \end{figure}
+
+We can clearly see that there are gaps in the time-lines, for example this particular tweeter never posts before 6.00 AM in the morning, implying that he/she is asleep, or during workdays he tweets very less at midday. Although we can see these trends with our eyes, we needed a strategy to parse these trends and get a computer understandable representation. 
+\paragraph{Discretizing the Time Lines:\\}
+We developed following strategy to stratify the time-lines: basically we divide up the 24 hour period into one hour chucks and for each chunk, if there are no tweets, we declare that, this particular property is empty. This is a simple approach, but works for us. Figure \ref{fig:DiscritizedTimeLine}, depicts a time line for a particular property.
+Note that 
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=40mm,scale=0.5]{Images/DiscritizedTimeLine.PNG}
+    \caption{A Discretized Time-Line of a Particular Property}
+    \label{fig:DiscritizedTimeLine}
+\end{figure}
+
+\paragraph{Sensitivity of the Time-Line Data:\\}
+Note that the information, that a particular house is empty at a particular time is a very sensitive information. And in its current form it is not of much use to any legitimate agency (like the government census bureau, as introduced in the introduction of the experiment). 
+\subsection{Aggregating Time-Lines to get Suburb Profile}
+Now that we have a Time-Line for each property, let's try to get some utility from these. For this we construct a suburb profile. Remember that we collected all the filtered properties into a single hypothetical suburb SUB-X, in this section we will make it's home usage profile. 
+\begin{namedtheorem}[Suburb Profile] A visual or data representation of the distribution of all empty houses in a particular suburb, over a 24 hour period.
+\end{namedtheorem}
+
+To make an aggregated profile for a suburb, we first collect the discretized time-lines for all the properties in the suburb, then for each one hour interval in the 24 hour day period, we count how many properties, we had marked empty in their respective time-lines. Figure \ref{fig:SubXProfile}, shows the profile for our SUB-X.
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=150mm,scale=1]{Images/SubXProfile.png}
+    \caption{Suburb Profile for SUB-X, Total 29 Properties}
+    \label{fig:SubXProfile}
+\end{figure}
+
+This is a very interesting chart, we can clearly see some very obvious patterns/trends. Below we explain some of the key points in the graph:
+\begin{itemize}
+  \item From mid-night (0:00) to morning (06:00), the chart shows that most of the properties are empty. But this is not the case, we simply do not have tweets from nearly all the filtered properties, because people are usually asleep during these hours. This time period is also not very interesting for our experiment, as any government or advertising agency would not visit homes during night time. So technically we can ignore any information we produce for these hours.
+  \item At around (08:30), we again see a rise in empty properties. This can be inferred as the time when people start going to work, hence leaving home empty.
+  \item We see a varying pattern throughout the day, we argue that this pattern is the main utility of the experiment. The variations between (09:00) and (18:00) can tell a story about this particular suburb. For example: Are there times when people might come back from work? According to this particular profile, yes we see a slight dip at around (13:30). This might be lunch time for many people, and some people may come back home for lunch.
+  \item After (17:00) we see a drop in empty properties, because this is the time people start coming back home.
+  \item Around (22:00) we see people going back to sleep.
+\end{itemize}
+\paragraph{Our Assumption is Verified:\\}
+Figure \ref{fig:SubXProfileLabeled} labels all these key points on the chart. One very important thing to note is this that, the logical reasons (as listed above) for the variation that we see in suburb profile, verify and support our main assumption (as stated in Section \ref{sec:Overview of the Experiment}), that we can predict whether a house is empty or not using the tweeting habits of its occupants. 
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=150mm,scale=1]{Images/SubXProfileLabeled.png}
+    \caption{Key points Labeled on Suburb Profile for SUB-X}
+    \label{fig:SubXProfileLabeled}
+\end{figure}
+
+
+
+\paragraph{Utility and Sensitivity of this Aggregation:\\}
+Complete suburb profiles offer great utility to any interested agency, as they present an accurate picture of the habits how people use their homes, or how they behave inside them (e.g. when do they wake up or sleep?). The agency doing this data analysis may be tempted to publish suburb profiles for each suburb. Now that we are not depicting data about any single property, but the suburb as a whole, some would argue that, this should be alright as no sensitive information is leaked. We contest that if only one suburb is analyzed and the data is released ``only once", then and only then, this experiment is OK. Otherwise there are methods to infer any particular property's time line completely, just by using these aggregations. We present such a method in next chapter. 
+
+\paragraph{Possible Interface for this Data:\\}
+So let's keep the sensitivity issue aside for just a minute, and discuss that if a decision is made to publish this data what might the interface look like? We present a very simple interface below:
+
+\[=CountNumberOfEmptyProperties(AtTime,SuburbDefination)\]
+
+The analysts may expose this function that returns number of empty properties at any particular time, below is the explanation of the arguments to this function:
+
+\begin{itemize}
+  \item AtTime: The user of function can specify the time of day (ranging from 0 to 23 hours), he/she is interested in.
+  \item SuburbDefination: Using this argument user can specify, what he means by a suburb. Basically this would be a set of properties that make up a suburb. We have given this flexibility to set suburb because suburb boundaries may change. Also this gives a nice control for changing the suburb, the user can simply change the set of properties and get a new profile.
+\end{itemize}
+
+Let's try this interface, by applying to our SUB-X (i.e. set of 29 filtered out properties) and each one hour interval of complete day. Figure \ref{fig:InterfaceRun}, lists the output of this run.
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=50mm,scale=1]{Images/InterfaceRun.PNG}
+    \caption{Key points Labeled on Suburb Profile for SUB-X}
+    \label{fig:InterfaceRun}
+\end{figure}
+
+\section{Experiment Conclusion}
+Now we have technically concluded our experiment in traditional sense. We analyzed a bunch of data and got very useful insights from it, and then published an interface to this analysis task. Nearly all Data Science Experiments finish at this stage, as ``Utility" has been achieved. But we will show that this is not the end of story and although we publish aggregate statistics, we still leak so much information that use pattern of individual properties can be inferred easily. We will show such a Privacy Attack on this interface in the next chapter.
 
 \chapter{Location Privacy Attack Demo }
 
