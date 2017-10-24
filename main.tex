@@ -22,7 +22,8 @@
 \usepackage{listings}
 \usepackage{booktabs}
 % \usepackage{fancyhdr}
- 
+\usepackage{algorithmic}
+
 % \pagestyle{fancy}
 % \fancyhf{}
 % \renewcommand\chaptermark[1]{\markboth{\\ #1}{}}
@@ -47,6 +48,15 @@
 
 
 
+\usepackage{amsthm}
+
+\newtheorem*{theorem}{Theorem}
+
+\newtheoremstyle{named}{}{}{\itshape}{}{\bfseries}{}{.5em}{\thmnote{#3: }#1}
+\theoremstyle{named}
+\newtheorem*{namedtheorem}{}
+
+
 
 
 \begin{document}
@@ -64,7 +74,13 @@ previously published or written by another person where due reference is not mad
 \end{itemize}
 - Muhammad Umer Altaf
 \pagebreak
-
+\thispagestyle{empty}
+ 
+\listoffigures
+ 
+\listoftables
+ 
+\newpage
 
 \chapter{Introduction}
 
@@ -74,7 +90,20 @@ previously published or written by another person where due reference is not mad
 {\raggedleft -- George Orwell in `Nineteen Eighty-Four'\quad\par}
 
 \paragraph{}
-Orwell wrote ``Nineteen Eighty-Four" in 1949, when computers were just calculators, but even then he beautifully captured the dilemma of modern data driven society. We produce a large amount of data everyday, be it sharing stuff on social networks, buying a movie ticket or almost any task on the internet, we are sure to leave behind a digital footprint. All this data is being collected for some purpose, this is defined the data's ``Utility". To understand utility, think: better weather forecasts, better connectivity with friends or better business practices. This utility is understood pretty well, and can be quantified using standard measures (e.g. Accuracy/Precision of the Algorithms, Revenue changes in financial models etc.). But what has often been either ignored, or has alluded us, is the price we pay for this utility on a personal level. This price to utility comes in form of violation of personal freedom. 
+Orwell wrote ``Nineteen Eighty-Four" in 1949, when computers were just calculators, but even then he beautifully captured the dilemma of modern data driven society. We produce a large amount of data everyday, be it sharing stuff on social networks, buying a movie ticket or almost any task on the internet, we are sure to leave behind a digital footprint. All this data is being collected for some purpose, this is defined as the data's ``Utility". To understand utility, think: better weather forecasts, better connectivity with friends or better business practices. This utility is understood pretty well, and can be quantified using standard measures (e.g. Accuracy/Precision of the Algorithms, Revenue changes in financial models etc.). But what has often been either ignored, or has alluded us, is the price we pay for this utility on a personal level. This price to utility comes in form of violation of personal privacy, or to put it into Orwellian words we forego our freedom.
+
+For a long time, in the field of statistical and computational analysis (think Big Data, AI etc.), experts believed that this price for utility, is inevitable. We either get advantage of data or we do not use it at all (hence the Orwellian choice). But recent breakthroughs in privacy-focused data analysis methodologies have demonstrated that, this is not an absolute choice. We now have tools that can help us balance utility and privacy. More importantly these techniques offer a way to quantify privacy (which is essentially an abstract concept), and then compare its `value', with the supposed utility of the analysis.
+
+In this work we will present, an overview of some of the privacy-preserving analysis techniques. Then we will present a real world data analysis experiment, which has the potential to dangerously violate privacy. Using some of the privacy-preserving techniques we demonstrate that we can minimize this danger, and still be able to benefit from the experiment.
+
+
+\section{What is Privacy? and Why is it Important?}
+We Humans are very social animals, one of our primary function is to communicate and exchange ideas. This property has enabled us to develop as a species. But we do not share all our ideas, there is a concept of private thought. This private thought makes us the individuals we are, and the fact that these thoughts are private, gives us the concept of freedom. Modern Western society is built upon the principals of democracy, and for democracy to function properly free thinking is necessary. The idea that we do not share everything with the world is called Privacy. 
+
+Privacy is a complex term, and even untranslatable directly to many other languages. As this is a very complex term, in this work we will refer to privacy in the sense of ``Digital Privacy". Digital Privacy is a concept for electronic information that, an individual would want to keep to itself.  For example: medical records, digital IDs, financial information etc. 
+
+
+
 
 % \paragraph{}
 % We live in an increasingly digitizing society, now nearly every human task has an electronic footprint. Buy a parking ticket, go through a security check point, log-on to a website you are sure to leave digital traces there. So existence of such knowledge in itself is a threat, let alone it being used adversely. All this information has the potential to become side information, hence, although they may not breach privacy by themselves, but when aggregated with other data they can cause privacy breaches. But, then again this data exists in first place because it offers some utility to certain people. 
@@ -366,7 +395,7 @@ Some approaches have used to mask user's identity using making him indistinguish
 \begin{figure}[ht]
 \centering
         \includegraphics[width=120mm,scale=1]{Images/obfuscationRegion.PNG}
-    \caption{Example of obfuscated cloaking region for pedestrian's location. Source:\cite{duckham2005formal}}
+    \caption{Obfuscated cloaking region for pedestrian's location. Source:\cite{duckham2005formal}}
     \label{fig:obfuscationRegion}
 \end{figure}
 
@@ -534,7 +563,9 @@ Predicting when a particular house is empty is a clear threat to its occupants, 
 
 
 \subsection{Overview of the Experiment}
-\paragraph{Assumption of the Experiment} For one bedroom homes, if we identify a single prominent tweeter, we can infer when he is at home based on his tweeting pattern. 
+\label{sec:Overview of the Experiment}
+\begin{namedtheorem}[Our Assumption For This Experiment] For one bedroom homes, if we identify a single prominent tweeter, we can infer when he is at home based on his tweeting pattern. 
+\end{namedtheorem}
 \paragraph{}
 Using the assumption stated above, Figure \ref{fig:TimeLineProcess} shows the high level overview of the process which was used to generate individual home/property use pattern time-line. First we start by collecting all the relevant data. We mainly use two data sources, one is the Twitter social media data, other is the property information data from CoreLogic. After getting the data we try to identify certain tweeters and corresponding properties that are closest to our assumption (as above). Once we find some interesting properties we aggregate them on suburb level to get the home use profile for the entire suburb. We will show that this profile somewhat verifies our assumption.
 \begin{figure}[ht]
@@ -566,7 +597,22 @@ The code uses the `Tweepy'\cite{Tweepy} Python library, to interface with the of
     \label{fig:tweetHarvester}
 \end{figure}
 
-Due to the limited amount of time and the retrieval speed of Twitter Search API, we were only able to gather about 1 million tweets, in 3 weeks, using this setup. Although one million is a high number, but due to the limitations of search API, these tweets were not all geo-coded, this means not all tweets had tweet location in them (This happens when tweeter turns off his device's location capabilities). As the location was our primary data attribute, we requested twitter data from our good friends at the Melbourne eResearch Group, they continually do social media experiments and collect tweets. They were kind enough to provide us an interface (REST API for their CouchDB instance) to their data. We added these tweets to our collection. In total we gathered about 3.2 Million tweets. 
+Due to the limited amount of time and the retrieval speed of Twitter Search API, we were only able to gather about 1 million tweets, in 3 weeks, using this setup. Although one million is a high number, but due to the limitations of search API, these tweets were not all geo-coded, this means not all tweets had tweet location in them (This happens when tweeter turns off his device's location capabilities). As the location was our primary data attribute, we requested twitter data from our good friends at the Melbourne eResearch Group, they continually do social media experiments and collect tweets. They were kind enough to provide us an interface (REST API for their CouchDB instance) to their data. We added these tweets to our collection. In total we gathered about 3.2 Million tweets. Table \ref{tab:tweetdata} shows the summary statistics of the data that we collected.
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Property}          & \textbf{Value}      \\ \midrule
+Size of resulting file     & 12.74 GB            \\
+Total number of tweets     & 3,234,293             \\
+Number of unique tweeters  & 165,255              \\
+Period of tweet collection & Aug 2014 - Sep 2017 \\ \bottomrule
+\end{tabular}
+\caption{Tweet Data Statistics}
+\label{tab:tweetdata}
+\end{table}
 \paragraph{Loading Tweets to HDFS:\\}
 The resulting JSON file from CouchDB was about 13 GB in size, which was then loaded to HDFS with the replication factor of 3. This means that the file is broken in to Hadoop blocks of 64 MB and each block will be replicated (copied) to at-least 3 different nodes. We did this because we wanted an even distribution of blocks, and if the default replication factor of 1 was used, all the blocks of the file are usually placed on a single node (the node that is used to load up: i.e. `hadoop fs -put", the file on hdfs).
 
@@ -597,31 +643,34 @@ Although this dataset has many fields, we only selected and used limited fields,
 \end{figure}
 
 
-As this dataset is restricted and comes with legal bindings, we in this work will only report visualizations and aggregate statistics from this data. Any individual record values even if mentioned here will only be representational (all original values will be anonymized, suppressed or replaced with random values). Secondly the agreement also restricts us to use maximum of 1000 properties, it states that if need to use more than 1000 we need special permission. Due to lack of time we did not apply for this permission, instead we limited our experiment to as few properties as possible. In the end we used less than 50 properties, for our complete analysis.
+As this dataset is restricted and comes with legal bindings, we in this work will only report visualizations and aggregate statistics from this data. Any individual record values even if mentioned here will only be representational (all original values will be anonymized, suppressed or replaced with random values). Secondly the agreement also restricts us to use maximum of 1000 properties, it states that if need to use more than 1000 we need special permission. Due to lack of time we did not apply for this permission, instead we limited our experiment to as few properties as possible. In the end we used less than 700 properties, for our complete analysis.
 
-The complete dataset has the data for entire Australia ranging from year 2013 to 2017, we however only retrieved records from selected Melbourne suburbs for 2017. We also restricted the retrieval by filtering only those records that have interesting tweeters as defined in next section. Plus we restricted properties only from a selected number of suburbs of Melbourne. These particular suburbs were chosen mainly because, first of all our Tweet data collection was mainly focused on Melbourne region and secondly, as we were more interested in residential homes rather than commercial properties, we focused on residential suburbs.
+The complete dataset has the data for entire Australia ranging from year 2013 to 2017, we however only retrieved records from selected Melbourne suburbs for 2017. We also restricted the retrieval by filtering only those records that have interesting tweeters as defined in next section. Plus we restricted properties only from a selected number of suburbs of Melbourne, refer Table \ref{tab:Suburbs Considered}. These particular suburbs were chosen mainly because, first of all our Tweet data collection was mainly focused on Melbourne region and secondly, as we were more interested in residential homes rather than commercial properties, we focused on residential suburbs.
+
+
+
 
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{lr}
-\hline
-\textbf{Suburb Name}         & \multicolumn{1}{l}{\textbf{No. of Properties}} \\ \hline
-Carlton North - Princes Hill & 1                                             \\
-Richmond (Vic.)              & 1                                           \\
-Hawthorn                     & 1                                            \\
-Port Melbourne Industrial    & 1                                             \\
-Northcote                    & 1                                            \\
-Abbotsford                   & 1                                           \\
-Total                        & 1                                           \\ \hline
+\begin{tabular}{@{}lll@{}}
+\toprule
+\multicolumn{3}{c}{\textbf{Suburbs Considered - Melbourne}}                        \\ \midrule
+Carlton North - Princes Hill & Toorak          & Fitzroy        \\
+Richmond (Vic.)              & Brunswick East  & Fitzroy North  \\
+Hawthorn                     & East Melbourne  & Port Melbourne \\
+Port Melbourne Industrial    & South Melbourne & South Yarra    \\
+Northcote                    & Yarra - North   & Albert Park    \\
+Abbotsford                   & Collingwood     & Carlton        \\
+Kew                          &                 &                \\ \bottomrule
 \end{tabular}
-\caption{Number of Properties in each Suburb}
-\label{tab:Number of Properties in each Suburb}
+\caption{Selected Suburbs for this Experiment}
+\label{tab:Suburbs Considered}
 \end{table}
 
-\section{Identifying Interesting Tweeters}
+\subsection{Identifying Interesting Tweeters}
 Twitter is a diverse platform, today it is being used by both humans and bots. Bots are automated programs that tweet messages like news, information updates (traffic, weather, sports scores etc.) or even advertisements. These bots can generate a lot of tweets very quickly, and if we collect tweets, we are bound to get a large number of tweets from bots too. This is a problem for our experiment, because this does not help us with our assumption that, we can infer home usage pattern based on tweet timing pattern. The concept of time (even sleep time) does not apply to bots as they can tweet continuously 24//7. Tweets from such bots are noise for our experiment and we have to get rid of bots before we go any further.
-
+\paragraph{Bot Detection:\\}
 There has been a lot of work done on detecting whether a tweeter is bot or human, in-fact literature also refers to third type of tweeters, the cyborg. Cyborg is defined to be human assisted bot, or bot assisted human. For example a person might program a bot to tweet when ever he/she eats. It has been observed that cyborgs and bots generate much higher number of tweets than humans, so the simplest approach to filter out bots and cyborgs is to analyze the number of tweets from each tweet handle or screen name (i.e. Twitter Id of the tweeter). 
 There are however many more sophisticated methods for bot detection, for example \cite{chu2010tweeting} uses multiple approaches, such as entropy based, machine learning based on the text of the tweet and the account properties of the tweeter. Due to the lack of time and desire to keep things simple we preferred the tweet frequency/count based filtering technique. Later when we got the tweet time-lines for each user, we could see that this approach worked fine as times reproduced mimicked human behaviour (e.g. sleeping at night etc.). 
 
@@ -632,21 +681,96 @@ But to filter on tweet frequency, we need the cut off thresholds for the number 
 \begin{tabular}{@{}rlr@{}}
 \toprule
 \multicolumn{1}{l}{\textbf{Rank}} & \multicolumn{1}{c}{\textbf{screen\_name}} & \multicolumn{1}{c}{\textbf{Num Of Tweets}} \\ \midrule
-1                                 & VirtualJukebox                            & 85363                                      \\
-2                                 & bikewatchbne                              & 27339                                      \\
-3                                 & will\_i\_ammg                             & 22620                                      \\
-4                                 & TrendsSydney                              & 14458                                      \\
-5                                 & emgw\_melbourne                           & 13654                                      \\
-6                                 & PairsonnalitesA                           & 11015                                      \\
-7                                 & UN\_secretary                             & 9938                                       \\
-8                                 & TrendsAustralia                           & 7640                                       \\
-9                                 & dsn\_status                               & 7438                                       \\
-10                                & 3031Weather                               & 6851                                       \\ \bottomrule
+1                                 & VirtualJukebox                            & 85,363                                      \\
+2                                 & bikewatchbne                              & 27,339                                      \\
+3                                 & will\_i\_ammg                             & 22,620                                      \\
+4                                 & TrendsMelbourne                              & 14,458                                      \\
+5                                 & emgw\_melbourne                           & 13,654                                      \\
+6                                 & PairsonnalitesA                           & 11,015                                      \\
+7                                 & UN\_secretary                             & 9,938                                       \\
+8                                 & TrendsAustralia                           & 7,640                                       \\
+9                                 & dsn\_status                               & 7,438                                       \\
+10                                & 3031Weather                               & 6,851                                       \\ \bottomrule
 \end{tabular}
 \caption{Top 10 Tweeters in our Data w.r.t Tweet Count}
 \label{tab:TopTweeters}
 \end{table}
-Just by analyzing the screen names we can see that nearly all of the top tweeters are bots, they seem to range from music bots to weather bots. So to get a clearer picture of the distribution of tweet counts as per user, we plotted them on a historgram
+Just by analyzing the screen names we can see that nearly all of the top tweeters are bots, they seem to range from music bots to weather bots. So to get a clearer picture of the distribution of tweet counts as per user, we plotted them on a frequency distribution histogram. Notice that more tweeters have low tweet count, but there are some high count tweeters too. 
+
+We decided to disregard any tweeter that has more than 6,000 total tweets, and removed around 20\% of the tweeters. We know that this is just an arbitrary threshold but due to the fact that we did not had any ground truth data for bot detection available, it was impossible to use other more sophisticated methods. Plus at this stage we only wanted to do a preliminary filtering, because we filtered out more tweeters when we associated them to particular residential properties. This second filtering also removed a lot of bots for us, as it was very aggressive.
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=100mm,scale=1]{Images/TweeterDistribution.PNG}
+    \caption{Frequency Distribution of Number of Tweets}
+    \label{fig:TweeterDistribution}
+\end{figure}
+
+
+
+\subsection{Identifying Interesting Properties}
+The assumption of our experiment, as defined in Sec \ref{sec:Overview of the Experiment}, states that we want one bedroom houses with single prominent tweeter. But when we started the experiment, we were much more ambitious. We thought that, there might be some relationship between the number of people tweeting from a home and the number of bedrooms in that home. So first lets, explore this relationship.
+
+\paragraph{Relationship between Number of Bedrooms and Unique Tweeters:\\}
+We originally wanted to investigate this relationship for all the available properties in the focused suburbs (Table \ref{tab:Suburbs Considered}), but we were constrained by the data agreement limitations (which restricted us to use a maximum of 1,000 properties in this experiment). So instead, we decided to get an idea of this relation by analyzing data from only one suburb. We selected ``Port Melbourne"  for this analysis, as it provides a nice mix of residential and commercial locations. Plus there are about a total of 681 properties for ``Port Melbourne" in the 2017 records, which clears us from the agreement limitation. 
+One may argue, that we could have instead randomly picked limited number of properties from all over Melbourne (staying within our limit), but we concluded that analyzing one complete suburb will be more beneficial, as random selection might not present the original distribution of data.
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=100mm,scale=1]{Images/bedRoomFrequencyDistribuion.PNG}
+    \caption{Frequency Distribution of Bedrooms per Property in Port Melbourne}
+    \label{fig:BedRoomDistribution}
+\end{figure}
+
+Figure \ref{fig:BedRoomDistribution}, shows the frequency distribution of the number of bedrooms per house, in the suburb of ``Port Melbourne". We can clearly see that number of bedrooms range from 1 to 39 for each property, and most of the properties have 12 or fewer bedrooms. The properties with higher bedroom count can be apartment buildings, with multiple homes. Also notice that There is an abundance of 1 bedroom properties.
+
+Now let's try to correlate these bedroom counts with the unique number of tweeters from each property. Here we ran into a problem, the properties data provided by CoreLogic, only has positional coordinates for each property, but to filter out tweets from each property we needed a region for area of the house. We tried to get this information using Google Maps GeoCoding API \cite{GoogleGeoCodingAPI}, but found out that it only gives property parameters for few selected places (we think public places which Google thinks are less sensitive). 
+
+So we had to come up with our own approach to get property parameter (Polygon), what we basically did was to construct a 10 meter by 10 meter box around the (latitude, longitude) coordinate point for each property. The resultant code is shown below, this code was used with 5 meters as input. Note that in all our data we follow the ``WGS84" geo-referencing coordinate system, so each degree in latitude value equals 1/111111 meters, corresponding longitude value can be calculated using trigonometry. This conversion is technically called `Projection'.
+
+\inputminted{python}{pointToPolygon.py}
+
+
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=100mm,scale=1]{Images/BedroomVsTweeters.png}
+    \caption{Relationship between Number of Bedrooms and Unique Tweeters}
+    \label{fig:BedroomVSTweeters}
+\end{figure}
+\paragraph{Filtering Interesting Properties:\\}
+After associating each tweet to a property, we generated a scatter plot of number of bedrooms in each property and the number of unique tweeters from that property. Figure \ref{fig:BedroomVSTweeters} shows this plot. We can see that there is no strong correlation, what is surprising however is the fact that low bedroom counts have high number of unique tweeters. We think this is because of the commercial places, for example cafes, offices, shops etc. which may have low number of rooms but a lot of people visiting them. 
+After failing to determine the connection between number of tweeters and bedrooms, we decided to limit our experiment to only one bedroom properties. Because if were to include properties with more bedrooms then it would be very difficult for us to determine who lives there and their tweeting profile.
+
+In the next step, we developed a filtering criteria, that could help us get only those properties that had maximum similarity to our base assumption. Basically, we wanted  one bedroom houses with single ``Prominent Tweeter", we define Prominent Tweeter as:
+
+
+\begin{namedtheorem}[Definition of Prominent Tweeter] A tweeter responsible for more than 60\% all tweets from a particular property, AND Has at-least 20 tweets.
+\end{namedtheorem}
+\paragraph{}
+It follows from our assumption, that we want one person living in a house, so that when he is not tweeting we can state that he may not be home. As for the minimum 20 tweet limit, we imposed this limit so that we can infer tweeting habit pattern and if tweet count for any tweeter is very low a pattern may not be visible.
+
+This filter is quite a hard one, specially considering we applied to only \textasciitilde100,000 tweets. After applying it to available properties from all the suburbs in Table \ref{tab:Suburbs Considered}, we were left with only 39 properties. Figure \ref{fig:Location of Interesting Properties}, shows the map, depicting the location of these filtered out properties (only the suburbs which contain these properties are shown). As we only have very limited amount of properties, from now on we will consider all these 29 houses to be from a single suburb SUB-X. As this is just a proof-of-concept experiment, this should not be a problem. If more twitter data is available it can be shown that, more properties are able to pass through this filter, hence no need to collect properties from 8 different suburbs into one hypothetical one.
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=80mm,scale=1]{Images/FilteredInterestingProperties.png}
+    \caption{Location of Interesting Properties}
+    \label{fig:Location of Interesting Properties}
+\end{figure}
+
+\subsection{Generating Property Time Lines}
+After collecting all the interesting properties, we proceeded to infer the tweeting patterns from these homes, we start by defining the term Time Line, we will use this definition throughout this work.
+\begin{namedtheorem}[Definition of a Time Line] A visual or data representation of the time of day, a tweeter tweets, plotted on a 24 hour (midnight to midnight) axis.
+\end{namedtheorem}
+\paragraph{}
+Figure 
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=80mm,scale=1]{Images/FilteredInterestingProperties.png}
+    \caption{Location of Interesting Properties}
+    \label{fig:ExampleTimeLine}
+\end{figure}
 
 \chapter{Location Privacy Attack Demo }
 
