@@ -65,12 +65,13 @@
 \setcounter{tocdepth}{1}
 \tableofcontents
 \pagebreak
-I certify that:
-\begin{itemize}
-\item This thesis does not incorporate without acknowledgement any material previously submitted for a degree or diploma in any university; and that to the best of my knowledge and belief it does not contain any material
-previously published or written by another person where due reference is not made in the text.
 
-\item The thesis is xxx words in length (excluding text in images, table, bibliographies and appendices).
+\textit{I certify that:}
+\begin{itemize}
+\item \textit{This thesis does not incorporate without acknowledgement any material previously submitted for a degree or diploma in any university; and that to the best of my knowledge and belief it does not contain any material
+previously published or written by another person where due reference is not made in the text.}
+
+\item \textit{The thesis is 16,201 words in length (excluding text in images, table, bibliographies and appendices).}
 \end{itemize}
 - Muhammad Umer Altaf
 \pagebreak
@@ -467,7 +468,8 @@ One problem with differential privacy is this that currently there are no standa
 \chapter{Experimental Setup}
 \section{Infrastructure}
 \paragraph{}
-From this chapter onwards we will discuss the experiments, and proof of concept implementations we did for this research work. For these experiments, we work with a large amount of data (for more details see Section [Add Section]). Collecting and processing this data needs substantial amount of computing resources, this chapter offers details of the infrastructure employed and the experimental setup deployed.
+From this chapter onwards we will discuss the experiments, and proof of concept implementations we did for this research work. For these experiments, we work with a large amount of data (for more details see Section 
+Section]). Collecting and processing this data needs substantial amount of computing resources, this chapter offers details of the infrastructure employed and the experimental setup deployed.
 \paragraph{}
 The primary computing resource used in this project is the NECTAR\cite{NECTAR} cloud platform. Other resources that are used include: the AURIN\cite{AURIN} data platform and some local resources at the University of Melbourne. Using these resources a Apache Spark and Hadoop cluster was deployed.
 
@@ -542,7 +544,8 @@ Figure \ref{fig:sparkCluster}, shows the high level diagram of the setup. It was
 
 
 
-\chapter{Location Specific Privacy Attack and Resolution}
+\chapter{Location-Specific Data Analysis Experiment}
+\label{chap:Experiment}
 \section{Locations and Privacy Attributes}
 \paragraph{}
 In Chapter \ref{chap:LocationBasedServices}, we introduced the concept of Location Privacy and the approaches to defend it. Until now we have presented privacy from a human's (i.e. user's) point of view. In this chapter we will show that, location (as in places) also have some privacy attributes attached to them. These issues, when exploited have the power to ultimately violate the privacy of humans that are related to these places. Examples of some of these privacy attributes can be:
@@ -559,7 +562,7 @@ Nearly all the methods for location privacy preservation as presented in Section
 \paragraph{The idea for the experiment\\}
 The motivation for this experiment comes from a discussion we had with some friends from the Australian Bureau of Statistics (ABS). One of their jobs is to visit each house and collect statistics (e.g. census etc.), but they had a problem that, they needed to figure out when is the best time of the day to do these surveys, such that most people will be at home. We had this intuition that, we can predict whether a house is empty or not based on its social media usage profile. When the people in a house are known to be avid social media users, we can collect their publicly shared data to determine when they use it from their home. And if there are times when they don't post we can infer that they are not home. And if these times can be aggregated on an administrative area level (i.e. Suburb), the ABS can get the best times to visit that suburb. Such analysis would not only help ABS but would also help various other organizations like advertising firms, city administration etc. to get a better understanding of its citizens movement and behaviour.
 \paragraph{This experiment can be dangerous\\}
-Predicting when a particular house is empty is a clear threat to its occupants, as it provides any potential thief or robber a golden opportunity to carry out their act, without interruption. In fact in most of the heists (robberies), the very first step is to stake-out the target property, which is the act to physically spy on  the property to determine how the occupants use it, i.e. when do they leave for work? when do they come back? So revealing such sensitive information via this experiment is a very big privacy issue. In this chapter we will first present a walk-through of the above experiment, then will present a solution to this problem (via Differential Privacy). Our solution aims to keep the aggregate utility of the experiment within reasonable expectation, while insuring that any adversary would not be able to determine the use pattern of any single property, thus mitigating the danger of this experiment.
+Predicting when a particular house is empty is a clear threat to its occupants, as it provides any potential thief or robber a golden opportunity to carry out their act, without interruption. In fact in most of the heists (robberies), the very first step is to stake-out the target property, which is the act to physically spy on  the property to determine how the occupants use it, i.e. when do they leave for work? when do they come back? So revealing such sensitive information via this experiment is a very big privacy issue. In this chapter we will first present a walk-through of the above experiment, then in the next chapter, present a solution to this problem (via Differential Privacy). Our solution aims to keep the aggregate utility of the experiment within reasonable expectation, while insuring that any adversary would not be able to determine the use pattern of any single property, thus mitigating the danger of this experiment.
 
 
 \subsection{Overview of the Experiment}
@@ -841,15 +844,36 @@ Let's try this interface, by applying to our SUB-X (i.e. set of 29 filtered out 
 \begin{figure}[ht]
 \centering
         \includegraphics[width=50mm,scale=1]{Images/InterfaceRun.PNG}
-    \caption{Key points Labeled on Suburb Profile for SUB-X}
+    \caption{Our Interface Applied to SUB-X}
     \label{fig:InterfaceRun}
 \end{figure}
 
 \section{Experiment Conclusion}
-Now we have technically concluded our experiment in traditional sense. We analyzed a bunch of data and got very useful insights from it, and then published an interface to this analysis task. Nearly all Data Science Experiments finish at this stage, as ``Utility" has been achieved. But we will show that this is not the end of story and although we publish aggregate statistics, we still leak so much information that use pattern of individual properties can be inferred easily. We will show such a Privacy Attack on this interface in the next chapter.
 
-\chapter{Location Privacy Attack Demo }
 
+\subsection{Discussion about the Experiment}
+In this chapter, we demonstrated that it is possible to predict home occupancy times using social media data. We started with relatively small number of tweets in our collection (\textasciitilde 3.6 Million), but still were able to find 39 properties/homes, which had substantial amount of social media usage. We then showed that the social media usage patterns can reveal whether a home is empty or not. In the end we presented an interface for this data, that any agency or organization can use, to get better insights into the daily lives of it's citizens. 
+
+This kind of data can be useful in many fields. Primarily this experiment was done for agencies like Government Census Bureau or advertising agencies, which need to run door to door campaigns. Their objective is to find the best time of day to visit all homes in a suburb. This interface can help them with this objective as now, they can just put in a suburb definition, and get the best hour of the day when most properties are shown to be empty.
+
+Alternatively, this interface can also provide Government Agencies to better plan their services. Imagine the health department wishing to conduct a vaccine spray campaign (mosquito/dengue killing etc.). Ideally they would want to spray the area, when least number of people are affected by it. Similarly in case of some calamity (e.g. fire, earthquake, terror event), the emergency services will have better understanding of the occupancy at any particular time. Traffic Authorities can get utility from this data, as to what time people are leaving for work in the morning and what time do they come back. We believe that exposing the proposed interface, will be of value to many people. 
+
+\subsection{Suggested Improvements to the Experiment}
+In this section, we will list down some of the improvements that can help further refine the experiment. Note that these suggestions are aimed at increasing he ``Utility" of the experiment, we will explore the ``Privacy" aspects in the next chapter (\ref{chap:AttackAndResolution}).
+\begin{itemize}
+  \item \textbf{More Data:} Additional data is always a good thing for Big Data application. In this experiment we only used 3.6 Million Tweets, which may seem like a large number, but resulted in only finding 39 interesting houses corresponding to these tweets. We propose that if more twitter data is collected, we can better generalize the trend of actual suburbs (instead of us making a hypothetical suburb SUB-X). Some ways to retrieve more data can be only focus the Twitter API on the suburb of interest (we had tweets from all over the world). Properties data in our view is enough, as CoreLogic keeps data about all of Australia and New Zealand. Only issue with the CoreLogic data is that, if you need to use more than 1,000 properties you need special permission. We did not require this permission mainly because we had very small of tweets that only resulted in 39 properties being used.
+  
+  \item \textbf{Better Bot Detection:} We used a very simple ``entropy" based approach to filter out bots (we simply removed any tweeter who had more tweets than our threshold i.e. 6,000). It worked for us because we only had 39 valid houses, but we reckon that if more Properties are retrieved (using more twitter data), we would surely get twitter bots as prominent tweeters. Then we would have to use fancier and more systematic techniques as explained in \cite{chu2010tweeting}. These techniques range from entropy analysis, social graph analysis and text classification methods.
+
+\end{itemize}
+
+
+Now that, we have technically concluded our experiment in traditional sense. Traditional means that, we analyzed a bunch of data and got very useful insights from it, and then published an interface to this analysis task. Nearly all Data Science Experiments finish at this stage, as ``Utility" has been achieved. But we will show that this is not the end of story and although we publish aggregate statistics, we still leak so much information that use pattern of individual properties can be inferred easily. We will show such a Privacy Attack on this interface, in the next chapter (\ref{chap:AttackAndResolution}).
+
+\chapter{Location-Specific Privacy Attack and Resolution }
+\label{chap:AttackAndResolution}
+\section{A Disclosing Interface}
+In Chapter \ref{chap:Experiment}, we presented a data analysis experiment, based on social media data. 
 
 \chapter{Conclusion and Recommendations}
 
