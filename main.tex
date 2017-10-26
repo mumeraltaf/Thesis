@@ -33,6 +33,7 @@
 
 \title{Privacy Oriented Data Analysis\\\large{Master Thesis - 75 Points}}
 
+
 \author[1]{Muhammad Umer Altaf}
 \author[1]{Prof. Richard O. Sinnott}
 
@@ -70,7 +71,7 @@
 \begin{itemize}
 \item \textit{This thesis does not incorporate without acknowledgement any material previously submitted for a degree or diploma in any university; and that to the best of my knowledge and belief it does not contain any material
 previously published or written by another person where due reference is not made in the text.}
-
+\item \textit{Where necessary I have received clearance for this research from the University's Ethics Committee and have submitted all required data to the Department }
 \item \textit{The thesis is 16,201 words in length (excluding text in images, table, bibliographies and appendices).}
 \end{itemize}
 - Muhammad Umer Altaf
@@ -154,7 +155,7 @@ AOL (America Online), released more than 20 million search terms from 6.5 millio
 
 
 \subsection{Impact of these privacy breaches}
-An extensive study \cite{ohm2009broken} from  UCLA Law School investigates the impact and realization the privacy breaches, such as the ones mentioned in this section have on human freedom, governance and policy making. They note that although simple anonymization has been proved to be worthless by these disclosures, but still most of the data publishing agencies (i.e. government, health care, legal etc.) do not pay attention to these issues and rely on half-cooked faulty anonymization. They argue that mostly it is because the legal framework is lagging behind and does not address these new issues. So if a law or policy asks for privacy it normally deems anonymization enough. They have proposed some good recommendations for policy makers to follow at the end.
+An extensive study \cite{ohm2009broken} from  UCLA Law School investigates the impact and realization of the privacy breaches, such as the ones mentioned in this section have on human freedom, governance and policy making. They note that although simple anonymization has been proved to be worthless by these disclosures, but still most of the data publishing agencies (i.e. government, health care, legal etc.) do not pay attention to these issues and rely on half-cooked faulty anonymization. They argue that mostly it is because the legal framework is lagging behind and does not address these new issues. So if a law or policy asks for privacy it normally deems anonymization enough. They have proposed some good recommendations for policy makers to follow at the end.
 
 \paragraph{}
 We here note that above mentioned disclosures are the ones that were very public. They made it to media outlets so that is why their impact has been so extensively investigated. But now consider some adversary having access to some private data repositories, (which is not a very absurd scenario as employees of every organization can have tendency to go rouge), he can do bad (as in evil) data analysis without the outside world even knowing about it. Right now not much legal thought has been given to these scenarios, mainly because techniques to do private data analysis are at very nascent stage. We need robust privacy oriented data analysis frameworks and the legal framework to follow it properly, that can only come if there is wide spread public awareness of these issues.
@@ -235,7 +236,7 @@ One problem with this performance score is this that the authors implemented thi
 \paragraph{}
 Sedic \cite{zhang2011sedic} proposes an implementation of Map Reduce over Hybrid Cloud infrastructure. Their approach works by splitting up both the mappers and reducers over large number of nodes. They claim to preserve privacy by allowing the user to label critical data. They keep the sensitive data on private infrastructure and send out rest to public cloud.
 \paragraph{}
-[9] Also is similar to Sedic \cite{zhang2011sedic}, but they have proposed a mechanism to finely control the scale of tagging i.e. what is sensitive and what is not. They propose multi-level tagging in terms of: file level, line level, temporal and spatial level tags. This can give almost total control of information to an administrator but also adds the overhead of manual tagging effort.
+\cite{xu2015framework} Also is similar to Sedic \cite{zhang2011sedic}, but they have proposed a mechanism to finely control the scale of tagging i.e. what is sensitive and what is not. They propose multi-level tagging in terms of: file level, line level, temporal and spatial level tags. This can give almost total control of information to an administrator but also adds the overhead of manual tagging effort.
 \paragraph{}
 Although both these approaches present a very good framework of task breakdown and scheduling but in terms of privacy, this approach is very simplistic and requires a lot of manual sanitization of data. Also as demonstrated by \cite{dwork2004privacy} this approach suffers from information leakage in presence of auxiliary information generator.
 \subsection{GUPT: Privacy Preserving Data Analysis}
@@ -255,6 +256,8 @@ Authors realize that using a WAN impacts the performance of MapReduce jobs, but 
 \subsection{Frameworks for Privacy Oriented Analysis}
 \paragraph{}
 All the mentioned frameworks use some form of manual data labeling, differential privacy or some combination of both. The table below summarizes these frameworks by describing their base fundamentals and their applicability to hybrid cloud environment:
+
+
 
 
 \begin{table}[ht]
@@ -294,7 +297,7 @@ Most of current frameworks for hybrid cloud, work by the manual tagging of sensi
 
 
 
-\chapter{Location Based Services and Methodologies for Location Privacy}
+\chapter{Location Based Services and Privacy Issues}
 \label{chap:LocationBasedServices}
 \section{Location Based Services}
 \paragraph{}
@@ -438,31 +441,104 @@ In \cite{andres2013geo} authors have presented a good comparison between the k-a
 In this chapter we explained the mechanism of Location Based Services, and presented a survey of the current methods of ensuring privacy while working with LBSs. A lot of work has been done on the protection of user's location, but there are some very specific privacy related issues, that are concerned with the private properties/attributes of the locations themselves. For example: the use pattern of a house, people staying in a property, demographics of a apartment block. Although the goal of such analysis is not directly related to the techniques discussed in this chapter, but still its good to think about privacy issues for these applications. In chapter [Add Chapter] we will demonstrate, such an attack on privacy where we can infer when particular homes are empty, then we will propose a differential privacy based approach to extract some utility from this scenario.
 
 \chapter{Differential Privacy}
+\label{chap:differentialPrivacy}
 \section{Introduction}
 \paragraph{}
 In Chapter 2 and 3, we introduced the notion of Differential Privacy with respect to a distributed environments and location privacy, In this chapter we will explore it in detail and formalize some of it's features. 
 
 \paragraph{}
-Differential Privacy \cite{Dwork:2006:DP:2097282.2097284} is one of the relatively new foundational works in preventing private information leaks. This work, first proves the impossibility of absolute disclosure prevention, which is the negation of Dalenius’s principal that no information should be learn-able from a data that is not learnable without absolute access to data. This auxiliary information is also dangerous for Privacy Preserving Data Mining Algorithms [2] as underlying distribution and some added information is usually sufficient to leak information.
-\paragraph{}
-To side step this impossibility authors propose a mechanism called differential privacy, which relaxes the absolute disclosure safety, that any information leak is within small multiplicative factor, i.e. adversary will at best have a rough approximation about the actual information. They achieve this by adding random noise to the output of queries. This magnitude of this noise is also controlled by the degree that one individual record can change the result of the query, for example getting mean of a distribution of small variance needs less noise but highly varying distributions require large amount of noise to conceal individual instances. \cite{dwork2014algorithmic} Provides a comprehensive analysis of differential privacy fundamentals and sets it in strong mathematical background. 
-\paragraph{}
-All these techniques have been proven to be effective only when the adversary tries sub linear number of queries, a large number of queries increase the chance of information leakage\cite{haeberlen2011differential}. \cite{dwork2004privacy} Argue that this limitation of sub-linear queries can be solved by using vertically partitioned databases, i.e. single attribute databases or database divided into multiple databases via subsets of attributes.
-\paragraph{}
-Differential Privacy seems to be the most trustworthy technique of all the approaches as its mathematically sound and provable. Other approaches need some form of trust between data provider and analyzer.
-\paragraph{}
-One problem with differential privacy is this that currently there are no standard ways to do this, like RSA or AES are now standard implementations of Public Key Encryption and have made encryption adoptable and more secure. So I believe that, such a standard will really help Differential Privacy to be adopted on a large scale.
+Differential Privacy \cite{Dwork:2006:DP:2097282.2097284} is one of the relatively new foundational works in preventing private information leaks. The main idea behind this concept, is this that it allows to develop tools that can help us balance between ``Privacy" and ``Utility". Utility is the value derived from any experiment and is understood pretty well, but privacy is a very abstract concept. It may mean different things to different people. In the field of statistical data analysis there have been tries to, mathematically define the notion of privacy. Let's explore one such definition.
+
+\section{Absolute Disclosure Safety}
+
+In 1977, T. Delanius while working with survey statisticians, gave the following definition of Privacy:
+\begin{namedtheorem}[Absolute Definition of Privacy\cite{dalenius1977}]
+No information should be learn-able from a data, that is not learn-able without absolute access to the data.
+\end{namedtheorem}
 
 
 
-\newcommand{\dd}[1]{\mathrm{d}#1}
-
-\begin{equation}
-[Pr[\mathit{K}(D_{1})\in S] \leq \exp (\epsilon ) \times Pr[\mathit{K}(D_{2})\in S]] \end{equation}
+Intuitively this makes sense. Consider a scenario where a `Mr. Paul' has a choice, to submit his personal details (Name, Age, Address etc.) to any organization.  Now if the organization can guarantee, that adding Paul's record in their database, will not affect the result of any analysis they might do with the data, Paul should not have any reservations about sharing his details (for this discussion, lets keep aside the issues related to the security of the data). Because it does not matter if Paul's record is part of the database or not. Mathematically this idea can be modeled as:
 
 \begin{equation}
 [Pr[\mathit{K}(D_{1})\in S]  = Pr[\mathit{K}(D_{2})\in S]]
 \end{equation}
+
+Here, $D_{1}$ is the database that, does not contain, the record of any particular individual person (i.e. Paul), and  $D_{2}$ is the database that contains that person's record. When we apply any function $K()$ on  $D_{1}$ the probability of getting result $S$, should be equal to getting same result $S$, when $K()$ is applied to $D_{2}$. Any $K()$, that can guarantee this relation, is said to be "Absolutely Private".
+
+\paragraph{Absolute Disclosure Safety is Useless\\}
+We can have many functions that can satisfy the relation (4.1), but all of them are bound to be 100\% useless. This is because if any one individual's record does not affect the answer, then by reduction it can be shown that anybody's record will also have no affect on the answer. This means the database will give same answer even if it has zero records (i.e. it is empty). Surely such an answer would be of no use to anybody. Only fixed valued functions (which always give the same answer no matter what data) can satisfy this safety, and there is no real utility of these functions. i.e. When $Privacy = 100\%$ then $Utility = 0\%$.
+
+% \paragraph{}
+% This work, first proves the impossibility of absolute disclosure prevention, which is the negation of Dalenius’s principal that no information should be learn-able from a data that is not learn-able without absolute access to data. This auxiliary information is also dangerous for Privacy Preserving Data Mining Algorithms \cite{agrawal2001design} as underlying distribution and some added information is usually sufficient to leak information.
+\section{Differential Privacy - Relaxation to Absolute Disclosure Safety}
+To side step the impossibility of a useful Absolute Private function,  Cynthia Dwork in 2006, proposed a mechanism called differential privacy.  This mechanism, proposes a relaxed definition of privacy, which states:
+
+\begin{namedtheorem}[Differential Privacy\cite{Dwork:2006:DP:2097282.2097284}]
+Adding any particular individual's record in a database, should not change the result of the applied function \textbf{by much}.
+\end{namedtheorem}
+
+This can be mathematically presented as:
+% \newcommand{\dd}[1]{\mathrm{d}#1}
+
+\begin{equation}
+[Pr[\mathit{K}(D_{1})\in S] \leq \exp (\epsilon ) \times Pr[\mathit{K}(D_{2})\in S]] \end{equation}
+
+
+Basically this means, that if we add any particular person's(i.e. Paul's) record in a database, he result of applying the deferentially private function will not be very different, from the result we get if we apply same function to original database (that did not contain Paul's record). The mathematical notation, bounds the ratio of the probabilities of getting the same answer for $D_{1}$ and $D_2$, within some very small value, donated as $\epsilon$ (i.e. epsilon).
+
+Note that by varying $\epsilon$, we can control how similar we want these probabilities to be. So in a sense it gives us a nice control to define, how much privacy and utility are we seeking from the function. If $\epsilon = 0$, we get maximum privacy and zero utility, on the other hand as we increase $\epsilon > 0$, we start to get some utility, and there will be an optimal value for $\epsilon$, where we shall maximum utility but zero privacy. Differential Privacy is a perfect tool to have the balance between utility and privacy.
+
+\section{Mechanisms For Differential Privacy}
+Relation (4.2) defines Differential Privacy, in this section we will list some of the methods that are used to actually apply Differential Privacy in real world. Ideally any method that satisfy relation (4.2) would be declared Deferentially Private, but in reality these type of relations are very few. Here we will discuss two main methods, both of them basically induce controlled random noise in the data or outputs. The Laplace Mechanism would be discussed in detail as we use this mechanism in our experiment (Chapter [Add Chapter]), the Exponential Mechanism is just introduced superficially, for the sake of completeness.  These techniques aim to hide individual values into the distribution they follow, hence guaranteeing privacy w.r.t. these values.
+
+\subsection{The Laplace Mechanism ($\epsilon, \Delta F$)}
+\label{sec:LaplaceMecha}
+This method works by adding a small amount of random noise into the output of any function that we want to make differential private. This noise follows the Laplace Distribution (also called double-exponential), so let's first have a look how does it look like.
+
+\paragraph{Expression for the Laplace Distribution:\\}
+\begin{equation}
+=\frac{1}{2b} \exp(-\frac{\left | x-\mu  \right |}{b})
+\end{equation}
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=80mm,scale=1]{Images/LaplaceDistribution.png}
+    \caption{Laplace Probability Distribution. Source:\cite{LaplaceDist}}
+    \label{fig:laplace}
+\end{figure}
+
+
+Figure \ref{fig:laplace}, shows the shape of the Laplacian distribution, when we change its two parameters ($\mu$ and $b$). Notice that $\mu$, controls the position of the distribution, while $b$ alters its spread.
+
+\paragraph{Adding Laplacian Noise to function $f(x)$:\\}
+\begin{equation}
+Noisy(f(x)) =f(x) + Rand( \frac{1}{2b} \exp(-\frac{\left | x-\mu  \right |}{b}))
+\end{equation}
+To apply this noise to real world functions we need to define its components:
+\begin{itemize}
+  \item $b = \frac{\Delta F}{\epsilon} $, this parameter basically controls the spread of distribution, hence the ammount of random noise. It's calculated using these 2 further parameters.
+  \begin{itemize}
+  \item ${\Delta F}$ is defined as the sensitivity of the function. Sensitivity means that the maximum value, by which the function $F$'s value can change by insertion or deletion of only one record. For example for $Count()$ function, where we are just counting some instances, $\Delta F$ will be 1, as adding one record can have an impact of maximum 1 on the result of count. You can imagine that for $Sum()$ function $\Delta F$ would be equal to the maximum value in the data-set.
+  \item ${\epsilon}$ controls, how much noise do we want to induce, a lower value of $\epsilon$ would mean that we add a large ammount of noise.
+  \end{itemize}
+  \item $\mu$ is the actual value of the function which we want to add noise.
+  \item  $Rand()$ means that we pick a random value from the enclosed distribution.
+\end{itemize}
+
+Note that the value of $\epsilon$ will depend on the requirements of the function, ideally we would want to achieve the perfect balance between utility and privacy, so that we don't add so little noise that individual records are easily identified also we don't want to add so much noise that there is no use of the result. This balance is usually achieved by through analysis of database (either original complete database or a sample). For our own experiment we did just that, refer Chapter \ref{chap:AttackAndResolution}.
+The Laplacian Mechanism has an elegant proof, that it satisfies the differential privacy condition (4.2). We have included this proof in Appendix \ref{Appendix}.
+
+\subsection{The Exponential Mechanism}
+The Laplacian Mechanism works very well for numeric functions, but there are some situations where it makes no sense in adding noise. For example if the function is discreet valued, i.e. it outputs class name after a classification task. Here if add just a small amount of noise it may entirely change the class and hence we automatically get very less utility. Another example can be bidding auctions, where a small increase in price may discourage many bidders from buying, or result in a failed bid.
+
+One solution is to use the Exponential Mechanism\cite{mcsherry2007mechanism}. This method works by specifying a internal metric called Utility Function, which approximates the quality of the output. For example in the auction example we can set to be the amount of total profit we make after each bid.
+
+
+\paragraph{}
+We will not go into more details about this mechanism as it is not very applicable in our experiment. However, there can be other mechanisms for differential privacy, and as this field is very new, a lot of research effort is ongoing to find these.
+
+\section{Issues With Differential Privacy}
+
 
 
 \chapter{Experimental Setup}
@@ -600,7 +676,7 @@ The code uses the `Tweepy'\cite{Tweepy} Python library, to interface with the of
     \label{fig:tweetHarvester}
 \end{figure}
 
-Due to the limited amount of time and the retrieval speed of Twitter Search API, we were only able to gather about 1 million tweets, in 3 weeks, using this setup. Although one million is a high number, but due to the limitations of search API, these tweets were not all geo-coded, this means not all tweets had tweet location in them (This happens when tweeter turns off his device's location capabilities). As the location was our primary data attribute, we requested twitter data from our good friends at the Melbourne eResearch Group, they continually do social media experiments and collect tweets. They were kind enough to provide us an interface (REST API for their CouchDB instance) to their data. We added these tweets to our collection. In total we gathered about 3.2 Million tweets. Table \ref{tab:tweetdata} shows the summary statistics of the data that we collected.
+Due to the limited amount of time and the retrieval speed of Twitter Search API, we were only able to gather about 1 million tweets, in 3 weeks, using this setup. Although one million is a high number, but due to the limitations of search API, these tweets were not all geo-coded, this means not all tweets had tweet location in them (This happens when tweeter turns off his device's location capabilities). As the location was our primary data attribute, we requested twitter data from our good friends at the Melbourne eResearch Group \cite{MelbEResrach}, they continually do social media experiments and collect tweets. They were kind enough to provide us an interface (REST API for their CouchDB instance) to their data. We added these tweets to our collection. In total we gathered about 3.2 Million tweets. Table \ref{tab:tweetdata} shows the summary statistics of the data that we collected.
 
 
 \begin{table}[ht]
@@ -858,7 +934,7 @@ This kind of data can be useful in many fields. Primarily this experiment was do
 
 Alternatively, this interface can also provide Government Agencies to better plan their services. Imagine the health department wishing to conduct a vaccine spray campaign (mosquito/dengue killing etc.). Ideally they would want to spray the area, when least number of people are affected by it. Similarly in case of some calamity (e.g. fire, earthquake, terror event), the emergency services will have better understanding of the occupancy at any particular time. Traffic Authorities can get utility from this data, as to what time people are leaving for work in the morning and what time do they come back. We believe that exposing the proposed interface, will be of value to many people. 
 
-\subsection{Suggested Improvements to the Experiment}
+\subsection{Possible Improvements to the Experiment}
 In this section, we will list down some of the improvements that can help further refine the experiment. Note that these suggestions are aimed at increasing he ``Utility" of the experiment, we will explore the ``Privacy" aspects in the next chapter (\ref{chap:AttackAndResolution}).
 \begin{itemize}
   \item \textbf{More Data:} Additional data is always a good thing for Big Data application. In this experiment we only used 3.6 Million Tweets, which may seem like a large number, but resulted in only finding 39 interesting houses corresponding to these tweets. We propose that if more twitter data is collected, we can better generalize the trend of actual suburbs (instead of us making a hypothetical suburb SUB-X). Some ways to retrieve more data can be only focus the Twitter API on the suburb of interest (we had tweets from all over the world). Properties data in our view is enough, as CoreLogic keeps data about all of Australia and New Zealand. Only issue with the CoreLogic data is that, if you need to use more than 1,000 properties you need special permission. We did not require this permission mainly because we had very small of tweets that only resulted in 39 properties being used.
@@ -873,11 +949,145 @@ Now that, we have technically concluded our experiment in traditional sense. Tra
 \chapter{Location-Specific Privacy Attack and Resolution }
 \label{chap:AttackAndResolution}
 \section{A Disclosing Interface}
-In Chapter \ref{chap:Experiment}, we presented a data analysis experiment, based on social media data. 
+In Chapter \ref{chap:Experiment}, we presented a data analysis experiment, based on social media data. The goal of the experiment was to determine the times of the day, when most of the houses in a suburb are empty. As shown in Figure \ref{fig:SubXProfile} we were able to present a hourly property use profile for a suburb (SUB-X). Then we exposed an interface to query the results of this analysis. In this chapter we will show that this interface is a privacy threat. 
+
+Although the goal of making this aggregating function, was to hide individual property's usage pattern, but here we show that ``neighbouring dataset" attack, on this interface can disclose individual property time-lines with 100\% certainty. Then we present a ``Differential Privacy" based solution to mitigate this threat. We apply this solution using two approaches and then we present a comparison and discussion between these two approaches. We conclude that our solution can mitigate the privacy issues of this interface, while keeping the utility of the experiment within expectation.
+\section{Neighbouring Data-Set Attack}
+Recall that we defined our interface as:
+\[=CountNumberOfEmptyProperties(AtTime,SuburbDefination)\]
+The problem with this approach, is this that the input dataset (i.e. SuburbDefination) is dynamic. Basically this means that, individual houses can be made part a suburb, or taken away from it. This makes this interface susceptible to ``Neighbourhood Data-set Attack", we define k-Neighbourhood Dataset as:
+
+\begin{namedtheorem}[k-Neighbouring Data-Set] If a data-set A differs by exactly k number of records, from another data-set B then A and B are k-Neighbouring Data-sets. Mathematically, A and B are 1 neighbouring if for any element x:\\ \begin{equation}  x\in A\ ,\  x\notin B\: ,\ \left | A \right | - \left | B \right | = 1 \end{equation}
+
+\end{namedtheorem}
+
+As an example, consider a database of school students, ``Paul" is a student at school so is part of this database. Now imagine if Paul's leaves school and his record is deleted. The original database before deletion will be a 1-neighbourhood dataset of the final dataset after deletion.
+\paragraph{}
+Count function has been shown, to be susceptible to leakage of private information, when called with 1-Neighbourhood dataset pairs. Here is a very simple logical proof:
+
+
+\paragraph{Count function on 1-Neighbouring Data-Sets A and B w.r.t. \textit{x}}
+\begin{namedtheorem}[Re-Identifying the Value of \textit{x}:\\] 
+
+Let x = True/False,\\ IF CountTrue(A) == CountTrue(B): x = False\\ELSE: x = True
+
+\end{namedtheorem}
+
+This simply means that if we are counting ``True" values for Data-sets A and B (e.g. containing and not containing Paul's record), if result of both these functions is same we can be certain that Paul's record had a value of False, because if it were to be True, then CountTrue(B) would have been, exactly 1 less than CountTrue(A).
+
+
+Now we can apply this 1-neighbourhood attack on our actual interface function ``CountNumberOfEmptyProperties". For this we run this function, first for all 29 properties in our database, then we take out one particular property (id = ed\_table\_2017:123XXXX\footnote{Suppressed Representation}) from the database and re-run this function. Figure \ref{fig:1NeighAttack}, shows such a run.
+
+
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=80mm,scale=1]{Images/1NeighbourhoodAttack.PNG}
+    \caption{Applying our interface on 1-Neighbourhood Dataset of Properties}
+    \label{fig:1NeighAttack}
+\end{figure}
+\paragraph{}
+Note that we have inferred the value of (Is X Empty?) by applying the De-Identifying function defined above. What we have done is that, we have successfully reconstructed the entire Time-Line for Home X. This proves that our interface is leaking such information, which we did not originally want to be disclosed. And just aggregating information, with operations like Count is prone to easy disclosures. In the next section we will present a way to minimize this disclosure.
+
+\section{Solution to the Disclosure Problem}
+\subsection{Approaches to Apply Laplacian Mechanism}
+In Chapter \ref{chap:differentialPrivacy}, we defined the mechanisms for Differential Privacy. In this section, we will  use the ``Laplacian Mechanism" (as defined previously in Section \ref{sec:LaplaceMecha}) as Differential Privacy is a very good solution for counting query disclosures, and Laplace Mechanism also fits very well here.
+
+We identified following multiple methods for the application of Laplacian Noise:
+\begin{itemize}
+  \item Perturb (Adding Noise to) the output empty property counts.
+  \item Adding Noise to the input Tweet times.
+  \item Adding Noise to the input Tweet locations (we did not try this method)
+\end{itemize}
+
+Below, we will show how these methods can be applied, and how do we set the parameters for Laplace.
+
+\paragraph{Adding Noise to the output counts:\\}
+This is the most straight forward approach, we just take the output of each function call and then, calculate amount of scaled random laplacian noise that we then add to the original counts.
+By applying the equation (4.4) in Section \ref{sec:LaplaceMecha}, we program following Python function, that takes in raw count and returns the perturbed values with random noise:
+
+\inputminted{python}{AddLaplaceCount.py}
+
+Note that sensitivity for count function is always 1. As for the other parameter ``ep", it is actually $\epsilon$ and needs to be experimentally \textit{learned} from the data, which we will do in next section.
+
+
+\paragraph{Adding Noise to the input Tweet times:\\}
+Another approach to this problem is to add noise to the raw Tweet times, before counting the empty hourly slots for each property. But what should be the sensitivity? this is a tricky question, so we tried and tested with multiple values for sensitivity. Note that in this approach sensitivity would be defined in a time metric (i.e. minutes or hours). We tried [15min, 30min, 1hr, 2hr] as values for sensitivity and found that 30 minutes and 1 hour are both good values at hiding individual time slots. Below is the Python code that adds noise to each Tweet time. Also note that as now times will be shifted, our counts will also change.
+\inputminted{python}{AddLapNoiseTime.py}
+
+
+
+
+\subsection{Re-Identification with Noisy Counts}
+Now that our counts are no longer integers, as they now are real valued decimal values we need to redefine our \textit{Re-Identification Algorithm}, here is the update approach to re-identify counts:
+
+
+
+\begin{namedtheorem}[Re-Identifying the Value of \textit{x} on Noisy Counts:\\] 
+
+Let x = True/False,\\ 
+Let diff = $\vert$CountTrue(A) - CountTrue(B)$\vert$ \\
+IF diff \textgreater t1 AND diff \textless t2: x = True\\ELSE: x = False
+
+\end{namedtheorem}
+
+The intuition behind this method is this that we want to compensate (maybe over) the effect of unknown noise, so we are checking if our count difference (b/w A and B) lies within a threshold (instead of it being strictly equal to 1). The values for the identification thresholds (t1 and t2), can be anything depending how much do you guess the noise to be. But normally we would suggest t1 to be 0.4 and t2 to be 1.9 (We tried with other thresholds i.e. 0 to 3, which proved to be quiet bad for utility and re-identification both)
+
+Figure \ref{fig:NoisyCountReID}, shows a run of our Interface both with and with out adding noise, notice that after adding noise we find it more difficult to re-identify empty time slots (the inference column).
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=150mm,scale=1]{Images/NoisyCountReID.PNG}
+    \caption{Re-Identifying Empty Hours, with Noisy Counts}
+    \label{fig:NoisyCountReID}
+\end{figure}
+
+
+\subsection{Defining the Evaluation Metrics}
+Now that we have presented a solution for the disclosure problem, we need some evaluation metrics so that we can compare between approaches and also learn the parameters for our mechanisms. As this is a pretty novel experiment, we could not find other existing methods for Location-Specific Privacy Preservation. So we will present our own metrics and compare our approaches with them.
+
+\paragraph{\textbf{Privacy Metric:}} This metric will help us to judge how good is an approach at preserving privacy. Basically it is the percentage of the time slots that we are able to correctly guess as being empty or not.
+\[=\frac{Number\ of\ Correctly\ Identified\ Timeslots}{Total\ Timeslots} \times 100\]
+\paragraph{\textbf{Utility Metric:}} This metric will help us judge how useful is the final suburb profile is to the legitimate agency. We use the Root Mean Square Error (RMSE), between the counts before adding noise and after adding noise. RMSE is defined as:
+\[RMSE = \sqrt\frac{\sum (CountBefore Noise - CountAfterNoise)^{2}}{Number of TimeSlots}\]
+
+
+\subsection{Learning the Parameters}
+To learn the parameters of the Lapacian Noise Distribution and to evaluate our approach we ran our interface for multiple possible values of the parameters. The main parameter we tested was the $\epsilon$, that control the amount of noise we add.
+
+\paragraph{When Counts Perturbed:\\}
+Figure \ref{fig:RunWithCounts} shows the run of the interface, when we added noise to the output of the count function.
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=150mm,scale=1]{Images/Counts.png}
+    \caption{Comparing different values of $\epsilon$, when noise added to output}
+    \label{fig:RunWithCounts}
+\end{figure}
+
+\paragraph{When Times Perturbed:\\}
+Figure \ref{fig:RunWithTimes} shows the run of the interface, when we added noise to the input Tweet times.
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=150mm,scale=1]{Images/RunWithTimes.png}
+    \caption{Comparing different values of $\epsilon$, when noise added to input}
+    \label{fig:RunWithTimes}
+\end{figure}
+
 
 \chapter{Conclusion and Recommendations}
 
 
 \bibliographystyle{plain}
 \bibliography{references}
+\appendix
+\chapter{Appendix}
+\label{Appendix}
+Below is the proof for the validity of the Laplacian Mechanism as explained in Chapter 4:
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=130mm,scale=1]{Images/ProofForLaplace.PNG}
+    \caption{Verification of Laplace Mechanism, Source\cite{LaplaceVaiditity}}
+    \label{fig:Laplace Verified}
+\end{figure}
+
 \end{document}
