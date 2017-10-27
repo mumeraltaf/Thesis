@@ -7,7 +7,7 @@
 % \usepackage{lineno}
 % \linenumbers
 
-
+\usepackage{multirow}% http://ctan.org/pkg/multirow
 \usepackage{algorithm2e}
 \usepackage{minted}
 \usepackage{hyperref}
@@ -110,7 +110,8 @@ Privacy is a complex term, and even untranslatable directly to many other langua
 % \paragraph{}
 % We live in an increasingly digitizing society, now nearly every human task has an electronic footprint. Buy a parking ticket, go through a security check point, log-on to a website you are sure to leave digital traces there. So existence of such knowledge in itself is a threat, let alone it being used adversely. All this information has the potential to become side information, hence, although they may not breach privacy by themselves, but when aggregated with other data they can cause privacy breaches. But, then again this data exists in first place because it offers some utility to certain people. 
 
-\chapter{Privacy-oriented Analysis in Distributed and Hybrid Environments}{Background Study}
+\chapter{Privacy-oriented Analysis in Distributed and Hybrid Environments}
+\label{chap:PrivacyDataTechniques}
 \section{Introduction}
 \paragraph{}
 Systems that guarantee secure communication have been in use for a long time, but Public Clouds suffer from very basic trust issues. Sensitive data like medical or financial records have tough safety guidelines and cannot be processed on offshore third party servers. The advent of public cloud holds tremendous advantages in terms of scalability and elasticity, especially if augmented by in-house infrastructure (Hybrid Cloud). In this chapter we will list some of existing frameworks that try to support privacy oriented analysis while being applicable in hybrid clouds or distributed environments.
@@ -444,7 +445,7 @@ In this chapter we explained the mechanism of Location Based Services, and prese
 \label{chap:differentialPrivacy}
 \section{Introduction}
 \paragraph{}
-In Chapter 2 and 3, we introduced the notion of Differential Privacy with respect to a distributed environments and location privacy, In this chapter we will explore it in detail and formalize some of it's features. 
+In Chapter 2 and 3, we introduced the notion of Differential Privacy with respect to a distributed environments and location privacy. One of the most problematic aspect for any privacy preserving mechanism, is that the data owner or publisher can not know when additional ``auxiliary-side information" may become available, or it may already exists without him knowing. Differential Privacy is a solution to this problem, as we will see in this chapter that, it does not tries to model any side information, but is independent of it. In this chapter we will explore Differential Privacy in detail and formalize some of it's features. 
 
 \paragraph{}
 Differential Privacy \cite{Dwork:2006:DP:2097282.2097284} is one of the relatively new foundational works in preventing private information leaks. The main idea behind this concept, is this that it allows to develop tools that can help us balance between ``Privacy" and ``Utility". Utility is the value derived from any experiment and is understood pretty well, but privacy is a very abstract concept. It may mean different things to different people. In the field of statistical data analysis there have been tries to, mathematically define the notion of privacy. Let's explore one such definition.
@@ -472,6 +473,7 @@ We can have many functions that can satisfy the relation (4.1), but all of them 
 % \paragraph{}
 % This work, first proves the impossibility of absolute disclosure prevention, which is the negation of Dalenius’s principal that no information should be learn-able from a data that is not learn-able without absolute access to data. This auxiliary information is also dangerous for Privacy Preserving Data Mining Algorithms \cite{agrawal2001design} as underlying distribution and some added information is usually sufficient to leak information.
 \section{Differential Privacy - Relaxation to Absolute Disclosure Safety}
+\label{sec:RelaxationToAbsolute}
 To side step the impossibility of a useful Absolute Private function,  Cynthia Dwork in 2006, proposed a mechanism called differential privacy.  This mechanism, proposes a relaxed definition of privacy, which states:
 
 \begin{namedtheorem}[Differential Privacy\cite{Dwork:2006:DP:2097282.2097284}]
@@ -490,7 +492,7 @@ Basically this means, that if we add any particular person's(i.e. Paul's) record
 Note that by varying $\epsilon$, we can control how similar we want these probabilities to be. So in a sense it gives us a nice control to define, how much privacy and utility are we seeking from the function. If $\epsilon = 0$, we get maximum privacy and zero utility, on the other hand as we increase $\epsilon > 0$, we start to get some utility, and there will be an optimal value for $\epsilon$, where we shall maximum utility but zero privacy. Differential Privacy is a perfect tool to have the balance between utility and privacy.
 
 \section{Mechanisms For Differential Privacy}
-Relation (4.2) defines Differential Privacy, in this section we will list some of the methods that are used to actually apply Differential Privacy in real world. Ideally any method that satisfy relation (4.2) would be declared Deferentially Private, but in reality these type of relations are very few. Here we will discuss two main methods, both of them basically induce controlled random noise in the data or outputs. The Laplace Mechanism would be discussed in detail as we use this mechanism in our experiment (Chapter [Add Chapter]), the Exponential Mechanism is just introduced superficially, for the sake of completeness.  These techniques aim to hide individual values into the distribution they follow, hence guaranteeing privacy w.r.t. these values.
+Relation (4.2) defines Differential Privacy, in this section we will list some of the methods that are used to actually apply Differential Privacy in real world. Ideally any method that satisfy relation (4.2) would be declared Deferentially Private, but in reality these type of relations are very few. Here we will discuss two main methods, both of them basically induce controlled random noise in the data or outputs. The Laplace Mechanism would be discussed in detail as we use this mechanism in our experiment (Chapter [Add Chapter]), the Exponential Mechanism is just introduced superficially, for the sake of completeness.  These techniques aim to hide individual values into the distribution they follow, hence guaranteeing privacy w.r.t. these values. This privacy guarantee has been proved mathematically robust in \cite{dwork2014algorithmic}.
 
 \subsection{The Laplace Mechanism ($\epsilon, \Delta F$)}
 \label{sec:LaplaceMecha}
@@ -516,10 +518,10 @@ Noisy(f(x)) =f(x) + Rand( \frac{1}{2b} \exp(-\frac{\left | x-\mu  \right |}{b}))
 \end{equation}
 To apply this noise to real world functions we need to define its components:
 \begin{itemize}
-  \item $b = \frac{\Delta F}{\epsilon} $, this parameter basically controls the spread of distribution, hence the ammount of random noise. It's calculated using these 2 further parameters.
+  \item $b = \frac{\Delta F}{\epsilon} $, this parameter basically controls the spread of distribution, hence the amount of random noise. It's calculated using these 2 further parameters.
   \begin{itemize}
   \item ${\Delta F}$ is defined as the sensitivity of the function. Sensitivity means that the maximum value, by which the function $F$'s value can change by insertion or deletion of only one record. For example for $Count()$ function, where we are just counting some instances, $\Delta F$ will be 1, as adding one record can have an impact of maximum 1 on the result of count. You can imagine that for $Sum()$ function $\Delta F$ would be equal to the maximum value in the data-set.
-  \item ${\epsilon}$ controls, how much noise do we want to induce, a lower value of $\epsilon$ would mean that we add a large ammount of noise.
+  \item ${\epsilon}$ controls, how much noise do we want to induce, a lower value of $\epsilon$ would mean that we add a large amount of noise.
   \end{itemize}
   \item $\mu$ is the actual value of the function which we want to add noise.
   \item  $Rand()$ means that we pick a random value from the enclosed distribution.
@@ -529,8 +531,8 @@ Note that the value of $\epsilon$ will depend on the requirements of the functio
 The Laplacian Mechanism has an elegant proof, that it satisfies the differential privacy condition (4.2). We have included this proof in Appendix \ref{Appendix}.
 
 \subsection{The Exponential Mechanism}
-The Laplacian Mechanism works very well for numeric functions, but there are some situations where it makes no sense in adding noise. For example if the function is discreet valued, i.e. it outputs class name after a classification task. Here if add just a small amount of noise it may entirely change the class and hence we automatically get very less utility. Another example can be bidding auctions, where a small increase in price may discourage many bidders from buying, or result in a failed bid.
-
+The Laplacian Mechanism works very well for numeric functions, but there are some situations where it makes no sense in adding noise. For example if the function is discreet valued, i.e. it outputs class name after a classification task. Here if add just a small amount of noise it may entirely change the class and hence, we automatically get very less utility. Another example can be bidding auctions, where a small increase in price may discourage many bidders from buying, or result in a failed bid.
+\paragraph{}
 One solution is to use the Exponential Mechanism\cite{mcsherry2007mechanism}. This method works by specifying a internal metric called Utility Function, which approximates the quality of the output. For example in the auction example we can set to be the amount of total profit we make after each bid.
 
 
@@ -538,8 +540,17 @@ One solution is to use the Exponential Mechanism\cite{mcsherry2007mechanism}. Th
 We will not go into more details about this mechanism as it is not very applicable in our experiment. However, there can be other mechanisms for differential privacy, and as this field is very new, a lot of research effort is ongoing to find these.
 
 \section{Issues With Differential Privacy}
+Although Differential Privacy solves the issue of side-information (as we did not include any extra information in the models above), and it is mathematically sound, it still has its limitations and issues. In this section we will discuss some of these issues:
 
+\begin{itemize}
+  \item \textbf{Only for certain primitives:} From the definition of the sensitivity parameter, it can inferred that, current mechanisms like Laplace only work well for low sensitivity queries. Query functions like $Count()$ are categorized as low-sensitivity as for count, $\Delta F$ is 1. But if we consider queries like $Sum()$ where adding a single value can have un-predictable effect on the answer, we realize that differential privacy is limited in application. $Min(),Max()$ are also high-sensitivity functions and even worse than $Sum()$.
+  \item \textbf{Adaptive Querying:} Differential Privacy works by introducing noise in data, experiments have shown that if an adversary issues a large number of queries, he can filter noise out of the signal (the actual answers), because noise is generated from a single underlying distribution. Methods like \cite{dwork2004privacy} have tried to side-step this problem by either limiting the number of times a single user can query or defining a global sensitivity budget. Part of this budget is used for each query and when it is exhausted, no more answers are given (this is akin to killing the user, which seems illogical, as a single user can have multiple credentials etc.).
+  \item \textbf{Attacks on the implementations:} There have been various attacks on some of the implementations of differential privacy, as an example see\cite{haeberlen2011differential}. We would love to discuss some of these attacks, but frankly these are out of the scope of this work.
+\end{itemize}
+\section{Chapter Conclusion}
+We explained differential privacy in detail, mainly because we will use its Laplace-Mechanism as the solution to the disclosure problem in our data experiment, see Chapter \ref{chap:AttackAndResolution}. As we have seen in this chapter that Differential Privacy is a good tool for aggregate data analysis, and we saw some of its implementations in Chapter \ref{chap:PrivacyDataTechniques}. Although a lot of tools are now available for privacy oriented analysis, but most of the programmers still find it hard to do and we argue it should be made more accessible. 
 
+One problem with differential privacy is this that currently there are no standard ways to do this, like RSA or AES are now standard implementations of Public Key Encryption and have made encryption adoptable and more secure. So we believe that, such a standard will really help Differential Privacy to be adopted on a large scale.
 
 \chapter{Experimental Setup}
 \section{Infrastructure}
@@ -924,7 +935,7 @@ Let's try this interface, by applying to our SUB-X (i.e. set of 29 filtered out 
     \label{fig:InterfaceRun}
 \end{figure}
 
-\section{Experiment Conclusion}
+\section{Experiment Conclusion and Improvements}
 
 
 \subsection{Discussion about the Experiment}
@@ -934,6 +945,7 @@ This kind of data can be useful in many fields. Primarily this experiment was do
 
 Alternatively, this interface can also provide Government Agencies to better plan their services. Imagine the health department wishing to conduct a vaccine spray campaign (mosquito/dengue killing etc.). Ideally they would want to spray the area, when least number of people are affected by it. Similarly in case of some calamity (e.g. fire, earthquake, terror event), the emergency services will have better understanding of the occupancy at any particular time. Traffic Authorities can get utility from this data, as to what time people are leaving for work in the morning and what time do they come back. We believe that exposing the proposed interface, will be of value to many people. 
 
+But this experiment is also a very big threat to Privacy of the Twitter users. When people tweet with their location setting on, they just want to let their friends know that they were at a particular place at that time. Surely no body would want anyone to infer when their house is empty. So while legitimately useful to many, this interface is also very dangerous at a private level.
 \subsection{Possible Improvements to the Experiment}
 In this section, we will list down some of the improvements that can help further refine the experiment. Note that these suggestions are aimed at increasing he ``Utility" of the experiment, we will explore the ``Privacy" aspects in the next chapter (\ref{chap:AttackAndResolution}).
 \begin{itemize}
@@ -1013,7 +1025,14 @@ Note that sensitivity for count function is always 1. As for the other parameter
 
 \paragraph{Adding Noise to the input Tweet times:\\}
 Another approach to this problem is to add noise to the raw Tweet times, before counting the empty hourly slots for each property. But what should be the sensitivity? this is a tricky question, so we tried and tested with multiple values for sensitivity. Note that in this approach sensitivity would be defined in a time metric (i.e. minutes or hours). We tried [15min, 30min, 1hr, 2hr] as values for sensitivity and found that 30 minutes and 1 hour are both good values at hiding individual time slots. Below is the Python code that adds noise to each Tweet time. Also note that as now times will be shifted, our counts will also change.
+
 \inputminted{python}{AddLapNoiseTime.py}
+
+
+\paragraph{Adding Noise to the input Tweet Locations:\\}
+One other approach can be to hide the input Tweet Locations. This can be achieved by using any method from Section \ref{sec:MethodsForLocationPrivacy}. But we argue that, adding noise or hiding the location coordinates in the tweets is not very logical for our experiment. Because, imagine if we add noise to tweets from one particular house, the resulting tweets may not even belong to that original house anymore. This behaviour warrants a through investigation, but as we are playing with very limited amount of data (only 29 houses), we could not afford to use this method.
+
+
 
 
 
@@ -1043,20 +1062,41 @@ Figure \ref{fig:NoisyCountReID}, shows a run of our Interface both with and with
 \end{figure}
 
 
+\section{Evaluating the Solution}
 \subsection{Defining the Evaluation Metrics}
 Now that we have presented a solution for the disclosure problem, we need some evaluation metrics so that we can compare between approaches and also learn the parameters for our mechanisms. As this is a pretty novel experiment, we could not find other existing methods for Location-Specific Privacy Preservation. So we will present our own metrics and compare our approaches with them.
 
 \paragraph{\textbf{Privacy Metric:}} This metric will help us to judge how good is an approach at preserving privacy. Basically it is the percentage of the time slots that we are able to correctly guess as being empty or not.
 \[=\frac{Number\ of\ Correctly\ Identified\ Timeslots}{Total\ Timeslots} \times 100\]
-\paragraph{\textbf{Utility Metric:}} This metric will help us judge how useful is the final suburb profile is to the legitimate agency. We use the Root Mean Square Error (RMSE), between the counts before adding noise and after adding noise. RMSE is defined as:
+\paragraph{\textbf{Utility Metric:}} This metric will help us judge how useful is the final suburb profile is to the legitimate agency. We use the Root Mean Square Error (RMSE), between the counts before adding noise and after adding noise. Practically this would mean that how much noise has an effect on our Suburb-Profile. RMSE is defined as:
 \[RMSE = \sqrt\frac{\sum (CountBefore Noise - CountAfterNoise)^{2}}{Number of TimeSlots}\]
+
+\paragraph{}
+The goal of our evaluations would be to keep both these metrics, as low as possible. We already know that achieving best values for both these metrics at the same time is not possible (see Section: \ref{sec:RelaxationToAbsolute}), so we will use our evaluations to find the best trade-off between these two values.
+
 
 
 \subsection{Learning the Parameters}
-To learn the parameters of the Lapacian Noise Distribution and to evaluate our approach we ran our interface for multiple possible values of the parameters. The main parameter we tested was the $\epsilon$, that control the amount of noise we add.
+To learn the parameters of the Laplacian Noise Distribution and to evaluate our approach we ran our interface for multiple possible values of the parameters. The main parameter we tested was the $\epsilon$, that control the amount of noise we add. We tried following values for the parameters:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Parameter} & \textbf{Values Tested} \\ \midrule
+Epsilon ($\epsilon$) & 0.001, 0.05, 0.1, 0.3, \\
+ & 0.5, 0.7, 1, 1.5, 2, 3, 4 \\
+$\Delta F$ for Count Perturbation & 1 \\
+$\Delta F$ for Time Perturbation & 15, 30, 60, 90, 120 (Minutes) \\ \bottomrule
+\end{tabular}
+\caption{Tested Values for the Parameters}
+\label{tab:parametersTested}
+\end{table}
+
+
 
 \paragraph{When Counts Perturbed:\\}
-Figure \ref{fig:RunWithCounts} shows the run of the interface, when we added noise to the output of the count function.
+For the $Count()$ function we already know that, the sensitivity is 1, so we did not need any other value. Figure \ref{fig:RunWithCounts} shows the run of the interface, when we added noise to the output of the count function. Notice that the shape of the plots verify the statement that utility and privacy are inversely related. As we decrease the amount of noise (by increasing value of $\epsilon$), we can see that the error also decreases (almost reaches 0, i.e. 0.2 for $\epsilon = 4$), but on the other hand we are easily able to re-identify most of the hidden individual time-slots (up to 82\% correct re-identification). 
 \begin{figure}[ht]
 \centering
         \includegraphics[width=150mm,scale=1]{Images/Counts.png}
@@ -1064,18 +1104,46 @@ Figure \ref{fig:RunWithCounts} shows the run of the interface, when we added noi
     \label{fig:RunWithCounts}
 \end{figure}
 
-\paragraph{When Times Perturbed:\\}
-Figure \ref{fig:RunWithTimes} shows the run of the interface, when we added noise to the input Tweet times.
+\paragraph{When Tweet Times Perturbed:\\}
+Like counts, we also ran the interface for the approach where we perturb the tweet times. As these are non-integer time values, so their sensitivity would logically be in minutes/hours or other time deltas. And remember that we divided our time-lines into hourly chunks, so 60 min is the logical sensitivity for this transformation. Figure \ref{fig:RunWithTimes} shows the run of the interface, when we added noise to the input Tweet times with $\Delta F = 60 min$. (Although just for experiment we did try other values for sensitivity)
+\paragraph{}
+Note that this plot also depicts the same inverse parameter relation as the previous plot. One thing to note is that although the privacy metric is really good here (never above 50\%), utility metric levels off at RMSE \textgreater 1. This gives a good insight into the mechanism that if we perturb the input record values, stronger privacy is achieved but at the cost of utility. We guess its mainly because here the noise has more impact as we applied it to each input record, instead of limited number of outputs.  
 \begin{figure}[ht]
 \centering
         \includegraphics[width=150mm,scale=1]{Images/RunWithTimes.png}
-    \caption{Comparing different values of $\epsilon$, when noise added to input}
+    \caption{Comparing different values of $\epsilon$, when noise added to times $\Delta F = 60 Min$}
     \label{fig:RunWithTimes}
 \end{figure}
 
 
-\chapter{Conclusion and Recommendations}
 
+\section{Best Found Parameters and Discussion}
+After analyzing a lot of runs of the interface we found the best (as per our human judgment) looking values for the required parameters, these results are shown in Table \ref{tab:approachesParameters}. The reason we selected these particular values is this that they offer nearly 50\% privacy measure, while keeping the utility metric in range of 1 house/property. This basically means the suburb profile after adding noise will be only shifted by 1 property. This might seem a lot for a 29 property suburb (SUB-X), but if much more tweet data is available then, more properties will filter through and shift of 1 property will not make a difference
+\paragraph{}
+So what is the use of these learned parameters? We suggest that these parameters can now be used to implement the noisy interface that guarantees that: if any adversary is keen on identifying individual time-lines (i.e. when a particular house is empty), he would only succeed with a chance of 50\%, then too he wont be sure of his re-identification efforts. This means that we have successfully solved the problem of the disclosing/leaking interface of Chapter \ref{chap:Experiment}.
+\paragraph{}
+In the last chapter we will show a mechanism for the system that can do public data analysis like our experiment and then publish the result with privacy guarantees.
+
+
+
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lllr@{}}
+\toprule
+\textbf{Approach} & \textbf{RMSE} & \multicolumn{1}{r}{\textbf{\% Re-ID}} & \textbf{Parameters} \\ \midrule
+Obfuscate Counts & 1.149 & 56.52 & $\epsilon$=1.5,  $\Delta F$ = 1 \\
+Obfuscate Input Times & 1.206 & 48.27 & $\epsilon$=2, $\Delta F$= 60 min \\
+\multirow{2}{*}{Obfuscate Tweet Location} & \multicolumn{3}{l}{\multirow{2}{*}{\begin{tabular}[r]{@{}r@{}}Deemed Not Feasible for this Experiment \\ But can be tried for similar scenarios\end{tabular}}} \\
+ & \multicolumn{3}{l}{} \\ \bottomrule
+\end{tabular}
+\caption{Best Found Parameters for Our Interface}
+\label{tab:approachesParameters}
+\end{table}
+
+
+\chapter{Conclusion}
 
 \bibliographystyle{plain}
 \bibliography{references}
