@@ -110,22 +110,35 @@ Privacy is a complex term, and even untranslatable directly to many other langua
 % \paragraph{}
 % We live in an increasingly digitizing society, now nearly every human task has an electronic footprint. Buy a parking ticket, go through a security check point, log-on to a website you are sure to leave digital traces there. So existence of such knowledge in itself is a threat, let alone it being used adversely. All this information has the potential to become side information, hence, although they may not breach privacy by themselves, but when aggregated with other data they can cause privacy breaches. But, then again this data exists in first place because it offers some utility to certain people. 
 
-\chapter{Privacy-oriented Analysis in Distributed and Hybrid Environments}
+\chapter{Methods for Privacy-Oriented Data Analysis}
 \label{chap:PrivacyDataTechniques}
 \section{Introduction}
 \paragraph{}
-Systems that guarantee secure communication have been in use for a long time, but Public Clouds suffer from very basic trust issues. Sensitive data like medical or financial records have tough safety guidelines and cannot be processed on offshore third party servers. The advent of public cloud holds tremendous advantages in terms of scalability and elasticity, especially if augmented by in-house infrastructure (Hybrid Cloud). In this chapter we will list some of existing frameworks that try to support privacy oriented analysis while being applicable in hybrid clouds or distributed environments.
-\paragraph{}
-The ideal of Privacy in Data Analysis can be traced back to Dalenius 1977’s \cite{dalenius1977} rule, that no such information about a single person can be derived from a database that cannot be learned without access to the database. This simply means that in a secure privacy controlled analysis, the results can never lead to private data.
+\footnote{Parts of this chapter were submitted earlier, as an assignment for COMP90044 \cite{ReserachMethodsLitReview}} Security and privacy are two distinct concepts \cite{spencer2001security}, but can be confused as being the same because they are very close in impact. Classically digital security usually means to restrict access to data and systems. Privacy is somewhat a different way of looking at things, digital privacy is the guarantee that the data or system, (doesn't matter secured or public), will not violate personal rights of the concerned person.
+
 \paragraph{}
 Organizations are hungry for insights from Big Data. Online advertisement agencies and social media networks are already using these insights to drive profits by serving targeted advertisements. Retailers use these insights to identify patterns in markets and sales. Most of currently prevalent applications care very less about individual privacy because in most cases the individual has voluntarily forfeited the right to privacy (see Terms and Conditions on Facebook Sign-up).
 \paragraph{}
 There are however some applications, where this privacy of individual holds the prime objective yet the analytic potential of data as whole is also very great. For example processing large data of psoriasis patients may bring useful insights about the disease, but if some health insurance company is able to identify patients and refuse coverage then it can be both, legally and ethically wrong. 
-Below we discuss some of the identified formalization of privacy problems in Big Data context and some proposed solutions.
+
+
+In this chapter we will introduce the current methods that are used to do privacy-oriented data analysis. Next we will compare some implementations of these techniques. Apart from the main goal of providing utility while preserving privacy, we will also judge these systems on their applicability for big data tasks. Ideally we want a system that has following attributes (ranked for their importance):
+\begin{itemize}
+  \item Preserves Privacy while doing analysis tasks.
+  \item Provides an acceptable level of utility. i.e. The results produced are not useless. (yes, it can happen, refer Chapter \ref{chap:differentialPrivacy})
+  \item Is accessible to the analyst, i.e. it is easy to use and program.
+  \item Is applicable in a distributed or even hybrid cloud environment. Because usually we work with a large amount of data and a distributed implementation is preferred for these tasks.
+\end{itemize}
+
+So let us start by, why exactly we need privacy focused analysis, by listing few incidents where privacy of individuals was compromised.
+
+% Systems that guarantee secure communication have been in use for a long time, but Public Clouds suffer from very basic trust issues. Sensitive data like medical or financial records have tough safety guidelines and cannot be processed on offshore third party servers. The advent of public cloud holds tremendous advantages in terms of scalability and elasticity, especially if augmented by in-house infrastructure (Hybrid Cloud). In this chapter we will list some of existing frameworks that try to support privacy oriented analysis while being applicable in hybrid clouds or distributed environments.
+% \paragraph{}
+% The ideal of Privacy in Data Analysis can be traced back to Dalenius 1977’s \cite{dalenius1977} rule, that no such information about a single person can be derived from a database that cannot be learned without access to the database. This simply means that in a secure privacy controlled analysis, the results can never lead to private data.
 
 \section{Popular Examples of Data Privacy Breaches}
 \paragraph{}
-Security and privacy are two distinct concepts \cite{spencer2001security}, but can be confused as being the same because they are very close in impact. Classically digital security usually means to restrict access to data and systems. Privacy is somewhat a different way of looking at things, digital privacy is the guarantee that the data or system, (doesn't matter secured or public), will not violate personal rights of the concerned person. In this section we will list some of the examples of data privacy breaches, which were not directly the result of a security breach or failure. These examples highlight the power of large scale data analysis, where the analyst can have access to diverse other secondary data sources, and combining them with primary data can result in surprising disclosures.
+ In this section we will list some of the examples of data privacy breaches, which were not directly the result of a security breach or failure. These examples highlight the power of large scale data analysis, where the analyst can have access to diverse other secondary data sources, and combining them with primary data can result in surprising disclosures.
 \paragraph{Governor of Massachusetts Health Records \cite{sweeney2000uniqueness}:\\}
 In 1990 a government department of the State of Massachusetts, released some hospital visit medical records for research purposes. This data was sanitized by state, means that all identifying information like: Social Security Number, Name and Address was removed from the records. The state gave an assurance that, no record can be linked to any personal identity, the then Governor of the state ``William Weld" himself assured his citizens of this. But instead, researcher ``Latanya Sweeney" at the Carnegie Mellon University, was able to re-identify most of the records from this release, including Governor's own records. 
 \paragraph{}
@@ -260,32 +273,32 @@ All the mentioned frameworks use some form of manual data labeling, differential
 
 
 
-
 \begin{table}[ht]
 \centering
+\begin{tabular}{@{}lcr@{}}
+\toprule
+\textbf{Framework} & \multicolumn{1}{c}{\textbf{Based on}} & \textbf{Hybrid Ready?} \\ \midrule
+Privacy Integrated Queries \cite{mcsherry2009privacy} & Differential Privacy & No \\
+Airavat \cite{roy2010airavat} & Differential Privacy & Yes \\
+Sedic \cite{zhang2011sedic} and Xu, X \cite{xu2015framework} & Manual Labeling & Yes \\
+GUPT \cite{mohan2012gupt} & Differential Privacy & No \\
+HybrEx \cite{ko2011hybrex} & Manual Labeling & Yes \\ \bottomrule
+\end{tabular}
 \caption{Frameworks for privacy Oriented Analysis}
 \label{Frameworks for privacy Oriented Analysis}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|l|l|l|}
-\hline
-\textbf{Framework}                 & \textbf{Based on}    & \textbf{Hybrid Ready?} & \textbf{Accuracy} \\ \hline
-Privacy Integrated Queries \cite{mcsherry2009privacy} & Differential Privacy & No                     &                   \\ \hline
-Airavat \cite{roy2010airavat}                   & Differential Privacy & No                     &                   \\ \hline
-Sedic \cite{zhang2011sedic} and Xu, X \cite{xu2015framework}    & Manual Labeling      & Yes                    &                   \\ \hline
-GUPT \cite{mohan2012gupt}                      & Differential Privacy & No                     &                   \\ \hline
-HybrEx \cite{ko2011hybrex}                    & Manual Labeling      & Yes                    &     Not Applicable              \\ \hline
-\end{tabular}
-}
 \end{table}
 
 
 
-\paragraph{}
-It is apparent from the results above that, none of the existing techniques provides a comprehensive platform that uses differential privacy in a hybrid environment. This is important because in big data applications it becomes impractical to label data manually.
+
 \paragraph{}
 Note that nearly all of the frameworks, except Privacy Integrated Queries are based on MapReduce.
+
 \paragraph{}
-Also there is a need of specific use cases for privacy control, which can be used to compare all these approaches in a standard way. Currently privacy can mean a lot of different things for different people, like for a financial institute personal data of its customers (name and address) may not be as sensitive than their financial data (funds in accounts), but for a medical institute personal data is most sensitive. So in my further work I will try to demonstrate an actual real world use scenario.
+It is apparent from the results above that, none of the existing techniques provides a comprehensive platform that uses differential privacy in a hybrid environment. This is important because in big data applications it becomes impractical to label data manually. Although systems like Airavat \cite{roy2010airavat} look promising, but practically they are very hard to setup and use.
+
+\paragraph{}
+Also there is a need of specific use cases for privacy control, which can be used to compare all these approaches in a standard way. Currently privacy can mean a lot of different things for different people, like for a financial institute personal data of its customers (name and address) may not be as sensitive than their financial data (funds in accounts), but for a medical institute personal data is most sensitive. So in my further work I will try to demonstrate an actual real world use scenario, where we use social media data to draw private insights about locations (e.g houses), see Chapter\ref{chap:Experiment}.
 
 
 
@@ -293,6 +306,7 @@ Also there is a need of specific use cases for privacy control, which can be use
 \paragraph{}
 Most of current frameworks for hybrid cloud, work by the manual tagging of sensitive information. Plus the standard mechanisms for differential privacy are hard for a data analyst, so there is scope of work in the direction of a unified framework that makes differential privacy techniques applicable in hybrid environment. 
 
+We wanted to find some pre-existing simple framework for large scale privacy-oriented data analysis task, but all existing approaches are a bit complex for our liking, so for our experiment with private data, we developed a simple Differential Privacy based mechanism (see \ref{chap:AttackAndResolution}). However in the future we would love to implement these platforms and check their performance on our data.
 
 
 
@@ -344,9 +358,9 @@ Location played a key role in some of the recent privacy breaches. Some of these
 Celebrities in Hollywood were outraged with this service, because in some cases they were being tracked in real-time. George Clooney and Jimmy Kimmel publicly thrashed Gawker for breaching their privacy and putting them in possible harms way. This scandal, apart from being one of the reason for the closure of Gawker as a whole, Stalker Maps brought into limelight the issues about privacy.
 \paragraph{``We know your house"\cite{WeKnowYourHouse} and ``Please Rob Me"\cite{PleaseRobMe}} These two websites were a social experiment to show the power of data analysis. ``We know your house"\cite{WeKnowYourHouse} gathered publicly available tweets via the Twitter Search API\cite{twiterSearchAPI} and extracted the tweets with location information. It then used this location to translate to actual street level level address, then published them online. 
 \paragraph{}
-``Please Rob Me"\cite{PleaseRobMe} also used Twitter data to mark the times when people check into Foursquare\cite{Foursquare} spots and tweeted about them. They published these times on internet saying that, they are not home so their homes were open for robbers. In section [Add Section], we also present an experiment like this.
+``Please Rob Me"\cite{PleaseRobMe} also used Twitter data to mark the times when people check into Foursquare\cite{Foursquare} spots and tweeted about them. They published these times on internet saying that, they are not home so their homes were open for robbers. In Chapter \ref{chap:Experiment}, we also present an experiment like this.
 
-\section{Methods for privacy aware Location Data Analysis}
+\section{Methods for Privacy-Aware Location Data Analysis}
 \label{sec:MethodsForLocationPrivacy}
 \paragraph{}
 There are many mechanisms for location privacy. Most of these approaches aim to limit the effect of any information that may be transmitted from a user's device. Nearly all the literature uses some kind of a motivation example as a use case for analysis.
@@ -368,7 +382,7 @@ Apart from ensuring privacy w.r.t location X some approaches also try to counter
 
 
 \paragraph{}
-For example side information can be an actual map of the area where certain area is a water body i.e. pond, river etc. and if some Privacy Preserving technique outputs a location within this water body, an adversary can rule out this whole water area as possible location for the user. Another example can be that if adversary knows that a house has single bedroom and only one person lives there, he can infer when that house is empty based on social media usage pattern of that particular user (This is the exact experiment which we will demonstrate in section [Add Section]).
+For example side information can be an actual map of the area where certain area is a water body i.e. pond, river etc. and if some Privacy Preserving technique outputs a location within this water body, an adversary can rule out this whole water area as possible location for the user. Another example can be that if adversary knows that a house has single bedroom and only one person lives there, he can infer when that house is empty based on social media usage pattern of that particular user.
 
 \subsection{Transformative Approaches}
 There are some methods which transform the location information in such a way that the LBS can not infer location X but can provide some useful utility. One such method is \cite{khoshgozaran2007blind} which keeps encrypted POIs on server, they make sure that this encryption transformation supports Nearest Neighbour calculations. So user's device just transforms the actual location X by encrypting it using same mechanism and then LBS server calculate k-Nearest POIs and returns the list.
