@@ -6,7 +6,7 @@
 \usepackage[utf8]{inputenc}
 % \usepackage{lineno}
 % \linenumbers
-
+\usepackage[nottoc,numbib]{tocbibind}
 \usepackage{multirow}% http://ctan.org/pkg/multirow
 \usepackage{algorithm2e}
 \usepackage{minted}
@@ -31,21 +31,23 @@
 % \fancyhead[L]{\bfseries\leftmark}\rfoot{Page \thepage}
 \renewcommand\Authands{ and }
 
-\title{Privacy Oriented Data Analysis\\\large{Master Thesis - 75 Points}}
+\title{Privacy Oriented Data Analysis,\\With a Focus on Location-Specific Privacy Issues\\\large{Master Thesis - 75 Points}}
 
 
-\author[1]{Muhammad Umer Altaf}
-\author[1]{Prof. Richard O. Sinnott}
+\author[]{Muhammad Umer Altaf}
+\author[]{Prof. Richard O. Sinnott}
 
-\affil[1]{The University of Melbourne\\School of Computing and Information Systems}
 
-\date{October 2017}
+\affil[]{School of Computing and Information Systems,}
+\affil[]{The University of Melbourne}
+
+\date{October, 2017}
 
 \usepackage{natbib}
 \usepackage{graphicx}
-\newcommand\Chapter[2]{
-  \chapter[#1: {\itshape#2}]{#1\\[2ex]\Large\itshape#2}
-}
+% \newcommand\Chapter[2]{
+%   \chapter[#1: {\itshape#2}]{#1\\[2ex]\Large\itshape#2}
+% }
 
 
 
@@ -59,20 +61,31 @@
 
 
 
-
 \begin{document}
 
 \maketitle
+
+\begin{abstract}
+   A lot of research has been done regarding, privacy preserving data analysis techniques, there are also systems available that specialize in location privacy. In this work we explore a range of such techniques and methods.  Then we introduce the notion that, individual locations have intrinsic privacy issues, which have not been explored in literature yet. We demonstrate a privacy attack on particular locations using social media data, where we show that we can infer things like: ``exactly when a particular house is empty?" We then present a Differential Privacy based mechanism to draw non-(privacy invading) insights from this data, so that legitimate organizations (e.g. government agencies) can have a better idea of house occupancy of an area as a whole, while making sure that any adversary (e.g. thief/robber/spy) is not able to know, the exact times any particular house is empty. Throughout this work, we will also explore the relationship between ``utility" and ``privacy", and evaluate our mechanism based on these metrics. 
+\end{abstract}
+\renewcommand{\abstractname}{Acknowledgements}
+\begin{abstract}
+ I would 
+\end{abstract}
+
 \setcounter{tocdepth}{1}
 \tableofcontents
 \pagebreak
+
+
+
 
 \textit{I certify that:}
 \begin{itemize}
 \item \textit{This thesis does not incorporate without acknowledgement any material previously submitted for a degree or diploma in any university; and that to the best of my knowledge and belief it does not contain any material
 previously published or written by another person where due reference is not made in the text.}
 \item \textit{Where necessary I have received clearance for this research from the University's Ethics Committee and have submitted all required data to the Department }
-\item \textit{The thesis is 16,201 words in length (excluding text in images, table, bibliographies and appendices).}
+\item \textit{The thesis is 19,304 words in length (excluding text in images, table, bibliographies and appendices).}
 \end{itemize}
 - Muhammad Umer Altaf
 \pagebreak
@@ -93,16 +106,50 @@ previously published or written by another person where due reference is not mad
 
 \paragraph{}
 Orwell wrote ``Nineteen Eighty-Four" in 1949, when computers were just calculators, but even then he beautifully captured the dilemma of modern data driven society. We produce a large amount of data everyday, be it sharing stuff on social networks, buying a movie ticket or almost any task on the internet, we are sure to leave behind a digital footprint. All this data is being collected for some purpose, this is defined as the data's ``Utility". To understand utility, think: better weather forecasts, better connectivity with friends or better business practices. This utility is understood pretty well, and can be quantified using standard measures (e.g. Accuracy/Precision of the Algorithms, Revenue changes in financial models etc.). But what has often been either ignored, or has alluded us, is the price we pay for this utility on a personal level. This price to utility comes in form of violation of personal privacy, or to put it into Orwellian words we forego our freedom.
-
+\paragraph{}
 For a long time, in the field of statistical and computational analysis (think Big Data, AI etc.), experts believed that this price for utility, is inevitable. We either get advantage of data or we do not use it at all (hence the Orwellian choice). But recent breakthroughs in privacy-focused data analysis methodologies have demonstrated that, this is not an absolute choice. We now have tools that can help us balance utility and privacy. More importantly these techniques offer a way to quantify privacy (which is essentially an abstract concept), and then compare its `value', with the supposed utility of the analysis.
-
+\paragraph{}
 In this work we will present, an overview of some of the privacy-preserving analysis techniques. Then we will present a real world data analysis experiment, which has the potential to dangerously violate privacy. Using some of the privacy-preserving techniques we demonstrate that we can minimize this danger, and still be able to benefit from the experiment.
 
 
 \section{What is Privacy? and Why is it Important?}
-We Humans are very social animals, one of our primary function is to communicate and exchange ideas. This property has enabled us to develop as a species. But we do not share all our ideas, there is a concept of private thought. This private thought makes us the individuals we are, and the fact that these thoughts are private, gives us the concept of freedom. Modern Western society is built upon the principals of democracy, and for democracy to function properly free thinking is necessary. The idea that we do not share everything with the world is called Privacy. 
-
+\textit{Higher Level Motivation}
+\paragraph{}
+We Humans, are very social animals, one of our primary function is to communicate and exchange ideas. This property has enabled us to develop as a species. But we do not share all our ideas, there is a concept of private thought. This private thought makes us the individuals we are, and the fact that these thoughts are private, gives us the concept of freedom. Modern Western society is built upon the principals of democracy, and for democracy to function properly free thinking is necessary. The idea that we do not share everything with the world is called Privacy. 
+\paragraph{}
 Privacy is a complex term, and even untranslatable directly to many other languages. As this is a very complex term, in this work we will refer to privacy in the sense of ``Digital Privacy". Digital Privacy is a concept for electronic information that, an individual would want to keep to itself.  For example: medical records, digital IDs, financial information etc. 
+\paragraph{}
+Today around one third of the whole world population\cite{SocialMediaPercent}, uses online social media platforms. The structure of these platform encourages to share private data (i.e. location check-ins, feelings, activities), and most of the users (even technically proficient) do not realize that the data they share can be used for things, they would not generally agree to. There have been experiments where personal attributes like sexual orientation, political affiliations and personal choices (likes/dislikes), were inferred using social network usage records. In-fact nearly all social media companies (Facebook, Twitter, Snapchat etc.) collect and process this kind of data. They then also sell this data to third party advertisers. 
+
+Although, all this process is said to be under legal cover, but Edward Snowden's revelations of 2013\cite{SnowdenStory} revelations about the United States government and others having access to all this data, raised a lot of concern. The aftermath of these revelations led to people being a lot more concerned about their online privacy. But still many people have this view that ``I have nothing to hide!", which experts believe is not good for society as a whole, that even if you don't have anything to hide, there are people who need privacy (e.g. journalists, whistle-blowers and political dissidents etc) to keep a check on freedom of society.
+
+
+\section{Statement of the Problem}
+In this work we will explore a range of data analysis techniques that promise to value privacy, while giving meaningful and useful results. We start by giving an overview of general privacy-aware techniques, and then we introduce certain techniques that focus on location privacy. We focused on location privacy issues mainly because, we started of with following question:
+
+\paragraph{Research Question:} Is it possible to determine when houses in a residential suburb are empty by using social media data? If yes, what would be the privacy implications? and how do we address them?
+\paragraph{}
+The motivation of this question, comes from a discussion we had with one of our friends at ``Australian Statistics Bureau", they had a problem that while collecting door to door statistics or surveys, they found many houses empty as occupants were away from home at that time. Ideally they would want to visit a suburb when most of people are at home, so they can collect more information. We thought that using social media use patterns we might be able to infer this information. 
+
+But this kind of analysis also violates the privacy of the occupants and poses some real world dangers. Imagine a thief obtaining this knowledge that exactly when a house is empty, it would make things easier for him. So this kind of data analysis should be done with strong privacy guarantees.  
+
+During our research on existing privacy-aware analysis techniques we found out that, all of the literature talks about privacy with respect to user. But in the above scenario it is the intrinsic private attribute of the property/house/location itself that poses a threat. Even the techniques that are in context of location privacy aim to hide a user's location, not the attributes of the location itself. So we decided to find and exploit these \textit{Location-Specific} privacy issues, while also suggest how to mitigate these issues.
+
+The goal of our system is to first analyze social media data (mainly Twitter Tweets), to generate use pattern for each individual house in suburb, then aggregate this information on suburb for legitimate entities (government etc.) in form of suburb profiles. Secondly we need to ensure that no individual house level information is leaked through these aggregations. For this we develop a differential privacy based mechanism that hides the individual house level information into a noisy distribution.
+
+
+\section{Overview}
+This work is organized as follows:
+
+\begin{itemize}
+  \item \textbf{Chapter 2} introduces the existing methods for general big data analysis 
+  \item \textbf{Chapter 3} explores the location related privacy issues and solutions
+  \item \textbf{Chapter 4} defines Differential Privacy - the main method used in our approach for private data analysis
+  \item \textbf{Chapter 5} explains the experimental setup we constructed for our experiments
+  \item \textbf{Chapter 6} explains our main experiment to find out the empty houses and present aggregate these results on suburb level
+  \item \textbf{Chapter 7} demonstrates a privacy attack on the aggregate statistics from last chapter
+  \item \textbf{Chapter 8} lists conclusions and future directions
+\end{itemize}
 
 
 
@@ -130,7 +177,7 @@ In this chapter we will introduce the current methods that are used to do privac
   \item Is applicable in a distributed or even hybrid cloud environment. Because usually we work with a large amount of data and a distributed implementation is preferred for these tasks.
 \end{itemize}
 
-So let us start by, why exactly we need privacy focused analysis, by listing few incidents where privacy of individuals was compromised.
+So let us start by exploring, why exactly we need privacy focused analysis? In next section, we will list few incidents where privacy of individuals was compromised.
 
 % Systems that guarantee secure communication have been in use for a long time, but Public Clouds suffer from very basic trust issues. Sensitive data like medical or financial records have tough safety guidelines and cannot be processed on offshore third party servers. The advent of public cloud holds tremendous advantages in terms of scalability and elasticity, especially if augmented by in-house infrastructure (Hybrid Cloud). In this chapter we will list some of existing frameworks that try to support privacy oriented analysis while being applicable in hybrid clouds or distributed environments.
 % \paragraph{}
@@ -275,9 +322,9 @@ All the mentioned frameworks use some form of manual data labeling, differential
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{@{}lcr@{}}
+\begin{tabular}{@{}lrr@{}}
 \toprule
-\textbf{Framework} & \multicolumn{1}{c}{\textbf{Based on}} & \textbf{Hybrid Ready?} \\ \midrule
+\textbf{Framework} & \multicolumn{1}{r}{\textbf{Based on}} & \textbf{Hybrid Ready?} \\ \midrule
 Privacy Integrated Queries \cite{mcsherry2009privacy} & Differential Privacy & No \\
 Airavat \cite{roy2010airavat} & Differential Privacy & Yes \\
 Sedic \cite{zhang2011sedic} and Xu, X \cite{xu2015framework} & Manual Labeling & Yes \\
@@ -335,7 +382,7 @@ All of these applications work by getting the location from the user's device an
 In a relatively early work \cite{dobson2003geoslavery} about the dangers of geo-privacy, authors have argued that location technologies that exist today, have the power to technically enslave human beings, for example they present scenarios where some ``master" entity may restrict the movement of ``slave" humans. Such an entity will have the technical means to accurately determine the location of slaves and take corrective action (just like we might zap animals with electric shock if they leave a set perimeter). Although, such a scenario is very unlikely or even absurd, but authors argue that all the technological pre-requisites are available now, which itself is a cause of concern.
 
 \paragraph{}
-Mining of publicly available location data (such as: from social media) can have adverse affect on the privacy and even physical well being of the user. We have demonstrated such an experiment in Section ([Add Section]). 
+Mining of publicly available location data (such as: from social media) can have adverse affect on the privacy and even physical well being of the user. We have demonstrated such an experiment in Chapter \ref{chap:Experiment}. 
 
 
 
@@ -453,7 +500,7 @@ In \cite{andres2013geo} authors have presented a good comparison between the k-a
 
 \section{Chapter Conclusion and A Possible Gap}
 \paragraph{}
-In this chapter we explained the mechanism of Location Based Services, and presented a survey of the current methods of ensuring privacy while working with LBSs. A lot of work has been done on the protection of user's location, but there are some very specific privacy related issues, that are concerned with the private properties/attributes of the locations themselves. For example: the use pattern of a house, people staying in a property, demographics of a apartment block. Although the goal of such analysis is not directly related to the techniques discussed in this chapter, but still its good to think about privacy issues for these applications. In chapter [Add Chapter] we will demonstrate, such an attack on privacy where we can infer when particular homes are empty, then we will propose a differential privacy based approach to extract some utility from this scenario.
+In this chapter we explained the mechanism of Location Based Services, and presented a survey of the current methods of ensuring privacy while working with LBSs. A lot of work has been done on the protection of user's location, but there are some very specific privacy related issues, that are concerned with the private properties/attributes of the locations themselves. For example: the use pattern of a house, people staying in a property, demographics of a apartment block. Although the goal of such analysis is not directly related to the techniques discussed in this chapter, but still its good to think about privacy issues for these applications. In chapter \ref{chap:Experiment} we will demonstrate, such an attack on privacy where we can infer when particular homes are empty, then we will propose a differential privacy based approach to extract some utility from this scenario.
 
 \chapter{Differential Privacy}
 \label{chap:differentialPrivacy}
@@ -510,7 +557,7 @@ Relation (4.2) defines Differential Privacy, in this section we will list some o
 
 \subsection{The Laplace Mechanism ($\epsilon, \Delta F$)}
 \label{sec:LaplaceMecha}
-This method works by adding a small amount of random noise into the output of any function that we want to make differential private. This noise follows the Laplace Distribution (also called double-exponential), so let's first have a look how does it look like.
+The Laplacian mechanism, works by adding a small amount of random noise into the output of any function that we want to make differential private. This noise follows the Laplace Distribution (also called double-exponential), so let's first have a look how does it look like.
 
 \paragraph{Expression for the Laplace Distribution:\\}
 \begin{equation}
@@ -553,7 +600,7 @@ One solution is to use the Exponential Mechanism\cite{mcsherry2007mechanism}. Th
 \paragraph{}
 We will not go into more details about this mechanism as it is not very applicable in our experiment. However, there can be other mechanisms for differential privacy, and as this field is very new, a lot of research effort is ongoing to find these.
 
-\section{Issues With Differential Privacy}
+\section{Limitations of Differential Privacy}
 Although Differential Privacy solves the issue of side-information (as we did not include any extra information in the models above), and it is mathematically sound, it still has its limitations and issues. In this section we will discuss some of these issues:
 
 \begin{itemize}
@@ -708,7 +755,7 @@ Due to the limited amount of time and the retrieval speed of Twitter Search API,
 \centering
 \begin{tabular}{@{}lr@{}}
 \toprule
-\textbf{Property}          & \textbf{Value}      \\ \midrule
+\textbf{Attribute}          & \textbf{Value}      \\ \midrule
 Size of resulting file     & 12.74 GB            \\
 Total number of tweets     & 3,234,293             \\
 Number of unique tweeters  & 165,255              \\
@@ -930,7 +977,7 @@ Figure \ref{fig:SubXProfileLabeled} labels all these key points on the chart. On
 Complete suburb profiles offer great utility to any interested agency, as they present an accurate picture of the habits how people use their homes, or how they behave inside them (e.g. when do they wake up or sleep?). The agency doing this data analysis may be tempted to publish suburb profiles for each suburb. Now that we are not depicting data about any single property, but the suburb as a whole, some would argue that, this should be alright as no sensitive information is leaked. We contest that if only one suburb is analyzed and the data is released ``only once", then and only then, this experiment is OK. Otherwise there are methods to infer any particular property's time line completely, just by using these aggregations. We present such a method in next chapter. 
 
 \paragraph{Possible Interface for this Data:\\}
-So let's keep the sensitivity issue aside for just a minute, and discuss that if a decision is made to publish this data what might the interface look like? We present a very simple interface below:
+So let's keep the sensitivity issue aside for just a minute, and discuss that if a decision is made to publish this data, what might the interface look like? We present a very simple interface below:
 
 \[=CountNumberOfEmptyProperties(AtTime,SuburbDefination)\]
 
@@ -961,6 +1008,7 @@ Alternatively, this interface can also provide Government Agencies to better pla
 
 But this experiment is also a very big threat to Privacy of the Twitter users. When people tweet with their location setting on, they just want to let their friends know that they were at a particular place at that time. Surely no body would want anyone to infer when their house is empty. So while legitimately useful to many, this interface is also very dangerous at a private level.
 \subsection{Possible Improvements to the Experiment}
+\label{sec:ImprovementsToExperiemnt}
 In this section, we will list down some of the improvements that can help further refine the experiment. Note that these suggestions are aimed at increasing he ``Utility" of the experiment, we will explore the ``Privacy" aspects in the next chapter (\ref{chap:AttackAndResolution}).
 \begin{itemize}
   \item \textbf{More Data:} Additional data is always a good thing for Big Data application. In this experiment we only used 3.6 Million Tweets, which may seem like a large number, but resulted in only finding 39 interesting houses corresponding to these tweets. We propose that if more twitter data is collected, we can better generalize the trend of actual suburbs (instead of us making a hypothetical suburb SUB-X). Some ways to retrieve more data can be only focus the Twitter API on the suburb of interest (we had tweets from all over the world). Properties data in our view is enough, as CoreLogic keeps data about all of Australia and New Zealand. Only issue with the CoreLogic data is that, if you need to use more than 1,000 properties you need special permission. We did not require this permission mainly because we had very small of tweets that only resulted in 39 properties being used.
@@ -1135,11 +1183,6 @@ Note that this plot also depicts the same inverse parameter relation as the prev
 After analyzing a lot of runs of the interface we found the best (as per our human judgment) looking values for the required parameters, these results are shown in Table \ref{tab:approachesParameters}. The reason we selected these particular values is this that they offer nearly 50\% privacy measure, while keeping the utility metric in range of 1 house/property. This basically means the suburb profile after adding noise will be only shifted by 1 property. This might seem a lot for a 29 property suburb (SUB-X), but if much more tweet data is available then, more properties will filter through and shift of 1 property will not make a difference
 \paragraph{}
 So what is the use of these learned parameters? We suggest that these parameters can now be used to implement the noisy interface that guarantees that: if any adversary is keen on identifying individual time-lines (i.e. when a particular house is empty), he would only succeed with a chance of 50\%, then too he wont be sure of his re-identification efforts. This means that we have successfully solved the problem of the disclosing/leaking interface of Chapter \ref{chap:Experiment}.
-\paragraph{}
-In the last chapter we will show a mechanism for the system that can do public data analysis like our experiment and then publish the result with privacy guarantees.
-
-
-
 
 
 \begin{table}[ht]
@@ -1157,13 +1200,60 @@ Obfuscate Input Times & 1.206 & 48.27 & $\epsilon$=2, $\Delta F$= 60 min \\
 \end{table}
 
 
+\section{Privacy Aware Interface}
+\label{sec:PrivacyAwareInterface}
+Now that we have devised a method to learn privacy parameters for our data interface, we can apply them to our analysis. Figure \ref{fig:ObfuscatedInterface} shows the architecture of our final proposed system. We recommend that we keep a subset of Tweet and Property data aside for the estimation of relevant privacy parameters. This learning can either be done using the simple approach of plotting privacy vs utility plots (as we did), or using any machine learning optimization algorithm.Then using these parameters we can ensure privacy on the main dataset. The assumption for this approach being that subset data will normally follow the distribution of the main dataset.
+
+Please note that using this indirect approach, may or may not 100\% satisfy the mathematical guarantees of the underlying differential privacy mechanism, but we argue that we can experimentally verify this approach. But still further mathematical investigation may be needed for proofs, which currently falls out of the scope of current work, and maybe explored in the future.
+
+
+\begin{figure}[ht]
+\centering
+        \includegraphics[width=120mm,scale=1]{Images/ObfuscatedInterface.png}
+    \caption{Architecture of the Privacy Aware Interface}
+    \label{fig:ObfuscatedInterface}
+\end{figure}
+
 \chapter{Conclusion}
+In this work we introduced the concept of ``Location-Specific" privacy attributes. We found that specific locations, such as homes have certain private attributes that can affect the privacy of the users of these locations. We demonstrated an experiment which exploited one such attribute i.e. ``When a particular house is empty?"
+
+To do this we analyzed social media usage (specifically tweets) from each location and built up a usage pattern for each house. This data is deemed to be very useful for legitimate organizations (such as Government Census Bureau) which need suburb level aggregate insights regarding house usage.
+
+Then we showed that this analysis can prove to be very dangerous for individual house dwellers as any adversary with access to these aggregations can infer the times when any particular house is empty.
+
+To solve this privacy issue we proposed a differential privacy based obfuscation mechanism, and explained how it can be practically applied, by learning its required privacy parameters. In the end we proposed an architecture of the complete system that can provide aggregated insights, while ensuring privacy of each house.
+
+
+\section{Future Direction}
+We have identified following future directions and enhancements to our solution:
+\begin{itemize}
+  \item Apply the improvements to the experiment as explained in Section \ref{sec:ImprovementsToExperiemnt}, to refine the current experiment.
+  \item In this work we only explored one \textbf{Location-Specific} privacy attribute, i.e. ``When a particular house is empty?", but we argue there can be other similar attributes, that have the potential to violate the user's (dwellers) privacy for example, further experiments can be done to investigate, how much information about these attributes can be inferred either using social media or other available data. Some of these attributes can be:
+  \begin{itemize}
+  \item The demographics of the people, living in a location (i.e. culture, language etc.)
+  \item We can try to infer relationships between people, who live at the same place
+  \item The information regarding the neighbourhood (for example: `How far is a house from police station?')
+    \end{itemize}
+    \item Now that through this experiment we have inferred the times when a house is empty, we can try to correlate this data with actual crime data (available on AURIN Platform). It would be interesting to explore that, 'do more empty houses mean more crime?'
+  \item Another entry in the list
+\item As a logical next step for the privacy-aware interface that we suggested in Section \ref{sec:PrivacyAwareInterface}, would be to apply it to some platform and expose it to analysts. We ideally wish that approach should be applied to the AURIN platform in following manner:
+  \begin{itemize}
+  \item AURIN should be allowed to hold Sensitive (privacy compromising) data. For example social media posts (Tweets, FB Posts), personal medical records, police records etc.
+  \item Then using the obfuscation layer it can then expose this data in a non-privacy threatening manner, which will allow much more interesting experiments.
+    \end{itemize}
+
+\end{itemize}
+
+
+
+
 
 \bibliographystyle{plain}
 \bibliography{references}
 \appendix
 \chapter{Appendix}
 \label{Appendix}
+\paragraph{Proof for the Laplacian Mechanism:\\}
 Below is the proof for the validity of the Laplacian Mechanism as explained in Chapter 4:
 \begin{figure}[ht]
 \centering
@@ -1172,4 +1262,9 @@ Below is the proof for the validity of the Laplacian Mechanism as explained in C
     \label{fig:Laplace Verified}
 \end{figure}
 
+\paragraph{Code for the experiments:\\}
+Following Repository contains the code we developed for the experiments in this project:
+
+
+\url{https://github.com/mumeraltaf/Thesis}
 \end{document}
